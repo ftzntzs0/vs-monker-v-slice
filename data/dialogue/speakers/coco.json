@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "name": "BFcoco",
+  "assetPath": "portraits/coco-dialogue",
+  "flipX": false,
+  "isPixel": false,
+  "scale": 1.0,
+  "offsets": [-250, 100],
+  "animations": [
+    {
+      "name": "coco_ehe",
+      "prefix": "coco_ehe"
+    },
+     {
+      "name": "coco_happy",
+      "prefix": "coco_happy"
+    },
+   {
+      "name": "coco_sweat",
+      "prefix": "coco_sweat"
+    },
+     {
+      "name": "coco_talk",
+      "prefix": "coco_talk"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+ "version": "2.2.4",
+ "songName": "Tutorial (Bean)",
+ "artist": "Geniy186",
+ "charter": "UNKNOWN",
+ "offsets": { },
+ "playData": {
+  "difficulties": [
+   "easy",
+   "normal",
+   "hard"
+  ],
+  "characters": {
+   "player": "beef",
+   "opponent": "geef",
+   "opponentVocals": [
+    "geef"
+   ],
+   "playerVocals": [
+    "beef"
+   ]
+  },
+  "stage": "hallway",
+  "noteStyle": "funkin",
+  "ratings": {
+   "easy": 2,
+   "normal": 3,
+   "hard": 4
+  },
+  "album": "coco",
+  "previewEnd": 0.2
+ },
+ "generatedBy": "Friday Night Funkin' - v0.8.4",
+ "timeChanges": [
+  {
+   "t": 0,
+   "b": 0,
+   "bpm": 106,
+   "bt": [4, 4, 4, 4]
+  }
+ ]
+}

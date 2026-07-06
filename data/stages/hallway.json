@@ -1,0 +1,54 @@
+{
+ "version": "1.0.2",
+ "name": "hallway",
+ "props": [
+  {
+   "assetPath": "stages/hallway/hallway",
+   "atlasSettings": null,
+   "name": "hall",
+   "position": [0, 0],
+   "startingAnimation": ""
+  },
+{
+   "assetPath": "stages/hallway/bench_left",
+   "atlasSettings": null,
+   "name": "benchLeft",
+   "position": [0, 0],
+   "scroll": [0.95, 0.95],
+   "startingAnimation": ""
+  },
+{
+   "assetPath": "stages/hallway/bench_right",
+   "atlasSettings": null,
+   "name": "benchRight",
+   "position": [0, 0],
+   "scroll": [0.95, 0.95],
+   "startingAnimation": ""
+  },
+{
+   "assetPath": "stages/hallway/silly_posters",
+   "atlasSettings": null,
+   "name": "posters",
+   "position": [0, 0],
+   "startingAnimation": ""
+  }
+ ],
+ "characters": {
+  "bf": {
+   "cameraOffsets": [-310, -190],
+   "position": [1300, 1010],
+   "zIndex": 300
+  },
+  "dad": {
+   "cameraOffsets": [115, 0],
+   "position": [850, 958],
+   "zIndex": 200
+  },
+  "gf": {
+   "cameraOffsets": [0, 0],
+   "position": [600, 950],
+   "zIndex": 100
+  }
+ },
+ "cameraZoom": 0.9
+}

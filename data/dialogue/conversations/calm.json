@@ -1,0 +1,107 @@
+{
+  "version": "1.0.0",
+
+  "backdrop": {
+    "type": "solid",
+    "fadeTime": 0,
+    "color": "#00FFFFFF"
+  },
+
+  "outro": {
+    "type": "fade",
+    "fadeTime": 1.0
+  },
+
+  "dialogue": [
+     {
+      "speaker": "coco",
+      "speakerAnimation": "coco_talk",
+      "box": "cocobox",
+      "boxAnimation": "openNormal",
+
+      "text": [
+        "Hiya! Could you be boyfriend?"
+      ]
+    },
+    {
+      "speaker": "bf-coco",
+      "speakerAnimation": "bf_curious",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "beep?"
+      ]
+    },
+        {
+      "speaker": "coco",
+      "speakerAnimation": "coco_happy",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "Oh good! I'm glad I found you then!"
+      ]
+    },
+            {
+      "speaker": "coco",
+      "speakerAnimation": "coco_sweat",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "I hope I'm not bothering you...?"
+      ]
+    },
+        {
+      "speaker": "bf-coco",
+      "speakerAnimation": "bf_meh",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "bap...."
+      ]
+    },
+            {
+      "speaker": "coco",
+      "speakerAnimation": "coco_happy",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "Sweet! I was wondering if I could sing with you for a bit?"
+      ]
+    },
+                {
+      "speaker": "coco",
+      "speakerAnimation": "coco_talk",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "Heard you got some cool rapping skills."
+      ]
+    },
+            {
+      "speaker": "bf-coco",
+      "speakerAnimation": "bf_happy",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "beep bop!"
+      ]
+    },
+                {
+      "speaker": "coco",
+      "speakerAnimation": "coco_happy",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "Haha, okay! Let's get started then!"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+    "version": "1.0.0",
+    "name": "Sketch",
+    "renderType": "multisparrow",
+    "assetPath": "characters/sketch_assets",
+    "flipX": false,
+    "cameraOffsets": [
+		0,
+		60
+	],
+    "singTime": 4,
+    "animations": [
+        {
+            "name": "idle",
+            "prefix": "sketch idle"
+        },
+        {
+            "name": "singLEFT",
+            "prefix": "sketch left",
+            "offsets": [
+                242,
+                -20
+            ]
+        },
+        {
+            "name": "singDOWN",
+            "prefix": "sketch down",
+            "offsets": [
+                7,
+                -64
+            ]
+        },
+        {
+            "name": "singUP",
+            "prefix": "sketch up",
+            "offsets": [
+                52,
+                73
+            ]
+        },
+        {
+            "name": "singRIGHT",
+            "prefix": "sketch right",
+            "offsets": [
+                -90,
+                -50
+            ]
+        }
+    ],
+    "startingAnimation": "",
+    "isPixel": false,
+    "scale": 1
+}

@@ -1,0 +1,209 @@
+{
+	"renderType": "multisparrow",
+	"offsets": [
+		0,
+		0
+	],
+	"applyStageMatrix": false,
+	"startingAnimation": "idle",
+	"healthIcon": {
+		"offsets": [
+			0,
+			0
+		],
+		"id": "beef",
+		"flipX": false,
+		"isPixel": false,
+		"scale": 1
+	},
+	"assetPath": "characters/beef",
+	"version": "1.0.0",
+	"danceEvery": 1,
+	"scale": 1,
+	"name": "beef",
+	"flipX": true,
+	"cameraOffsets": [
+		-100,
+		0
+	],
+	"singTime": 4,
+	"isPixel": false,
+	"atlasSettings": {
+		"applyStageMatrix": false,
+		"useRenderTexture": false,
+		"filterQuality": 1,
+		"cacheOnLoad": false,
+		"swfMode": true
+	},
+	"animations": [
+		{
+			"flipY": false,
+			"offsets": [
+				0,
+				0
+			],
+			"frameRate": 24,
+			"prefix": "Beef Idle Dance0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "idle"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-28,
+				-13
+			],
+			"frameRate": 24,
+			"prefix": "Beef Down Note0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singDOWN"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-29,
+				10
+			],
+			"frameRate": 24,
+			"prefix": "Beef Up Note0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singUP"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-26,
+				-4
+			],
+			"frameRate": 24,
+			"prefix": "Beef Right Note0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singRIGHT"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-14,
+				3
+			],
+			"frameRate": 24,
+			"prefix": "Beef Left Note Miss0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singLEFTmiss"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-20,
+				-17
+			],
+			"frameRate": 24,
+			"prefix": "Beef Down Note Miss0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singDOWNmiss"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-31,
+				11
+			],
+			"frameRate": 24,
+			"prefix": "Beef Up Note Miss0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singUPmiss"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-26,
+				-2
+			],
+			"frameRate": 24,
+			"prefix": "Beef Right Note Miss0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singRIGHTmiss"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				0,
+				0
+			],
+			"frameRate": 24,
+			"prefix": "Beef Gameover0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "firstDeath"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-139,
+				-11
+			],
+			"frameRate": 24,
+			"prefix": "Beef Gameover loop0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": true,
+			"name": "deathLoop"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-15,
+				-6
+			],
+			"frameRate": 24,
+			"prefix": "Beef Left Note0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singLEFT"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-138,
+				1
+			],
+			"frameRate": 24,
+			"prefix": "Beef Gameover confirm0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "deathConfirm"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				7,
+				4
+			],
+			"frameRate": 24,
+			"prefix": "Beef HEY!0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "HEY!"
+		}
+	]
+}

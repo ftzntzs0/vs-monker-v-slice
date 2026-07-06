@@ -1,0 +1,42 @@
+{
+ "version": "2.2.4",
+ "songName": "Joyful",
+ "artist": "Tictacto",
+ "charter": "PunkinMike",
+ "offsets": { },
+ "playData": {
+  "difficulties": [
+   "easy",
+   "normal",
+   "hard"
+  ],
+  "characters": {
+   "player": "bf-coco",
+   "girlfriend": "gf-coco",
+   "opponent": "coco",
+   "opponentVocals": [
+    "coco"
+   ],
+   "playerVocals": [
+    "bf-coco"
+   ]
+  },
+  "stage": "park",
+  "noteStyle": "funkin",
+  "ratings": {
+   "easy": 3,
+   "normal": 5,
+   "hard": 7
+  },
+  "album": "coco"
+ },
+ "generatedBy": "Friday Night Funkin' - v0.8.4",
+ "timeChanges": [
+  {
+   "t": 0,
+   "b": 0,
+   "bpm": 180,
+   "bt": [4, 4, 4, 4]
+  }
+ ]
+}

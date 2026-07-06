@@ -1,0 +1,323 @@
+import funkin.play.PlayState;
+import funkin.modding.module.Module;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import funkin.Paths;
+import flixel.math.FlxRect; 
+
+import flixel.text.FlxText;
+import flixel.text.FlxTextBorderStyle;
+import funkin.Preferences; 
+
+class Test extends Module
+{
+    var customHealthBG:FlxSprite = null;      
+    var customLeftBar:FlxSprite = null;       
+    var customRightBar:FlxSprite = null;      
+
+    var diamondP1:FlxSprite = null;
+    var diamondP2:FlxSprite = null;
+    
+    var dummyIconP1:FlxSprite = null;
+    var dummyIconP2:FlxSprite = null;
+    var customScoreTxt:FlxText = null;
+
+    var corOponentePadrao:Int = 0xFFFF0000; 
+    var corJogadorPadrao:Int  = 0xFF00FF00; 
+    var barraFluidez:Float = 0.15; 
+    var smoothHealth:Float = 50; 
+
+    var hudY_Upscroll:Float = 560;    
+    var hudY_Downscroll:Float = 60;   
+    
+    var barraOffsetY:Float = -20; 
+
+    var textoScore_OffsetX:Float = 165; 
+    var textoScore_OffsetY_Upscroll:Float = -5;
+    var textoScore_OffsetY_Downscroll:Float = -125; 
+
+    var diamanteP2_OffsetX:Float = -95;
+    var diamanteP2_OffsetY:Float = 10;   
+    var diamanteP1_OffsetX:Float = 95;  
+    var diamanteP1_OffsetY:Float = 10;
+
+    
+    
+    
+    var iconeInterno_P1_OffsetX:Float = 15;  
+    var iconeInterno_P1_OffsetY:Float = 35; 
+    
+    var iconeInterno_P2_OffsetX:Float = 15;  
+    var iconeInterno_P2_OffsetY:Float = 15; 
+    
+
+    var assetWidth:Float = 780;
+    var assetHeight:Float = 145;
+
+    public function new() {
+        super('teste');
+    }
+
+    
+    function isCustomDad():Bool {
+        var game = PlayState.instance;
+        if (game == null || game.currentStage == null || game.currentStage.getDad() == null) return false;
+        
+        var dadAtual = game.currentStage.getDad();
+        if (dadAtual.characterName == null) return false;
+
+        var dadName:String = dadAtual.characterName.toLowerCase();
+        
+        if (dadName.indexOf("geef") != -1) return true;
+        if (dadName.indexOf("monker") != -1) return true;
+        if (dadName.indexOf("syor") != -1) return true;
+        if (dadName.indexOf("natki") != -1) return true;
+        if (dadName.indexOf("yur") != -1) return true;
+        if (dadName.indexOf("emcee") != -1) return true;
+        if (dadName.indexOf("tato") != -1) return true;
+
+        return false;
+    }
+
+    override function onUpdate(event) {
+        super.onUpdate(event);
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        
+        if (!isCustomDad()) {
+            if (customHealthBG != null) customHealthBG.visible = false;
+            if (customLeftBar != null) customLeftBar.visible = false;
+            if (customRightBar != null) customRightBar.visible = false;
+            if (diamondP1 != null) diamondP1.visible = false;
+            if (diamondP2 != null) diamondP2.visible = false;
+            if (dummyIconP1 != null) dummyIconP1.visible = false;
+            if (dummyIconP2 != null) dummyIconP2.visible = false;
+            if (customScoreTxt != null) customScoreTxt.visible = false;
+            return; 
+        }
+
+        
+        
+        
+        var dadName:String = game.currentStage.getDad().characterName.toLowerCase();
+        var corDoOponente:Int = 0xFFFF0000;
+        var corDoJogador:Int = 0xFF31B0CD;
+
+        if (dadName.indexOf("geef") != -1) corDoOponente = 0xFFA70049;
+        else if (dadName.indexOf("monker") != -1) corDoOponente = 0xFFA9D995;
+        else if (dadName.indexOf("syor") != -1) corDoOponente = 0xFF9ACDF8;
+        else if (dadName.indexOf("natki") != -1) corDoOponente = 0xFFFCAADD;
+        else if (dadName.indexOf("yur") != -1) corDoOponente = 0xFFB090C5;
+        else if (dadName.indexOf("emcee") != -1) corDoOponente = 0xFF93575E;
+        else if (dadName.indexOf("tato") != -1) corDoOponente = 0xFFF587A1;
+
+        if (customHealthBG == null || customLeftBar == null || customRightBar == null) return;
+
+        
+        if (game.healthBar != null) game.healthBar.visible = false;
+        if (game.healthBarBG != null) game.healthBarBG.visible = false;
+        if (game.iconP1 != null) game.iconP1.visible = false;
+        if (game.iconP2 != null) game.iconP2.visible = false;
+        if (game.scoreText != null) game.scoreText.visible = false;
+
+        
+        customHealthBG.visible = true;
+        customLeftBar.visible = true;
+        customRightBar.visible = true;
+        if (diamondP1 != null) diamondP1.visible = true;
+        if (diamondP2 != null) diamondP2.visible = true;
+        if (dummyIconP1 != null) dummyIconP1.visible = true;
+        if (dummyIconP2 != null) dummyIconP2.visible = true;
+        if (customScoreTxt != null) customScoreTxt.visible = true;
+
+        
+        var isDownscroll:Bool = Preferences.downscroll;
+        var hudY:Float = isDownscroll ? hudY_Downscroll : hudY_Upscroll;
+        var diffY:Float = FlxG.height - 720;
+        var baseHUD_Y:Float = hudY + diffY;
+        var startX = (FlxG.width - assetWidth) / 2;
+        var startY = baseHUD_Y + barraOffsetY;
+
+        customHealthBG.x = startX;  customHealthBG.y = startY;
+        customLeftBar.x = startX;   customLeftBar.y = startY;
+        customRightBar.x = startX;  customRightBar.y = startY;
+
+        customLeftBar.color = corDoOponente;
+        customRightBar.color = corDoJogador;
+        
+        var alvoHealth = game.healthBar.percent;
+        if (alvoHealth < 0) alvoHealth = 0;
+        if (alvoHealth > 100) alvoHealth = 100;
+
+        smoothHealth = smoothHealth + (alvoHealth - smoothHealth) * barraFluidez;
+
+        var splitX = assetWidth * ((100 - smoothHealth) / 100);
+        customLeftBar.clipRect = FlxRect.get(0, 0, splitX, assetHeight); 
+        customRightBar.clipRect = FlxRect.get(splitX, 0, assetWidth - splitX, assetHeight);
+
+        if (diamondP2 != null) {
+            diamondP2.x = customHealthBG.x + diamanteP2_OffsetX;
+            diamondP2.y = baseHUD_Y + (assetHeight - diamondP2.height) / 2 + diamanteP2_OffsetY;
+        }
+        if (diamondP1 != null) {
+            diamondP1.x = customHealthBG.x + assetWidth - diamondP1.width + diamanteP1_OffsetX;
+            diamondP1.y = baseHUD_Y + (assetHeight - diamondP1.height) / 2 + diamanteP1_OffsetY;
+        }
+
+        var iconBaseSize:Float = 150;
+        
+        
+        
+        
+        if (diamondP1 != null && game.iconP1 != null && dummyIconP1 != null) {
+            dummyIconP1.frames = game.iconP1.frames; 
+            dummyIconP1.animation.frameIndex = game.iconP1.animation.frameIndex; 
+            dummyIconP1.antialiasing = game.iconP1.antialiasing; 
+            
+            
+            dummyIconP1.flipX = !game.iconP1.flipX; 
+            
+            dummyIconP1.scale.set(1, 1); 
+            dummyIconP1.updateHitbox(); 
+            
+            dummyIconP1.x = diamondP1.x + (diamondP1.width - iconBaseSize) / 2 + iconeInterno_P1_OffsetX;
+            dummyIconP1.y = diamondP1.y + (diamondP1.height - iconBaseSize) / 2 + iconeInterno_P1_OffsetY;
+        }
+        
+        
+        
+        
+        if (diamondP2 != null && game.iconP2 != null && dummyIconP2 != null) {
+            dummyIconP2.frames = game.iconP2.frames; 
+            dummyIconP2.animation.frameIndex = game.iconP2.animation.frameIndex; 
+            dummyIconP2.antialiasing = game.iconP2.antialiasing; 
+            dummyIconP2.flipX = game.iconP2.flipX; 
+            dummyIconP2.scale.set(1, 1); 
+            dummyIconP2.updateHitbox(); 
+            
+            dummyIconP2.x = diamondP2.x + (diamondP2.width - iconBaseSize) / 2 + iconeInterno_P2_OffsetX;
+            dummyIconP2.y = diamondP2.y + (diamondP2.height - iconBaseSize) / 2 + iconeInterno_P2_OffsetY;
+        }
+
+        if (customScoreTxt != null) {
+            customScoreTxt.text = "Score: " + Math.floor(game.songScore);
+            customScoreTxt.x = textoScore_OffsetX;
+            if (isDownscroll) {
+                customScoreTxt.y = startY + assetHeight + textoScore_OffsetY_Downscroll;
+            } else {
+                customScoreTxt.y = startY + assetHeight + textoScore_OffsetY_Upscroll;
+            }
+        }
+    }
+
+    override function onCountdownStart(event) {
+        super.onCountdownStart(event);
+        var game = PlayState.instance;
+        if (game == null || game.healthBar == null) return;
+
+        
+        
+        if (!isCustomDad()) return;
+
+        var baseZ:Int = game.healthBar.zIndex;
+        smoothHealth = game.healthBar.percent;
+
+        if (customLeftBar == null) {
+            customLeftBar = new FlxSprite();
+            customLeftBar.frames = Paths.getSparrowAtlas("BeanhealthBar");
+            customLeftBar.animation.addByPrefix("idle", "idle", 24, true);
+            customLeftBar.animation.play("idle");
+            customLeftBar.scrollFactor.set(0, 0);
+            customLeftBar.cameras = [game.camHUD];
+            customLeftBar.zIndex = baseZ; 
+            game.add(customLeftBar);
+        } else { customLeftBar.zIndex = baseZ; }
+
+        if (customRightBar == null) {
+            customRightBar = new FlxSprite();
+            customRightBar.frames = Paths.getSparrowAtlas("BeanhealthBar");
+            customRightBar.animation.addByPrefix("idle", "idle", 24, true);
+            customRightBar.animation.play("idle");
+            customRightBar.scrollFactor.set(0, 0);
+            customRightBar.cameras = [game.camHUD];
+            customRightBar.zIndex = baseZ + 1; 
+            game.add(customRightBar);
+        } else { customRightBar.zIndex = baseZ + 1; }
+
+        if (customHealthBG == null) {
+            customHealthBG = new FlxSprite();
+            customHealthBG.frames = Paths.getSparrowAtlas("BeanhealthBarEmpty");
+            customHealthBG.animation.addByPrefix("idle", "idle", 24, true);
+            customHealthBG.animation.play("idle");
+            customHealthBG.scrollFactor.set(0, 0);
+            customHealthBG.cameras = [game.camHUD];
+            customHealthBG.zIndex = baseZ + 2; 
+            game.add(customHealthBG);
+        } else { customHealthBG.zIndex = baseZ + 2; }
+
+        if (diamondP2 == null) {
+            diamondP2 = new FlxSprite().loadGraphic(Paths.image("iconDiamond"));
+            diamondP2.scrollFactor.set(0, 0);
+            diamondP2.cameras = [game.camHUD];
+            diamondP2.zIndex = baseZ + 3; 
+            game.add(diamondP2);
+        } else { diamondP2.zIndex = baseZ + 3;
+        }
+
+        if (diamondP1 == null) {
+            diamondP1 = new FlxSprite().loadGraphic(Paths.image("iconDiamond"));
+            diamondP1.scrollFactor.set(0, 0);
+            diamondP1.cameras = [game.camHUD];
+            diamondP1.zIndex = baseZ + 4; 
+            game.add(diamondP1);
+        } else { diamondP1.zIndex = baseZ + 4;
+        }
+
+        if (dummyIconP2 == null) {
+            dummyIconP2 = new FlxSprite();
+            dummyIconP2.scrollFactor.set(0, 0);
+            dummyIconP2.cameras = [game.camHUD];
+            dummyIconP2.zIndex = baseZ + 5; 
+            game.add(dummyIconP2);
+        } else { dummyIconP2.zIndex = baseZ + 5;
+        }
+
+        if (dummyIconP1 == null) {
+            dummyIconP1 = new FlxSprite();
+            dummyIconP1.scrollFactor.set(0, 0);
+            dummyIconP1.cameras = [game.camHUD];
+            dummyIconP1.zIndex = baseZ + 6; 
+            game.add(dummyIconP1);
+        } else { dummyIconP1.zIndex = baseZ + 6;
+        }
+
+        if (customScoreTxt == null) {
+            
+            if (game.scoreText != null) game.scoreText.visible = false; 
+            customScoreTxt = new FlxText(0, 0, FlxG.width, "", 24);
+            customScoreTxt.setFormat(Paths.font("RifficFree-Bold.ttf"), 20, 0xFFFFFFFF, "center", FlxTextBorderStyle.OUTLINE, 0xFF000000);
+            customScoreTxt.borderSize = 1; 
+            customScoreTxt.scrollFactor.set(0, 0);
+            customScoreTxt.cameras = [game.camHUD];
+            customScoreTxt.zIndex = baseZ + 7; 
+            game.add(customScoreTxt);
+        } else {
+            customScoreTxt.zIndex = baseZ + 7;
+        }
+
+        game.refresh();
+    }
+
+    override function onDestroy(event) {
+        super.onDestroy(event);
+        customHealthBG = null;
+        customLeftBar = null;
+        customRightBar = null;
+        diamondP1 = null;
+        diamondP2 = null;
+        dummyIconP1 = null;
+        dummyIconP2 = null;
+        customScoreTxt = null;
+    }
+}

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Natki_BG.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Natki BG0000" x="17" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0001" x="495" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0002" x="973" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0003" x="1451" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0004" x="17" y="445" width="469" height="419"/>
+	<SubTexture name="Natki BG0005" x="495" y="445" width="469" height="419"/>
+	<SubTexture name="Natki BG0006" x="973" y="445" width="469" height="419"/>
+	<SubTexture name="Natki BG0007" x="1451" y="445" width="469" height="419"/>
+	<SubTexture name="Natki BG0008" x="17" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0009" x="495" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0010" x="17" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0011" x="495" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0012" x="17" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0013" x="495" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0014" x="17" y="17" width="469" height="419"/>
+	<SubTexture name="Natki BG0015" x="495" y="17" width="469" height="419"/>
+</TextureAtlas>

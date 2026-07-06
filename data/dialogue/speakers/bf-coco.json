@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "name": "BFcoco",
+  "assetPath": "portraits/bf-coco-dialogue",
+  "flipX": false,
+  "isPixel": false,
+  "scale": 1.0,
+  "offsets": [450, 100],
+  "animations": [
+    {
+      "name": "bf_aaa",
+      "prefix": "bf_aaa"
+    },
+     {
+      "name": "bf_concern",
+      "prefix": "bf_concern"
+    },
+    {
+      "name": "bf_curious",
+      "prefix": "bf_curious"
+    },
+      {
+      "name": "bf_happy",
+      "prefix": "bf_happy"
+    },
+    {
+      "name": "bf_meh",
+      "prefix": "bf_meh"
+    },
+    {
+      "name": "bf_shocked",
+      "prefix": "bf_shocked"
+    }
+  ]
+}

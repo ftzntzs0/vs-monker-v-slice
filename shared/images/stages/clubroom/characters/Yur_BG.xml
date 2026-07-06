@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Yur_BG.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Yur BG0000" x="17" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0001" x="372" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0002" x="727" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0003" x="1082" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0004" x="1437" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0005" x="17" y="438" width="346" height="412"/>
+	<SubTexture name="Yur BG0006" x="372" y="438" width="346" height="412"/>
+	<SubTexture name="Yur BG0007" x="727" y="438" width="346" height="412"/>
+	<SubTexture name="Yur BG0008" x="17" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0009" x="372" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0010" x="17" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0011" x="372" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0012" x="17" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0013" x="372" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0014" x="17" y="17" width="346" height="412"/>
+	<SubTexture name="Yur BG0015" x="372" y="17" width="346" height="412"/>
+</TextureAtlas>

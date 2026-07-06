@@ -1,0 +1,120 @@
+import funkin.play.character.MultiSparrowCharacter;
+import funkin.play.PlayState;
+import funkin.modding.events.UpdateScriptEvent;
+import funkin.modding.events.ScriptEvent;
+
+class GeefCharacter extends MultiSparrowCharacter
+{
+    var isAltIdle:Bool = false;
+    var isPlayingPoster:Bool = false;
+    var isLeftTurn:Bool = false; 
+    var posterCooldown:Int = 0; 
+
+    public function new() 
+    {
+        super('geef'); 
+    }
+
+    
+    
+    
+    
+    
+    override function onSongRetry(event:ScriptEvent) 
+    {
+        super.onSongRetry(event);
+        resetVariables();
+    }
+
+    
+    override function onSongStart(event:ScriptEvent)
+    {
+        super.onSongStart(event);
+        resetVariables();
+    }
+
+    
+    function resetVariables()
+    {
+        isAltIdle = false;
+        isPlayingPoster = false;
+        isLeftTurn = false;
+        posterCooldown = 0;
+    }
+
+    
+    
+    
+    override function onUpdate(event:UpdateScriptEvent) 
+    {
+        super.onUpdate(event);
+
+        
+        if (posterCooldown > 0) posterCooldown--;
+
+        
+        if (this.animation.curAnim != null && this.animation.curAnim.name == "poster" && !isPlayingPoster && posterCooldown == 0) 
+        {
+            isPlayingPoster = true;
+
+            if (!isAltIdle) {
+                isAltIdle = true;
+                this.playAnimation("poster", true, false); 
+            } else {
+                isAltIdle = false;
+                this.playAnimation("poster", true, true); 
+                
+                if (this.animation.curAnim != null) {
+                    this.animation.curAnim.reversed = true;
+                    this.animation.curAnim.curFrame = this.animation.curAnim.numFrames - 1;
+                }
+            }
+        }
+
+        
+        if (isPlayingPoster && this.animation.curAnim != null && this.animation.curAnim.name == "poster") 
+        {
+            var isDone:Bool = false;
+
+            if (this.animation.curAnim.reversed && this.animation.curAnim.curFrame == 0) {
+                isDone = true;
+            } 
+            else if (!this.animation.curAnim.reversed && this.animation.curAnim.finished) {
+                isDone = true;
+            }
+
+            if (isDone) {
+                isPlayingPoster = false;
+                posterCooldown = 5; 
+                
+                if (!isAltIdle) {
+                    this.playAnimation("danceRight", true); 
+                } else {
+                    this.playAnimation("danceRight-cheer", true); 
+                }
+                
+                this.dance(true); 
+            }
+        }
+    }
+
+    override function dance(force) 
+    {
+        if (isPlayingPoster) return;
+
+        if (isAltIdle) 
+        {
+            isLeftTurn = !isLeftTurn;
+            
+            if (isLeftTurn) {
+                this.playAnimation("danceLeft-cheer", true);
+            } else {
+                this.playAnimation("danceRight-cheer", true);
+            }
+        } 
+        else 
+        {
+            super.dance(force);
+        }
+    }
+}

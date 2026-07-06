@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Syor_BG.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Syor BG0000" x="17" y="17" width="374" height="413"/>
+	<SubTexture name="Syor BG0001" x="400" y="17" width="374" height="413"/>
+	<SubTexture name="Syor BG0002" x="783" y="17" width="374" height="413"/>
+	<SubTexture name="Syor BG0003" x="1166" y="17" width="374" height="413"/>
+	<SubTexture name="Syor BG0004" x="1549" y="17" width="374" height="413"/>
+	<SubTexture name="Syor BG0005" x="17" y="439" width="374" height="413"/>
+	<SubTexture name="Syor BG0006" x="783" y="17" width="374" height="413"/>
+	<SubTexture name="Syor BG0007" x="1166" y="17" width="374" height="413"/>
+	<SubTexture name="Syor BG0008" x="17" y="17" width="374" height="413"/>
+	<SubTexture name="Syor BG0009" x="400" y="17" width="374" height="413"/>
+	<SubTexture name="Syor BG0010" x="400" y="439" width="374" height="413"/>
+	<SubTexture name="Syor BG0011" x="783" y="439" width="374" height="413"/>
+	<SubTexture name="Syor BG0012" x="1166" y="439" width="374" height="413"/>
+	<SubTexture name="Syor BG0013" x="1549" y="439" width="374" height="413"/>
+	<SubTexture name="Syor BG0014" x="400" y="439" width="374" height="413"/>
+	<SubTexture name="Syor BG0015" x="783" y="439" width="374" height="413"/>
+</TextureAtlas>

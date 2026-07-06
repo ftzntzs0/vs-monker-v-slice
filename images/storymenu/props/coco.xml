@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="coco.png" width="1024" height="2048">
+	<SubTexture name="coco stance BLACK LINES0000" x="1" y="1" width="293" height="374" frameX="-0" frameY="-1" frameWidth="298" frameHeight="375"/>
+	<SubTexture name="coco stance BLACK LINES0001" x="1" y="378" width="293" height="374" frameX="-0" frameY="-1" frameWidth="298" frameHeight="375"/>
+	<SubTexture name="coco stance BLACK LINES0002" x="297" y="752" width="298" height="366" frameX="-0" frameY="-8" frameWidth="298" frameHeight="375"/>
+	<SubTexture name="coco stance BLACK LINES0003" x="595" y="376" width="298" height="366" frameX="-0" frameY="-8" frameWidth="298" frameHeight="375"/>
+	<SubTexture name="coco stance BLACK LINES0004" x="297" y="377" width="295" height="372" frameX="-0" frameY="-2" frameWidth="298" frameHeight="375"/>
+	<SubTexture name="coco stance BLACK LINES0005" x="594" y="1" width="295" height="372" frameX="-0" frameY="-2" frameWidth="298" frameHeight="375"/>
+	<SubTexture name="coco stance BLACK LINES0006" x="1" y="1509" width="294" height="373" frameX="-0" frameY="-2" frameWidth="298" frameHeight="375"/>
+	<SubTexture name="coco stance BLACK LINES0007" x="297" y="1" width="294" height="373" frameX="-0" frameY="-2" frameWidth="298" frameHeight="375"/>
+	<SubTexture name="coco stance BLACK LINES0008" x="1" y="755" width="293" height="374" frameX="-0" frameY="-1" frameWidth="298" frameHeight="375"/>
+	<SubTexture name="coco stance BLACK LINES0009" x="1" y="1132" width="293" height="374" frameX="-0" frameY="-1" frameWidth="298" frameHeight="375"/>
+</TextureAtlas>

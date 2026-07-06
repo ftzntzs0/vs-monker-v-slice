@@ -1,0 +1,77 @@
+{
+  "version": "1.0.0",
+
+  "backdrop": {
+    "type": "solid",
+    "fadeTime": 0,
+    "color": "#00FFFFFF"
+  },
+
+  "outro": {
+    "type": "fade",
+    "fadeTime": 1.0
+  },
+
+  "dialogue": [
+     {
+      "speaker": "coco",
+      "speakerAnimation": "coco_ehe",
+      "box": "cocobox",
+      "boxAnimation": "openNormal",
+
+      "text": [
+        "Wooow!! You're really good at this dude!"
+      ]
+    },
+    {
+      "speaker": "bf-coco",
+      "speakerAnimation": "bf_happy",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "beep bop boop!"
+      ]
+    },
+        {
+      "speaker": "coco",
+      "speakerAnimation": "coco_happy",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "This really got me excited now! You ready for the second song?"
+      ]
+    },
+            {
+      "speaker": "bf-coco",
+      "speakerAnimation": "bf_happy",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "ski bop!"
+      ]
+    },
+        {
+      "speaker": "coco",
+      "speakerAnimation": "coco_sweat",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "hey! don't call me kid, I'm older than you y'know.."
+      ]
+    },
+            {
+      "speaker": "bf-coco",
+      "speakerAnimation": "bf_aaa",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "?!?"
+      ]
+    }
+  ]
+}

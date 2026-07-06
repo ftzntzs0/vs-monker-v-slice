@@ -1,0 +1,53 @@
+{
+    "version": "1.0.0",
+    "name": "Coco",
+    "renderType": "multisparrow",
+    "assetPath": "characters/Coco_assets",
+    "flipX": false,
+    "singTime": 4,
+    "animations": [
+        {
+            "name": "idle",
+            "prefix": "coco idle"
+        },
+        {
+            "name": "singLEFT",
+            "prefix": "coco left",
+            "offsets": [
+                -6,
+                6
+            ]
+        },
+        {
+            "name": "singDOWN",
+            "prefix": "coco down",
+            "offsets": [
+                -30,
+                -40
+            ]
+        },
+        {
+            "name": "singUP",
+            "prefix": "coco up",
+            "offsets": [
+                -40,
+                3
+            ]
+        },
+        {
+            "name": "cheer",
+            "prefix": "let's go"
+        },
+        {
+            "name": "singRIGHT",
+            "prefix": "coco right",
+            "offsets": [
+                -40,
+                15
+            ]
+        }
+    ],
+    "startingAnimation": "",
+    "isPixel": false,
+    "scale": 1
+}

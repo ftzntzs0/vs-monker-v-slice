@@ -1,0 +1,167 @@
+import funkin.modding.module.Module;
+import funkin.play.PlayState;
+import funkin.modding.events.ScriptEvent;
+import flixel.FlxSprite;
+import flixel.text.FlxText;
+import flixel.text.FlxTextBorderStyle; 
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import flixel.util.FlxTimer;
+import flixel.FlxG;
+import funkin.Paths;
+
+class MusicianCredits extends Module 
+{
+    public function new() 
+    {
+        super("Musician Credits");
+    }
+
+    override function onSongStart(event:ScriptEvent) 
+    {
+        super.onSongStart(event);
+        
+        
+        var state = PlayState.instance;
+        if (state == null || state.currentSong == null) return;
+
+        
+        var songId = state.currentSong.id.toLowerCase();
+        
+
+
+        var musicianName = getMusicianName(songId);
+        
+        
+        
+        
+        
+        
+        if (musicianName == "UNKNOWN") return;
+
+        var iconName = getSongIcon(songId);
+        var actualSongName = state.currentSong.songName; 
+        
+        if (songId == "bean-tutorial") {
+            actualSongName = "Tutorial";
+        }
+
+        
+        var bg = new FlxSprite(FlxG.width, 300);
+        bg.makeGraphic(350, 100, 0xFFE27E9E); 
+        bg.alpha = 0.6;
+        bg.cameras = [state.camHUD];
+        state.add(bg);
+
+        
+        var songIcon = new FlxSprite(bg.x + 2, bg.y + 2);
+        songIcon.loadGraphic(Paths.image("songIcons/" + iconName));
+        songIcon.scale.set(0.6, 0.6);
+        songIcon.updateHitbox();
+        songIcon.cameras = [state.camHUD];
+        state.add(songIcon);
+
+        
+        var songNameTxt = new FlxText(songIcon.x + songIcon.width, songIcon.y, 250, actualSongName, 40);
+        songNameTxt.font = Paths.font("RifficFree-Bold.ttf"); 
+        
+        
+        songNameTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
+        
+        if (songId == "aggressiv-nyat" || songId == "lavender-essence") {
+            songNameTxt.size = 28;
+        }
+        songNameTxt.alignment = "left";
+        songNameTxt.cameras = [state.camHUD];
+        state.add(songNameTxt);
+
+        
+        var songMusicianTxt = new FlxText(songNameTxt.x + 30, songNameTxt.y + songNameTxt.height, 200, "By: " + musicianName, 25);
+        songMusicianTxt.font = Paths.font("RifficFree-Bold.ttf");
+        
+        
+        songMusicianTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
+        
+        if (songId == "aggressiv-nyat" || songId == "lavender-essence") {
+            songMusicianTxt.size = 20;
+        }
+        songMusicianTxt.alignment = "left";
+        songMusicianTxt.cameras = [state.camHUD];
+        state.add(songMusicianTxt);
+
+        
+        songNameTxt.y = (bg.y + (bg.height / 2.0)) - (songNameTxt.height / 2.0) - (songMusicianTxt.height / 2.0);
+        songMusicianTxt.y = songNameTxt.y + songNameTxt.height;
+
+        
+        
+        
+        var destX = FlxG.width - 350;
+        FlxTween.tween(bg, {x: destX}, 0.6, {ease: FlxEase.quadInOut});
+        FlxTween.tween(songIcon, {x: destX + 2}, 0.7, {ease: FlxEase.quadInOut});
+        FlxTween.tween(songNameTxt, {x: destX + 2 + songIcon.width}, 0.8, {ease: FlxEase.quadInOut});
+        FlxTween.tween(songMusicianTxt, {x: destX + 2 + songIcon.width + 30}, 0.85, {ease: FlxEase.quadInOut});
+
+        
+        
+        
+        new FlxTimer().start(2.35, function(tmr:FlxTimer) 
+        {
+            var outX = FlxG.width;
+            FlxTween.tween(bg, {x: outX}, 0.75, {ease: FlxEase.quadInOut});
+            FlxTween.tween(songIcon, {x: outX + 2}, 0.7, {ease: FlxEase.quadInOut});
+            FlxTween.tween(songNameTxt, {x: outX + 2 + songIcon.width}, 0.6, {ease: FlxEase.quadInOut});
+            FlxTween.tween(songMusicianTxt, {x: outX + 2 + songIcon.width + 30}, 0.5, {ease: FlxEase.quadInOut});
+            
+            new FlxTimer().start(0.8, function(tmr2:FlxTimer) {
+                bg.destroy();
+                songIcon.destroy();
+                songNameTxt.destroy();
+                songMusicianTxt.destroy();
+            });
+        });
+    }
+
+    
+    
+    
+    function getMusicianName(songId:String):String 
+    {
+        switch (songId) {
+            case "bean-tutorial", "warm-up", "scholar", "tater", "nutrient": 
+                return "Geniy186";
+            case "yarisugi": 
+                return "Rarusel";
+            case "embrace": 
+                return "VamCatJay";
+            case "aggressiv-nyat": 
+                return "Agami";
+            case "lavender-essence": 
+                return "JustYuri";
+            default: 
+                return "UNKNOWN";
+        }
+    }
+
+    function getSongIcon(songId:String):String 
+    {
+        switch (songId) {
+            case "bean-tutorial", "warm-up": 
+                return "note";
+            case "yarisugi": 
+                return "pen";
+            case "embrace": 
+                return "cookie";
+            case "aggressiv-nyat": 
+                return "cupcake";
+            case "lavender-essence": 
+                return "book";
+            case "scholar": 
+                return "poem";
+            case "tater", "nutrient": 
+                return "flower";
+            default: 
+                return "note";
+        }
+    }
+}

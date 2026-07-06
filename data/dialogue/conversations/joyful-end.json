@@ -1,0 +1,117 @@
+{
+  "version": "1.0.0",
+
+  "backdrop": {
+    "type": "solid",
+    "fadeTime": 0,
+    "color": "#00FFFFFF"
+  },
+
+  "outro": {
+    "type": "fade",
+    "fadeTime": 1.0
+  },
+
+  "dialogue": [
+     {
+      "speaker": "coco",
+      "speakerAnimation": "coco_happy",
+      "box": "cocobox",
+      "boxAnimation": "openNormal",
+
+      "text": [
+        "Hahaha! This is really fun!"
+      ]
+    },
+    {
+      "speaker": "bf-coco",
+      "speakerAnimation": "bf_happy",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "bap beep!"
+      ]
+    },
+        {
+      "speaker": "coco",
+      "speakerAnimation": "coco_happy",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "Heheh..."
+      ]
+    },
+            {
+      "speaker": "coco",
+      "speakerAnimation": "coco_talk",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "okay, one more song and I'll get out of your hair okay?"
+      ]
+    },
+        {
+      "speaker": "coco",
+      "speakerAnimation": "coco_sweat",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "I feel like I might be interrupting your date.."
+      ]
+    },
+            {
+      "speaker": "bf-coco",
+      "speakerAnimation": "bf_meh",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "beep boop.."
+      ]
+    },
+            {
+      "speaker": "coco",
+      "speakerAnimation": "coco_sweat",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "Hmm..."
+      ]
+    },
+     {
+      "speaker": "coco",
+      "speakerAnimation": "coco_ehe",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "...oh RIGHT!"
+      ]
+    },
+      {
+      "speaker": "coco",
+      "speakerAnimation": "coco_talk",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "I'm supposed to be doing something really cool for the third song right?"
+      ]
+    },
+          {
+      "speaker": "coco",
+      "speakerAnimation": "coco_happy",
+      "box": "cocobox",
+      "boxAnimation": "idleNormal",
+
+      "text": [
+        "Not to worry! I got this covered!!"
+      ]
+    }
+  ]
+}
