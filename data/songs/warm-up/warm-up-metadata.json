@@ -1,0 +1,39 @@
+{
+ "version": "2.2.4",
+ "songName": "Warm Up",
+ "artist": "Geniy186",
+ "charter": "Unknown",
+ "offsets": { },
+ "playData": {
+  "difficulties": [
+   "easy",
+   "normal",
+   "hard"
+  ],
+  "characters": {
+   "player": "beef",
+   "opponent": "geef",
+   "opponentVocals": [
+    "geef"
+   ],
+   "playerVocals": [
+    "beef"
+   ]
+  },
+  "stage": "hallway",
+  "noteStyle": "bean",
+  "ratings": {
+   "normal": 6,
+   "hard": 0
+  }
+ },
+ "generatedBy": "Friday Night Funkin' - v0.8.4",
+ "timeChanges": [
+  {
+   "t": 0,
+   "b": 0,
+   "bpm": 135,
+   "bt": [4, 4, 4, 4]
+  }
+ ]
+}

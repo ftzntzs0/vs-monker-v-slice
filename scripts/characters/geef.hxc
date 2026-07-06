@@ -2,6 +2,7 @@ import funkin.play.character.MultiSparrowCharacter;
 import funkin.play.PlayState;
 import funkin.modding.events.UpdateScriptEvent;
 import funkin.modding.events.ScriptEvent;
+import flixel.FlxG; // IMPORTANTE: Adicionado para detetar o Mobile!
 
 class GeefCharacter extends MultiSparrowCharacter
 {
@@ -15,25 +16,18 @@ class GeefCharacter extends MultiSparrowCharacter
         super('geef'); 
     }
 
-    
-    
-    
-    
-    
     override function onSongRetry(event:ScriptEvent) 
     {
         super.onSongRetry(event);
         resetVariables();
     }
 
-    
     override function onSongStart(event:ScriptEvent)
     {
         super.onSongStart(event);
         resetVariables();
     }
 
-    
     function resetVariables()
     {
         isAltIdle = false;
@@ -42,21 +36,15 @@ class GeefCharacter extends MultiSparrowCharacter
         posterCooldown = 0;
     }
 
-    
-    
-    
     override function onUpdate(event:UpdateScriptEvent) 
     {
         super.onUpdate(event);
 
-        
         if (posterCooldown > 0) posterCooldown--;
 
-        
         if (this.animation.curAnim != null && this.animation.curAnim.name == "poster" && !isPlayingPoster && posterCooldown == 0) 
         {
             isPlayingPoster = true;
-
             if (!isAltIdle) {
                 isAltIdle = true;
                 this.playAnimation("poster", true, false); 
@@ -71,21 +59,47 @@ class GeefCharacter extends MultiSparrowCharacter
             }
         }
 
-        
         if (isPlayingPoster && this.animation.curAnim != null && this.animation.curAnim.name == "poster") 
         {
             var isDone:Bool = false;
 
-            if (this.animation.curAnim.reversed && this.animation.curAnim.curFrame == 0) {
-                isDone = true;
-            } 
-            else if (!this.animation.curAnim.reversed && this.animation.curAnim.finished) {
-                isDone = true;
+            // ==========================================
+            // VERIFICAÇÃO ISOLADA (PC vs MOBILE)
+            // ==========================================
+            if (FlxG.onMobile) {
+                // LÓGICA MOBILE: Tolerante a pulos de frames
+                if (this.animation.curAnim.reversed) {
+                    // Previne bugs de frames negativos sem checar o .finished
+                    if (this.animation.curAnim.curFrame <= 0) isDone = true;
+                } else {
+                    if (this.animation.curAnim.finished) isDone = true;
+                }
+            } else {
+                // LÓGICA PC: 100% INTACTA COMO VOCÊ PEDIU
+                if (this.animation.curAnim.reversed && this.animation.curAnim.curFrame == 0) {
+                    isDone = true;
+                } 
+                else if (!this.animation.curAnim.reversed && this.animation.curAnim.finished) {
+                    isDone = true;
+                }
             }
+            // ==========================================
 
             if (isDone) {
                 isPlayingPoster = false;
-                posterCooldown = 5; 
+                
+                // ==========================================
+                // COOLDOWN ISOLADO (O SEGREDO PARA NÃO REPETIR)
+                // ==========================================
+                if (FlxG.onMobile) {
+                    // No mobile, se acabou de fazer a reversa (!isAltIdle), damos um tempo
+                    // de "descanso" muito maior (45 frames) para o jogo esquecer o comando.
+                    // Se foi a animação normal, mantemos 5.
+                    posterCooldown = (!isAltIdle) ? 45 : 5;
+                } else {
+                    // PC continua sempre com 5, igual ao seu código original
+                    posterCooldown = 5; 
+                }
                 
                 if (!isAltIdle) {
                     this.playAnimation("danceRight", true); 

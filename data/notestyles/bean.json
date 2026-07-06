@@ -17,7 +17,7 @@
     "noteStrumline": {
       "assetPath": "shared:Notes/notes_bean",
       "scale": 0.7,
-      "offsets": [25, 25],
+      "offsets": [25, 30],
       "data": {
         "leftStatic": { "prefix": "arrowLEFT0" },
         "leftPress": { "prefix": "left press0" },
