@@ -1,0 +1,57 @@
+{
+    "version": "1.0.0",
+    "name": "Monker",
+    "renderType": "multisparrow",
+    "offsets": [
+		-130,
+		300
+	],
+    "assetPath": "characters/monker-normal",
+    "flipX": false,
+    "cameraOffsets": [
+		-90,
+		0
+	],
+    "singTime": 6.1,
+    "animations": [
+        {
+            "name": "idle",
+            "prefix": "Monker Idle Dance0"
+        },
+        {
+            "name": "singLEFT",
+            "prefix": "Monker Left Note0",
+            "offsets": [
+                8,
+                32
+            ]
+        },
+        {
+            "name": "singDOWN",
+            "prefix": "Monker Down Note0",
+            "offsets": [
+                -34,
+                -8
+            ]
+        },
+        {
+            "name": "singUP",
+            "prefix": "Monker Up Note0",
+            "offsets": [
+                15,
+                17
+            ]
+        },
+        {
+            "name": "singRIGHT",
+            "prefix": "Monker Right Note0",
+            "offsets": [
+                -61,
+                -30
+            ]
+        }
+    ],
+    "startingAnimation": "",
+    "isPixel": false,
+    "scale": 1
+}

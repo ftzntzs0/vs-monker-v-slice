@@ -1,0 +1,142 @@
+{
+ "version": "1.0.2",
+ "name": "bclubroom",
+ "props": [
+  {
+   "assetPath": "stages/clubroom/clubroom",
+   "atlasSettings": null,
+   "name": "room",
+   "position": [0, 0],
+   "startingAnimation": ""
+  },
+{
+   "assetPath": "stages/clubroom/characters/Yur_BG",
+   "danceEvery": 2,
+      "zIndex": 0,
+      "position": [1800, 1020],
+      "scale": [0.9, 0.9],
+      "animType": "sparrow",
+      "name": "yur",
+      "isPixel": false,
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "Yur BG0",
+          "frameRate": 24,
+          "looped": false,
+          "flipX": false,
+          "flipY": false
+        }
+      ]
+  },
+{
+    "assetPath": "stages/clubroom/characters/Natki_BG",
+   "danceEvery": 2,
+      "zIndex": 1,
+      "position": [2000, 1060],
+      "scale": [0.9, 0.9],
+      "animType": "sparrow",
+      "name": "natki",
+      "isPixel": false,
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "Natki BG0",
+          "frameRate": 24,
+          "looped": false,
+          "flipX": false,
+          "flipY": false
+        }
+      ]
+  },
+{
+    "assetPath": "stages/clubroom/characters/Emcee_BG",
+   "danceEvery": 2,
+      "zIndex": 1,
+      "position": [850, 920],
+      "scale": [0.9, 0.9],
+      "animType": "sparrow",
+      "name": "emcee",
+      "isPixel": false,
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "Emcee BG0",
+          "frameRate": 24,
+          "looped": false,
+          "flipX": false,
+          "flipY": false
+        }
+      ]
+  },
+  {
+    "assetPath": "stages/clubroom/characters/Syor_BG",
+   "danceEvery": 1,
+      "zIndex": 2,
+      "position": [600, 1000],
+      "scale": [0.9, 0.9],
+      "animType": "sparrow",
+      "name": "syor",
+      "isPixel": false,
+      "animations": [
+        {
+          "name": "danceLeft",
+          "prefix": "Syor BG0",
+          "frameIndices": [0, 1, 2, 3, 4, 5, 6, 7],
+          "frameRate": 24,
+          "looped": false,
+          "flipX": false,
+          "flipY": false
+        },
+                {
+          "name": "danceRight",
+          "prefix": "Syor BG0",
+          "frameIndices": [8, 9, 10, 11, 12, 13, 14, 15],
+          "frameRate": 24,
+          "looped": false,
+          "flipX": false,
+          "flipY": false
+        }
+      ]
+  },
+  {
+    "assetPath": "stages/clubroom/characters/Monker_BG",
+   "danceEvery": 2,
+      "zIndex": 1,
+      "position": [300, 1050],
+      "scale": [0.9, 0.9],
+      "animType": "sparrow",
+      "name": "monker",
+      "isPixel": false,
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "Monker BG0",
+          "frameRate": 24,
+          "looped": false,
+          "flipX": false,
+          "flipY": false
+        }
+      ]
+  }
+  
+ ],
+ "characters": {
+  "bf": {
+   "cameraOffsets": [0, -60],
+   "position": [1750, 1655],
+   "zIndex": 300
+  },
+  "dad": {
+   "cameraOffsets": [200, -60],
+   "position": [1100, 1045],
+   "zIndex": 200
+  },
+  "gf": {
+   "cameraOffsets": [0, 0],
+   "position": [1300, 1455],
+   "zIndex": 100
+  }
+ },
+ "cameraZoom": 0.65
+}
