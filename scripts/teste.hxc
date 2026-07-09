@@ -50,9 +50,9 @@ class Test extends Module
     var assetWidth:Float = 780;
     var assetHeight:Float = 145;
 
-    // ==========================================
-    // VARIÁVEL OTIMIZADA PARA O DOWNSCROLL
-    // ==========================================
+    
+    
+    
     var atualDownscroll:Bool = false;
 
     public function new() {
@@ -125,9 +125,9 @@ class Test extends Module
         if (dummyIconP2 != null) dummyIconP2.visible = true;
         if (customScoreTxt != null) customScoreTxt.visible = true;
 
-        // ==========================================
-        // USO OTIMIZADO (Sem verificar a engine de novo)
-        // ==========================================
+        
+        
+        
         var isDownscroll:Bool = atualDownscroll;
         
         var hudY:Float = isDownscroll ? hudY_Downscroll : hudY_Upscroll;
@@ -204,9 +204,9 @@ class Test extends Module
 
         if (!isCustomDad()) return;
 
-        // ==========================================
-        // CÁLCULO OTIMIZADO FEITO APENAS 1 VEZ POR MÚSICA (OU RETRY)
-        // ==========================================
+        
+        
+        
         atualDownscroll = Preferences.downscroll;
         if (FlxG.onMobile) {
             atualDownscroll = true; 

@@ -1,0 +1,324 @@
+import funkin.play.song.Song;
+import funkin.play.PlayState;
+import funkin.Conductor;
+import funkin.modding.module.ModuleHandler;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import funkin.Paths;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import flixel.addons.display.FlxBackdrop;
+import funkin.modding.events.ScriptEvent;
+import funkin.modding.events.SongTimeScriptEvent;
+import funkin.modding.events.UpdateScriptEvent;
+
+class YarisugiScript extends Song
+{
+    var defaultOpponentY:Array<Float> = [];
+    var defaultPlayerY:Array<Float> = [];
+    var oppOffsets:Array<Float> = [-400, -400, -400, -400];
+    var plrOffsets:Array<Float> = [-400, -400, -400, -400];
+    
+    var polkaBG:FlxBackdrop = null;
+    var blackOverlay:FlxSprite = null;
+
+    
+    var customBopInterval:Int = 4;
+    var customBopIntensity:Float = 1.0;
+
+    public function new() {
+        super('yarisugi');
+    }
+
+    override function onCountdownStart(event:ScriptEvent) {
+        super.onCountdownStart(event);
+
+        var game = PlayState.instance;
+        if (game == null) return;
+        
+        try { game.camZooming = true; } catch(e:Dynamic) {}
+
+        if (game.opponentStrumline != null) {
+            for (i in 0...4) {
+                var oppNote = game.opponentStrumline.getByIndex(i);
+                if (oppNote != null) defaultOpponentY[i] = oppNote.y;
+            }
+        }
+
+        if (game.playerStrumline != null) {
+            for (i in 0...4) {
+                var plrNote = game.playerStrumline.getByIndex(i);
+                if (plrNote != null) defaultPlayerY[i] = plrNote.y;
+            }
+        }
+
+        var mod = ModuleHandler.getModule('teste');
+        if (mod != null) {
+            try { mod.barraOffsetY += 400; } catch(e:Dynamic) {}
+            try { mod.diamanteP2_OffsetY += 400; } catch(e:Dynamic) {}
+            try { mod.diamanteP1_OffsetY += 400; } catch(e:Dynamic) {}
+            try { mod.textoScore_OffsetY_Upscroll += 400; } catch(e:Dynamic) {}
+            try { mod.textoScore_OffsetY_Downscroll += 400; } catch(e:Dynamic) {}
+        }
+
+        var targetCam = game.camGame;
+        if (targetCam == null) targetCam = FlxG.camera;
+
+        var polkaImg = Paths.image("stages/clubroom/menuScrolling_bg");
+        if (polkaImg != null) {
+            polkaBG = new FlxBackdrop(polkaImg);
+            polkaBG.velocity.set(40, 40); 
+            polkaBG.cameras = [targetCam]; 
+            polkaBG.alpha = 0; 
+            
+            if (game.currentStage != null) {
+                var alvo = game.currentStage.getNamedProp('yur');
+                if (alvo == null) {
+                    alvo = game.currentStage.getDad();
+                }
+
+                if (alvo != null) {
+                    var alvoIndex = game.currentStage.members.indexOf(alvo);
+                    if (alvoIndex != -1) {
+                        game.currentStage.insert(alvoIndex, polkaBG);
+                    } else {
+                        game.currentStage.add(polkaBG);
+                    }
+                } else {
+                    game.currentStage.add(polkaBG);
+                }
+            } else {
+                game.insert(0, polkaBG);
+            }
+        }
+
+        var topCam = game.camHUD;
+        
+        blackOverlay = new FlxSprite();
+        blackOverlay.makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
+        blackOverlay.screenCenter();
+        blackOverlay.scrollFactor.set(0, 0);
+        blackOverlay.cameras = [topCam];
+        blackOverlay.alpha = 0;
+        blackOverlay.visible = false; 
+        
+        
+        
+        
+        blackOverlay.zIndex = 999999; 
+        game.add(blackOverlay);
+        game.refresh(); 
+    }
+
+    override function onUpdate(event:UpdateScriptEvent) {
+        super.onUpdate(event);
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        if (game.opponentStrumline != null) {
+            for (i in 0...4) {
+                var oppNote = game.opponentStrumline.getByIndex(i);
+                if (oppNote != null && defaultOpponentY[i] != null) {
+                    oppNote.y = defaultOpponentY[i] + oppOffsets[i];
+                }
+            }
+        }
+
+        if (game.playerStrumline != null) {
+            for (i in 0...4) {
+                var plrNote = game.playerStrumline.getByIndex(i);
+                if (plrNote != null && defaultPlayerY[i] != null) {
+                    plrNote.y = defaultPlayerY[i] + plrOffsets[i];
+                }
+            }
+        }
+    }
+
+    override function onStepHit(event:SongTimeScriptEvent) {
+        super.onStepHit(event);
+        var curStep:Int = event.step;
+        var game = PlayState.instance;
+        if (game == null) return;
+        
+        var mod = ModuleHandler.getModule('teste');
+        switch(curStep) {
+            
+            
+            
+            case 0:
+                var flashCam = game.camOther;
+                if (flashCam == null) flashCam = game.camHUD; 
+                if (flashCam != null) flashCam.flash(0xFF000000, 6.8, null, true);
+                
+            case 123:
+                
+                if (blackOverlay != null) {
+                    blackOverlay.visible = true;
+                    blackOverlay.alpha = 1;
+                }
+                
+            case 128:
+                if (blackOverlay != null) {
+                    blackOverlay.visible = false;
+                    blackOverlay.alpha = 0;
+                }
+                if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, 0.775, null, true);
+                
+            case 384:
+                if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 0.775, null, true);
+            case 640:
+                if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 0.775, null, true);
+            case 896:
+                if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 1.55, null, true);
+            case 1183:
+                if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 0.775, null, true);
+                
+            
+            
+            
+            case 827:
+                try { game.camZoomingDecay = 4; } catch(e:Dynamic) {}
+            case 831:
+                try { game.camZoomingDecay = 1; } catch(e:Dynamic) {}
+            
+            case 1152:
+                customBopInterval = 0;
+            case 1168:
+                try { game.camZoomingDecay = 2; } catch(e:Dynamic) {}
+                forceBop(0.0075, 0.0075);
+            case 1171 | 1174:
+                forceBop(0.0075, 0.0075);
+            case 1177 | 1180:
+                forceBop(0.0125, 0.0125);
+            case 1184:
+                customBopInterval = 2;
+            case 1440:
+                customBopInterval = 4;
+                customBopIntensity = 0.25;
+                try { game.camZoomingDecay = 1; } catch(e:Dynamic) {}
+
+            
+            
+            
+            case 66:
+                if (mod != null) {
+                    FlxTween.num(410, 10, 0.75, {ease: FlxEase.expoOut}, function(val:Float) {
+                        try { mod.diamanteP2_OffsetY = val; } catch(e:Dynamic) {}
+                    });
+                }
+                tweenOpponentNote(0, 0.75);
+            case 67: tweenOpponentNote(1, 0.75);
+            case 68: tweenOpponentNote(2, 0.75);
+            case 69: tweenOpponentNote(3, 0.75);
+            case 82:
+                if (mod != null) {
+                    FlxTween.num(410, 10, 0.75, {ease: FlxEase.expoOut}, function(val:Float) {
+                        try { mod.diamanteP1_OffsetY = val; } catch(e:Dynamic) {}
+                    });
+                }
+                tweenPlayerNote(3, 0.75);
+            case 83: tweenPlayerNote(2, 0.75);
+            case 84: tweenPlayerNote(1, 0.75);
+            case 85: tweenPlayerNote(0, 0.75);
+            case 98:
+                if (mod != null) {
+                    FlxTween.num(380, -20, 0.75, {ease: FlxEase.expoOut}, function(val:Float) {
+                        try { mod.barraOffsetY = val; } catch(e:Dynamic) {}
+                    });
+                    FlxTween.num(395, -5, 0.75, {ease: FlxEase.expoOut}, function(val:Float) {
+                        try { mod.textoScore_OffsetY_Upscroll = val; } catch(e:Dynamic) {}
+                    });
+                    FlxTween.num(275, -125, 0.75, {ease: FlxEase.expoOut}, function(val:Float) {
+                        try { mod.textoScore_OffsetY_Downscroll = val; } catch(e:Dynamic) {}
+                    });
+                }
+        }
+    }
+
+    override function onBeatHit(event:SongTimeScriptEvent) {
+        super.onBeatHit(event);
+        var curBeat:Int = event.beat;
+        var game = PlayState.instance;
+        if (game == null) return;
+        var duration:Float = (60 / Conductor.instance.bpm) * 4;
+
+        
+        
+        
+        if (customBopInterval > 0 && (curBeat % customBopInterval) == 0) {
+            forceBop(0.015 * customBopIntensity, 0.03 * customBopIntensity);
+        }
+
+        
+        
+        
+        switch(curBeat) {
+            case 224:
+                if (polkaBG != null) FlxTween.tween(polkaBG, {alpha: 1}, duration, {ease: FlxEase.cubeIn});
+                tweenStrumAlpha(0, duration);
+                if (game.camHUD != null) FlxTween.tween(game.camHUD, {alpha: 0}, duration, {ease: FlxEase.cubeIn});
+            case 252:
+                if (polkaBG != null) FlxTween.tween(polkaBG, {alpha: 0}, duration, {ease: FlxEase.cubeIn});
+                tweenStrumAlpha(1, duration);
+                if (game.camHUD != null) FlxTween.tween(game.camHUD, {alpha: 1}, duration, {ease: FlxEase.cubeIn});
+            case 368:
+                if (blackOverlay != null) {
+                    blackOverlay.visible = true;
+                    FlxTween.tween(blackOverlay, {alpha: 1}, duration, {ease: FlxEase.cubeIn});
+                }
+        }
+    }
+
+    
+    function forceBop(gameZoom:Float, hudZoom:Float) {
+        var game = PlayState.instance;
+        if (game == null) return;
+        try {
+            if (game.camZooming) {
+                if (game.camGame != null) game.camGame.zoom += gameZoom;
+                if (game.camHUD != null) game.camHUD.zoom += hudZoom;
+            }
+        } catch(e:Dynamic) {}
+    }
+
+    function tweenOpponentNote(index:Int, duration:Float) {
+        FlxTween.num(-400, 0, duration, {ease: FlxEase.expoOut}, function(val:Float) {
+            oppOffsets[index] = val;
+        });
+    }
+
+    function tweenPlayerNote(index:Int, duration:Float) {
+        FlxTween.num(-400, 0, duration, {ease: FlxEase.expoOut}, function(val:Float) {
+            plrOffsets[index] = val;
+        });
+    }
+
+    function tweenStrumAlpha(targetAlpha:Float, duration:Float) {
+        var game = PlayState.instance;
+        if (game == null) return;
+        
+        if (game.opponentStrumline != null) {
+            for (i in 0...4) {
+                var note = game.opponentStrumline.getByIndex(i);
+                if (note != null) FlxTween.tween(note, {alpha: targetAlpha}, duration, {ease: FlxEase.cubeIn});
+            }
+        }
+        
+        if (game.playerStrumline != null) {
+            for (i in 0...4) {
+                var note = game.playerStrumline.getByIndex(i);
+                if (note != null) FlxTween.tween(note, {alpha: targetAlpha}, duration, {ease: FlxEase.cubeIn});
+            }
+        }
+    }
+
+    override function onDestroy(event:ScriptEvent) {
+        super.onDestroy(event);
+        defaultOpponentY = null;
+        defaultPlayerY = null;
+        oppOffsets = null;
+        plrOffsets = null;
+        polkaBG = null;
+        blackOverlay = null;
+    }
+}

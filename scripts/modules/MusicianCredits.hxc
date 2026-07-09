@@ -47,33 +47,42 @@ class MusicianCredits extends Module
         }
 
         
+        var topCam = state.camOther != null ? state.camOther : state.camHUD;
+
         var bg = new FlxSprite(FlxG.width, 300);
         bg.makeGraphic(350, 100, 0xFFE27E9E); 
         bg.alpha = 0.6;
-        bg.cameras = [state.camHUD];
+        bg.cameras = [topCam]; // Atualizado
         state.add(bg);
 
-        
         var songIcon = new FlxSprite(bg.x + 2, bg.y + 2);
         songIcon.loadGraphic(Paths.image("songIcons/" + iconName));
         songIcon.scale.set(0.6, 0.6);
         songIcon.updateHitbox();
-        songIcon.cameras = [state.camHUD];
+        songIcon.cameras = [topCam]; // Atualizado
         state.add(songIcon);
 
-        
         var songNameTxt = new FlxText(songIcon.x + songIcon.width, songIcon.y, 250, actualSongName, 40);
         songNameTxt.font = Paths.font("RifficFree-Bold.ttf"); 
-        
-        
         songNameTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
         
         if (songId == "aggressiv-nyat" || songId == "lavender-essence") {
             songNameTxt.size = 28;
         }
         songNameTxt.alignment = "left";
-        songNameTxt.cameras = [state.camHUD];
+        songNameTxt.cameras = [topCam]; // Atualizado
         state.add(songNameTxt);
+
+        var songMusicianTxt = new FlxText(songNameTxt.x + 30, songNameTxt.y + songNameTxt.height, 200, "By: " + musicianName, 25);
+        songMusicianTxt.font = Paths.font("RifficFree-Bold.ttf");
+        songMusicianTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
+        
+        if (songId == "aggressiv-nyat" || songId == "lavender-essence") {
+            songMusicianTxt.size = 20;
+        }
+        songMusicianTxt.alignment = "left";
+        songMusicianTxt.cameras = [topCam]; // Atualizado
+        state.add(songMusicianTxt);
 
         
         var songMusicianTxt = new FlxText(songNameTxt.x + 30, songNameTxt.y + songNameTxt.height, 200, "By: " + musicianName, 25);

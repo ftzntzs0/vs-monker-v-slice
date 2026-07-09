@@ -168,6 +168,26 @@
       "name": "countdown",
       "prefix": "Geef countdown0"
     },
+	{
+      "name": "three",
+      "prefix": "Geef countdown0",
+      "frameIndices": [0, 1, 2, 3, 4, 5, 6, 7]
+    },
+	{
+      "name": "two",
+      "prefix": "Geef countdown0",
+      "frameIndices": [7,9, 10, 11, 12, 13, 14,15,16,17]
+    },
+		{
+      "name": "one",
+      "prefix": "Geef countdown0",
+      "frameIndices": [17,18,19,20,21,22,23,24,25,26]
+    },
+			{
+      "name": "go",
+      "prefix": "Geef countdown0",
+      "frameIndices": [26,27,28,29,30,31,32,33,34,35]
+    },
     {
       "name": "drop70",
       "prefix": "Crying",

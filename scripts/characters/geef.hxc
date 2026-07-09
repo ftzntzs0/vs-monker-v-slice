@@ -2,18 +2,19 @@ import funkin.play.character.MultiSparrowCharacter;
 import funkin.play.PlayState;
 import funkin.modding.events.UpdateScriptEvent;
 import funkin.modding.events.ScriptEvent;
-import flixel.FlxG; // IMPORTANTE: Adicionado para detetar o Mobile!
+import flixel.FlxG;
+import funkin.Highscore; 
 
 class GeefCharacter extends MultiSparrowCharacter
 {
     var isAltIdle:Bool = false;
     var isPlayingPoster:Bool = false;
-    var isLeftTurn:Bool = false; 
+    var isLeftTurn:Bool = false;
     var posterCooldown:Int = 0; 
 
     public function new() 
     {
-        super('geef'); 
+        super('geef');
     }
 
     override function onSongRetry(event:ScriptEvent) 
@@ -42,19 +43,38 @@ class GeefCharacter extends MultiSparrowCharacter
 
         if (posterCooldown > 0) posterCooldown--;
 
-        if (this.animation.curAnim != null && this.animation.curAnim.name == "poster" && !isPlayingPoster && posterCooldown == 0) 
+        if (!isPlayingPoster && posterCooldown <= 0) 
         {
-            isPlayingPoster = true;
-            if (!isAltIdle) {
-                isAltIdle = true;
-                this.playAnimation("poster", true, false); 
-            } else {
-                isAltIdle = false;
-                this.playAnimation("poster", true, true); 
+            var currentAcc:Float = 100.0;
+            var totalNotes:Int = 0;
+
+            try {
+                var t = Highscore.tallies;
+                totalNotes = t.sick + t.good + t.bad + t.shit + t.missed;
                 
-                if (this.animation.curAnim != null) {
-                    this.animation.curAnim.reversed = true;
-                    this.animation.curAnim.curFrame = this.animation.curAnim.numFrames - 1;
+                if (totalNotes > 0) {
+                    currentAcc = ((t.sick * 1.0) + (t.good * 0.75) + (t.bad * 0.5)) / totalNotes * 100.0;
+                }
+            } catch(e:Dynamic) {}
+
+            if (totalNotes > 0) 
+            {
+                if (currentAcc >= 95.0 && !isAltIdle) 
+                {
+                    isAltIdle = true;
+                    isPlayingPoster = true;
+                    this.playAnimation("poster", true, false); 
+                } 
+                else if (currentAcc < 95.0 && isAltIdle) 
+                {
+                    isAltIdle = false;
+                    isPlayingPoster = true;
+                    this.playAnimation("poster", true, true); 
+                    
+                    if (this.animation.curAnim != null) {
+                        this.animation.curAnim.reversed = true;
+                        this.animation.curAnim.curFrame = this.animation.curAnim.numFrames - 1;
+                    }
                 }
             }
         }
@@ -62,20 +82,14 @@ class GeefCharacter extends MultiSparrowCharacter
         if (isPlayingPoster && this.animation.curAnim != null && this.animation.curAnim.name == "poster") 
         {
             var isDone:Bool = false;
-
-            // ==========================================
-            // VERIFICAÇÃO ISOLADA (PC vs MOBILE)
-            // ==========================================
+            
             if (FlxG.onMobile) {
-                // LÓGICA MOBILE: Tolerante a pulos de frames
                 if (this.animation.curAnim.reversed) {
-                    // Previne bugs de frames negativos sem checar o .finished
                     if (this.animation.curAnim.curFrame <= 0) isDone = true;
                 } else {
                     if (this.animation.curAnim.finished) isDone = true;
                 }
             } else {
-                // LÓGICA PC: 100% INTACTA COMO VOCÊ PEDIU
                 if (this.animation.curAnim.reversed && this.animation.curAnim.curFrame == 0) {
                     isDone = true;
                 } 
@@ -83,43 +97,49 @@ class GeefCharacter extends MultiSparrowCharacter
                     isDone = true;
                 }
             }
-            // ==========================================
 
             if (isDone) {
                 isPlayingPoster = false;
                 
-                // ==========================================
-                // COOLDOWN ISOLADO (O SEGREDO PARA NÃO REPETIR)
-                // ==========================================
                 if (FlxG.onMobile) {
-                    // No mobile, se acabou de fazer a reversa (!isAltIdle), damos um tempo
-                    // de "descanso" muito maior (45 frames) para o jogo esquecer o comando.
-                    // Se foi a animação normal, mantemos 5.
                     posterCooldown = (!isAltIdle) ? 45 : 5;
                 } else {
-                    // PC continua sempre com 5, igual ao seu código original
-                    posterCooldown = 5; 
+                    posterCooldown = 5;
                 }
                 
                 if (!isAltIdle) {
-                    this.playAnimation("danceRight", true); 
+                    this.playAnimation("danceRight", true);
                 } else {
-                    this.playAnimation("danceRight-cheer", true); 
+                    this.playAnimation("danceRight-cheer", true);
                 }
                 
-                this.dance(true); 
+                this.dance(true);
             }
         }
     }
 
-    override function dance(force) 
+    
+    
+    
+    override function playAnimation(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)
+    {
+        
+        if (name == "drop70" || name == "combo50") return;
+        
+        
+        if (isPlayingPoster && name != "poster") return;
+        
+        
+        super.playAnimation(name, force, reversed, frame);
+    }
+
+    override function dance(force:Bool = false) 
     {
         if (isPlayingPoster) return;
 
         if (isAltIdle) 
         {
             isLeftTurn = !isLeftTurn;
-            
             if (isLeftTurn) {
                 this.playAnimation("danceLeft-cheer", true);
             } else {

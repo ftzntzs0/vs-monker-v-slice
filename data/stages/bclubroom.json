@@ -12,7 +12,7 @@
 {
    "assetPath": "stages/clubroom/characters/Yur_BG",
    "danceEvery": 2,
-      "zIndex": 0,
+      "zIndex": 50,
       "position": [1800, 1020],
       "scale": [0.9, 0.9],
       "animType": "sparrow",
@@ -32,7 +32,7 @@
 {
     "assetPath": "stages/clubroom/characters/Natki_BG",
    "danceEvery": 2,
-      "zIndex": 1,
+      "zIndex": 51,
       "position": [2000, 1060],
       "scale": [0.9, 0.9],
       "animType": "sparrow",
@@ -52,7 +52,7 @@
 {
     "assetPath": "stages/clubroom/characters/Emcee_BG",
    "danceEvery": 2,
-      "zIndex": 1,
+      "zIndex": 51,
       "position": [850, 920],
       "scale": [0.9, 0.9],
       "animType": "sparrow",
@@ -72,7 +72,7 @@
   {
     "assetPath": "stages/clubroom/characters/Syor_BG",
    "danceEvery": 1,
-      "zIndex": 2,
+      "zIndex": 52,
       "position": [600, 1000],
       "scale": [0.9, 0.9],
       "animType": "sparrow",
@@ -102,7 +102,7 @@
   {
     "assetPath": "stages/clubroom/characters/Monker_BG",
    "danceEvery": 2,
-      "zIndex": 1,
+      "zIndex": 51,
       "position": [300, 1050],
       "scale": [0.9, 0.9],
       "animType": "sparrow",
@@ -123,12 +123,12 @@
  ],
  "characters": {
   "bf": {
-   "cameraOffsets": [0, -60],
+   "cameraOffsets": [90, -165],
    "position": [1750, 1655],
    "zIndex": 300
   },
   "dad": {
-   "cameraOffsets": [200, -60],
+   "cameraOffsets": [200, 133],
    "position": [1100, 1045],
    "zIndex": 200
   },

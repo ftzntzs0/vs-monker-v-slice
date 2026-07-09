@@ -1,0 +1,63 @@
+import funkin.play.stage.Stage;
+import funkin.play.PlayState;
+import funkin.modding.events.ScriptEvent;
+
+class BClubroomStage extends Stage 
+{
+    public function new() 
+    {
+        super('bclubroom');
+    }
+
+    override function onCountdownStart(event:ScriptEvent) 
+    {
+        super.onCountdownStart(event);
+        
+        var game = PlayState.instance;
+        if (game == null || game.currentStage == null) return;
+
+        
+        if (game.currentStage.getGirlfriend() != null && game.currentStage.getGirlfriend().hasAnimation('countdown')) {
+            game.currentStage.getGirlfriend().playAnimation('countdown', true);
+        }
+        
+        var dadAtual = game.currentStage.getDad();
+        if (dadAtual == null || dadAtual.characterName == null) return;
+
+        var dadName:String = dadAtual.characterName.toLowerCase();
+        
+        
+        var todosOsProps = ["monker", "syor", "yur", "natki", "emcee"];
+        
+        
+        for (nomeProp in todosOsProps) {
+            var obj = game.currentStage.getNamedProp(nomeProp);
+            if (obj != null) {
+                obj.visible = true;
+            }
+        }
+
+        
+        var propParaEsconder:String = "";
+
+        if (dadName.indexOf("monker") != -1) {
+            propParaEsconder = "monker";
+        } else if (dadName.indexOf("syor") != -1) {
+            propParaEsconder = "syor";
+        } else if (dadName.indexOf("yur") != -1) {
+            propParaEsconder = "yur";
+        } else if (dadName.indexOf("natki") != -1) {
+            propParaEsconder = "natki";
+        } else if (dadName.indexOf("emcee") != -1) {
+            propParaEsconder = "emcee";
+        }
+
+        
+        if (propParaEsconder != "") {
+            var objToHide = game.currentStage.getNamedProp(propParaEsconder);
+            if (objToHide != null) {
+                objToHide.visible = false; 
+            }
+        }
+    }
+}
