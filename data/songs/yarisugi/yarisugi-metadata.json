@@ -1,17 +1,40 @@
 {
-	"timeFormat": "ms",
-	"artist": "Rarusel",
-	"charter": "Unknown",
-	"playData": {
-		"stage": "bclubroom",
-		"noteStyle": "funkin",
-		"difficulties": ["easy", "normal", "hard"],
-		"characters": {"girlfriend": "geef", "opponent": "monker", "player": "beef"}
-	},
-	"songName": "Yarisugi",
-	"timeChanges": [
-		{"t": 0, "bpm": 155}
-	],
-	"generatedBy": "Psych Engine v1.0.4 - Chart Editor V-Slice Exporter",
-	"version": "2.2.3"
+ "version": "2.2.4",
+ "songName": "Yarisugi",
+ "artist": "Rarusel",
+ "charter": "Unknown",
+ "offsets": { },
+ "playData": {
+  "difficulties": [
+   "easy",
+   "normal",
+   "hard"
+  ],
+  "characters": {
+   "player": "beef",
+   "girlfriend": "geef",
+   "opponent": "monker",
+   "opponentVocals": [
+    "monker"
+   ],
+   "playerVocals": [
+    "beef"
+   ]
+  },
+  "stage": "bclubroom",
+  "noteStyle": "bean",
+  "ratings": {
+   "normal": 0,
+   "hard": 0
+  }
+ },
+ "generatedBy": "Friday Night Funkin' - v0.8.4",
+ "timeChanges": [
+  {
+   "t": 0,
+   "b": 0,
+   "bpm": 155,
+   "bt": [4, 4, 4, 4]
+  }
+ ]
 }
