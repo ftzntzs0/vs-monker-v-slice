@@ -46,6 +46,9 @@ class Test extends Module
     
     
     
+    var mobileStrumOffset:Float = -50; 
+    
+    
     var assetWidth:Float = 780;
     var assetHeight:Float = 145;
     
@@ -96,13 +99,9 @@ class Test extends Module
         var corDoOponente:Int = 0xFFFF0000;
         var corDoJogador:Int = 0xFF31B0CD;
         
-        
         var currentIconeP2_OffsetX:Float = 15;
         var currentIconeP2_OffsetY:Float = 15;
 
-        
-        
-        
         if (dadName.indexOf("geef") != -1) {
             corDoOponente = 0xFFA70049;
             currentIconeP2_OffsetX = 15; 
@@ -190,7 +189,6 @@ class Test extends Module
 
         var iconBaseSize:Float = 150;
         
-        
         if (diamondP1 != null && game.iconP1 != null && dummyIconP1 != null) {
             dummyIconP1.frames = game.iconP1.frames;
             dummyIconP1.animation.frameIndex = game.iconP1.animation.frameIndex; 
@@ -201,7 +199,6 @@ class Test extends Module
             dummyIconP1.x = diamondP1.x + (diamondP1.width - iconBaseSize) / 2 + iconeInterno_P1_OffsetX;
             dummyIconP1.y = diamondP1.y + (diamondP1.height - iconBaseSize) / 2 + iconeInterno_P1_OffsetY;
         }
-        
         
         if (diamondP2 != null && game.iconP2 != null && dummyIconP2 != null) {
             dummyIconP2.frames = game.iconP2.frames;
@@ -234,9 +231,21 @@ class Test extends Module
         if (!isCustomDad()) return;
 
         atualDownscroll = Preferences.downscroll;
+        
+        
         if (FlxG.onMobile) {
             atualDownscroll = true;
+            
+            if (game.opponentStrumline != null) {
+                for (i in 0...4) {
+                    var oppNote = game.opponentStrumline.getByIndex(i);
+                    if (oppNote != null) {
+                        oppNote.x += mobileStrumOffset; 
+                    }
+                }
+            }
         }
+        
 
         var baseZ:Int = game.healthBar.zIndex;
         smoothHealth = game.healthBar.percent;
