@@ -33,25 +33,21 @@ class Test extends Module
     var barraOffsetY:Float = -20; 
 
     var textoScore_OffsetX:Float = 165; 
-    var textoScore_OffsetY_Upscroll:Float = -5;
+    var textoScore_OffsetY_Upscroll:Float = -5; 
     var textoScore_OffsetY_Downscroll:Float = -125; 
 
     var diamanteP2_OffsetX:Float = -95;
     var diamanteP2_OffsetY:Float = 10;   
     var diamanteP1_OffsetX:Float = 95;  
     var diamanteP1_OffsetY:Float = 10;
-
+    
     var iconeInterno_P1_OffsetX:Float = 15;  
     var iconeInterno_P1_OffsetY:Float = 35; 
     
-    var iconeInterno_P2_OffsetX:Float = 15;  
-    var iconeInterno_P2_OffsetY:Float = 15; 
+    
     
     var assetWidth:Float = 780;
     var assetHeight:Float = 145;
-
-    
-    
     
     var atualDownscroll:Bool = false;
 
@@ -99,14 +95,49 @@ class Test extends Module
         var dadName:String = game.currentStage.getDad().characterName.toLowerCase();
         var corDoOponente:Int = 0xFFFF0000;
         var corDoJogador:Int = 0xFF31B0CD;
+        
+        
+        var currentIconeP2_OffsetX:Float = 15;
+        var currentIconeP2_OffsetY:Float = 15;
 
-        if (dadName.indexOf("geef") != -1) corDoOponente = 0xFFA70049;
-        else if (dadName.indexOf("monker") != -1) corDoOponente = 0xFFA9D995;
-        else if (dadName.indexOf("syor") != -1) corDoOponente = 0xFF9ACDF8;
-        else if (dadName.indexOf("natki") != -1) corDoOponente = 0xFFFCAADD;
-        else if (dadName.indexOf("yur") != -1) corDoOponente = 0xFFB090C5;
-        else if (dadName.indexOf("emcee") != -1) corDoOponente = 0xFF93575E;
-        else if (dadName.indexOf("tato") != -1) corDoOponente = 0xFFF587A1;
+        
+        
+        
+        if (dadName.indexOf("geef") != -1) {
+            corDoOponente = 0xFFA70049;
+            currentIconeP2_OffsetX = 15; 
+            currentIconeP2_OffsetY = 15; 
+        } 
+        else if (dadName.indexOf("monker") != -1) {
+            corDoOponente = 0xFFA9D995;
+            currentIconeP2_OffsetX = -5; 
+            currentIconeP2_OffsetY = 30; 
+        } 
+        else if (dadName.indexOf("syor") != -1) {
+            corDoOponente = 0xFF9ACDF8;
+            currentIconeP2_OffsetX = 15; 
+            currentIconeP2_OffsetY = 15; 
+        } 
+        else if (dadName.indexOf("natki") != -1) {
+            corDoOponente = 0xFFFCAADD;
+            currentIconeP2_OffsetX = 15; 
+            currentIconeP2_OffsetY = 15; 
+        } 
+        else if (dadName.indexOf("yur") != -1) {
+            corDoOponente = 0xFFB090C5;
+            currentIconeP2_OffsetX = 15; 
+            currentIconeP2_OffsetY = 15; 
+        } 
+        else if (dadName.indexOf("emcee") != -1) {
+            corDoOponente = 0xFF93575E;
+            currentIconeP2_OffsetX = 15; 
+            currentIconeP2_OffsetY = 15; 
+        } 
+        else if (dadName.indexOf("tato") != -1) {
+            corDoOponente = 0xFFF587A1;
+            currentIconeP2_OffsetX = 15; 
+            currentIconeP2_OffsetY = 15; 
+        }
 
         if (customHealthBG == null || customLeftBar == null || customRightBar == null) return;
 
@@ -125,11 +156,7 @@ class Test extends Module
         if (dummyIconP2 != null) dummyIconP2.visible = true;
         if (customScoreTxt != null) customScoreTxt.visible = true;
 
-        
-        
-        
         var isDownscroll:Bool = atualDownscroll;
-        
         var hudY:Float = isDownscroll ? hudY_Downscroll : hudY_Upscroll;
         var diffY:Float = FlxG.height - 720;
         var baseHUD_Y:Float = hudY + diffY;
@@ -146,7 +173,6 @@ class Test extends Module
         var alvoHealth = game.healthBar.percent;
         if (alvoHealth < 0) alvoHealth = 0;
         if (alvoHealth > 100) alvoHealth = 100;
-
         smoothHealth = smoothHealth + (alvoHealth - smoothHealth) * barraFluidez;
 
         var splitX = assetWidth * ((100 - smoothHealth) / 100);
@@ -164,6 +190,7 @@ class Test extends Module
 
         var iconBaseSize:Float = 150;
         
+        
         if (diamondP1 != null && game.iconP1 != null && dummyIconP1 != null) {
             dummyIconP1.frames = game.iconP1.frames;
             dummyIconP1.animation.frameIndex = game.iconP1.animation.frameIndex; 
@@ -175,6 +202,7 @@ class Test extends Module
             dummyIconP1.y = diamondP1.y + (diamondP1.height - iconBaseSize) / 2 + iconeInterno_P1_OffsetY;
         }
         
+        
         if (diamondP2 != null && game.iconP2 != null && dummyIconP2 != null) {
             dummyIconP2.frames = game.iconP2.frames;
             dummyIconP2.animation.frameIndex = game.iconP2.animation.frameIndex; 
@@ -182,8 +210,9 @@ class Test extends Module
             dummyIconP2.flipX = game.iconP2.flipX; 
             dummyIconP2.scale.set(1, 1); 
             dummyIconP2.updateHitbox();
-            dummyIconP2.x = diamondP2.x + (diamondP2.width - iconBaseSize) / 2 + iconeInterno_P2_OffsetX;
-            dummyIconP2.y = diamondP2.y + (diamondP2.height - iconBaseSize) / 2 + iconeInterno_P2_OffsetY;
+            
+            dummyIconP2.x = diamondP2.x + (diamondP2.width - iconBaseSize) / 2 + currentIconeP2_OffsetX;
+            dummyIconP2.y = diamondP2.y + (diamondP2.height - iconBaseSize) / 2 + currentIconeP2_OffsetY;
         }
 
         if (customScoreTxt != null) {
@@ -204,17 +233,14 @@ class Test extends Module
 
         if (!isCustomDad()) return;
 
-        
-        
-        
         atualDownscroll = Preferences.downscroll;
         if (FlxG.onMobile) {
-            atualDownscroll = true; 
+            atualDownscroll = true;
         }
 
         var baseZ:Int = game.healthBar.zIndex;
         smoothHealth = game.healthBar.percent;
-
+        
         if (customLeftBar == null) {
             customLeftBar = new FlxSprite();
             customLeftBar.frames = Paths.getSparrowAtlas("BeanhealthBar");

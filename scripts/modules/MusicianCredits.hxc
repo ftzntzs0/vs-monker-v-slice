@@ -21,21 +21,11 @@ class MusicianCredits extends Module
     {
         super.onSongStart(event);
         
-        
         var state = PlayState.instance;
         if (state == null || state.currentSong == null) return;
 
-        
         var songId = state.currentSong.id.toLowerCase();
-        
-
-
         var musicianName = getMusicianName(songId);
-        
-        
-        
-        
-        
         
         if (musicianName == "UNKNOWN") return;
 
@@ -46,20 +36,19 @@ class MusicianCredits extends Module
             actualSongName = "Tutorial";
         }
 
-        
-        var topCam = state.camOther != null ? state.camOther : state.camHUD;
+        var topCam = state.camHUD;
 
         var bg = new FlxSprite(FlxG.width, 300);
         bg.makeGraphic(350, 100, 0xFFE27E9E); 
         bg.alpha = 0.6;
-        bg.cameras = [topCam]; // Atualizado
+        bg.cameras = [topCam];
         state.add(bg);
 
         var songIcon = new FlxSprite(bg.x + 2, bg.y + 2);
         songIcon.loadGraphic(Paths.image("songIcons/" + iconName));
         songIcon.scale.set(0.6, 0.6);
         songIcon.updateHitbox();
-        songIcon.cameras = [topCam]; // Atualizado
+        songIcon.cameras = [topCam];
         state.add(songIcon);
 
         var songNameTxt = new FlxText(songIcon.x + songIcon.width, songIcon.y, 250, actualSongName, 40);
@@ -70,7 +59,7 @@ class MusicianCredits extends Module
             songNameTxt.size = 28;
         }
         songNameTxt.alignment = "left";
-        songNameTxt.cameras = [topCam]; // Atualizado
+        songNameTxt.cameras = [topCam];
         state.add(songNameTxt);
 
         var songMusicianTxt = new FlxText(songNameTxt.x + 30, songNameTxt.y + songNameTxt.height, 200, "By: " + musicianName, 25);
@@ -81,39 +70,27 @@ class MusicianCredits extends Module
             songMusicianTxt.size = 20;
         }
         songMusicianTxt.alignment = "left";
-        songMusicianTxt.cameras = [topCam]; // Atualizado
+        songMusicianTxt.cameras = [topCam];
         state.add(songMusicianTxt);
 
-        
-        var songMusicianTxt = new FlxText(songNameTxt.x + 30, songNameTxt.y + songNameTxt.height, 200, "By: " + musicianName, 25);
-        songMusicianTxt.font = Paths.font("RifficFree-Bold.ttf");
-        
-        
-        songMusicianTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
-        
-        if (songId == "aggressiv-nyat" || songId == "lavender-essence") {
-            songMusicianTxt.size = 20;
-        }
-        songMusicianTxt.alignment = "left";
-        songMusicianTxt.cameras = [state.camHUD];
-        state.add(songMusicianTxt);
-
-        
         songNameTxt.y = (bg.y + (bg.height / 2.0)) - (songNameTxt.height / 2.0) - (songMusicianTxt.height / 2.0);
         songMusicianTxt.y = songNameTxt.y + songNameTxt.height;
 
         
         
         
+        bg.zIndex = 999999;
+        songIcon.zIndex = 999999;
+        songNameTxt.zIndex = 999999;
+        songMusicianTxt.zIndex = 999999;
+        state.refresh(); 
+
         var destX = FlxG.width - 350;
         FlxTween.tween(bg, {x: destX}, 0.6, {ease: FlxEase.quadInOut});
         FlxTween.tween(songIcon, {x: destX + 2}, 0.7, {ease: FlxEase.quadInOut});
         FlxTween.tween(songNameTxt, {x: destX + 2 + songIcon.width}, 0.8, {ease: FlxEase.quadInOut});
         FlxTween.tween(songMusicianTxt, {x: destX + 2 + songIcon.width + 30}, 0.85, {ease: FlxEase.quadInOut});
 
-        
-        
-        
         new FlxTimer().start(2.35, function(tmr:FlxTimer) 
         {
             var outX = FlxG.width;
@@ -131,9 +108,6 @@ class MusicianCredits extends Module
         });
     }
 
-    
-    
-    
     function getMusicianName(songId:String):String 
     {
         switch (songId) {

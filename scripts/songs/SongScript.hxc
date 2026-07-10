@@ -21,7 +21,7 @@ class YarisugiScript extends Song
     
     var polkaBG:FlxBackdrop = null;
     var blackOverlay:FlxSprite = null;
-
+    var introFade:FlxSprite = null; 
     
     var customBopInterval:Int = 4;
     var customBopIntensity:Float = 1.0;
@@ -36,6 +36,13 @@ class YarisugiScript extends Song
         var game = PlayState.instance;
         if (game == null) return;
         
+        defaultOpponentY = [];
+        defaultPlayerY = [];
+        oppOffsets = [-400, -400, -400, -400];
+        plrOffsets = [-400, -400, -400, -400];
+        customBopInterval = 4;
+        customBopIntensity = 1.0;
+
         try { game.camZooming = true; } catch(e:Dynamic) {}
 
         if (game.opponentStrumline != null) {
@@ -92,7 +99,7 @@ class YarisugiScript extends Song
             }
         }
 
-        var topCam = game.camHUD;
+        var topCam = game.camHUD; 
         
         blackOverlay = new FlxSprite();
         blackOverlay.makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
@@ -101,12 +108,19 @@ class YarisugiScript extends Song
         blackOverlay.cameras = [topCam];
         blackOverlay.alpha = 0;
         blackOverlay.visible = false; 
-        
-        
-        
-        
-        blackOverlay.zIndex = 999999; 
+        blackOverlay.zIndex = 900000; 
         game.add(blackOverlay);
+
+        introFade = new FlxSprite();
+        introFade.makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
+        introFade.screenCenter();
+        introFade.scrollFactor.set(0, 0);
+        introFade.cameras = [topCam];
+        introFade.zIndex = 900000; 
+        
+        introFade.alpha = 0; 
+        game.add(introFade);
+
         game.refresh(); 
     }
 
@@ -118,8 +132,10 @@ class YarisugiScript extends Song
         if (game.opponentStrumline != null) {
             for (i in 0...4) {
                 var oppNote = game.opponentStrumline.getByIndex(i);
-                if (oppNote != null && defaultOpponentY[i] != null) {
-                    oppNote.y = defaultOpponentY[i] + oppOffsets[i];
+                if (oppNote != null && defaultOpponentY != null && oppOffsets != null) {
+                    if (defaultOpponentY[i] != null && oppOffsets[i] != null) {
+                        oppNote.y = defaultOpponentY[i] + oppOffsets[i];
+                    }
                 }
             }
         }
@@ -127,8 +143,10 @@ class YarisugiScript extends Song
         if (game.playerStrumline != null) {
             for (i in 0...4) {
                 var plrNote = game.playerStrumline.getByIndex(i);
-                if (plrNote != null && defaultPlayerY[i] != null) {
-                    plrNote.y = defaultPlayerY[i] + plrOffsets[i];
+                if (plrNote != null && defaultPlayerY != null && plrOffsets != null) {
+                    if (defaultPlayerY[i] != null && plrOffsets[i] != null) {
+                        plrNote.y = defaultPlayerY[i] + plrOffsets[i];
+                    }
                 }
             }
         }
@@ -143,15 +161,16 @@ class YarisugiScript extends Song
         var mod = ModuleHandler.getModule('teste');
         switch(curStep) {
             
-            
-            
             case 0:
-                var flashCam = game.camOther;
-                if (flashCam == null) flashCam = game.camHUD; 
-                if (flashCam != null) flashCam.flash(0xFF000000, 6.8, null, true);
+                
+                if (introFade != null) {
+                    introFade.alpha = 1; 
+                    FlxTween.tween(introFade, {alpha: 0}, 6.8, {ease: FlxEase.linear, onComplete: function(twn:FlxTween) {
+                        if (introFade != null) introFade.visible = false; 
+                    }});
+                }
                 
             case 123:
-                
                 if (blackOverlay != null) {
                     blackOverlay.visible = true;
                     blackOverlay.alpha = 1;
@@ -173,9 +192,6 @@ class YarisugiScript extends Song
             case 1183:
                 if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 0.775, null, true);
                 
-            
-            
-            
             case 827:
                 try { game.camZoomingDecay = 4; } catch(e:Dynamic) {}
             case 831:
@@ -197,9 +213,6 @@ class YarisugiScript extends Song
                 customBopIntensity = 0.25;
                 try { game.camZoomingDecay = 1; } catch(e:Dynamic) {}
 
-            
-            
-            
             case 66:
                 if (mod != null) {
                     FlxTween.num(410, 10, 0.75, {ease: FlxEase.expoOut}, function(val:Float) {
@@ -242,16 +255,10 @@ class YarisugiScript extends Song
         if (game == null) return;
         var duration:Float = (60 / Conductor.instance.bpm) * 4;
 
-        
-        
-        
         if (customBopInterval > 0 && (curBeat % customBopInterval) == 0) {
             forceBop(0.015 * customBopIntensity, 0.03 * customBopIntensity);
         }
 
-        
-        
-        
         switch(curBeat) {
             case 224:
                 if (polkaBG != null) FlxTween.tween(polkaBG, {alpha: 1}, duration, {ease: FlxEase.cubeIn});
@@ -269,7 +276,6 @@ class YarisugiScript extends Song
         }
     }
 
-    
     function forceBop(gameZoom:Float, hudZoom:Float) {
         var game = PlayState.instance;
         if (game == null) return;
@@ -282,14 +288,16 @@ class YarisugiScript extends Song
     }
 
     function tweenOpponentNote(index:Int, duration:Float) {
+        if (oppOffsets == null) return;
         FlxTween.num(-400, 0, duration, {ease: FlxEase.expoOut}, function(val:Float) {
-            oppOffsets[index] = val;
+            if (oppOffsets != null) oppOffsets[index] = val;
         });
     }
 
     function tweenPlayerNote(index:Int, duration:Float) {
+        if (plrOffsets == null) return;
         FlxTween.num(-400, 0, duration, {ease: FlxEase.expoOut}, function(val:Float) {
-            plrOffsets[index] = val;
+            if (plrOffsets != null) plrOffsets[index] = val;
         });
     }
 
@@ -314,11 +322,5 @@ class YarisugiScript extends Song
 
     override function onDestroy(event:ScriptEvent) {
         super.onDestroy(event);
-        defaultOpponentY = null;
-        defaultPlayerY = null;
-        oppOffsets = null;
-        plrOffsets = null;
-        polkaBG = null;
-        blackOverlay = null;
     }
 }
