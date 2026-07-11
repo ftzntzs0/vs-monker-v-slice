@@ -1,0 +1,57 @@
+{
+    "version": "1.0.0",
+    "name": "Natki",
+    "renderType": "multisparrow",
+    "offsets": [
+		-120,
+		295
+	],
+    "assetPath": "characters/natki-normal",
+    "flipX": false,
+    "cameraOffsets": [
+		-100,
+		10
+	],
+    "singTime": 6.1,
+    "animations": [
+        {
+            "name": "idle",
+            "prefix": "Natki Idle Dance0"
+        },
+        {
+            "name": "singLEFT",
+            "prefix": "Natki Left Note0",
+            "offsets": [
+                19,
+                8
+            ]
+        },
+        {
+            "name": "singDOWN",
+            "prefix": "Natki Down Note0",
+            "offsets": [
+                -14,
+                -3
+            ]
+        },
+        {
+            "name": "singUP",
+            "prefix": "Natki Up Note0",
+            "offsets": [
+                4,
+                16
+            ]
+        },
+        {
+            "name": "singRIGHT",
+            "prefix": "Natki Right Note0",
+            "offsets": [
+                -12,
+                12
+            ]
+        }
+    ],
+    "startingAnimation": "",
+    "isPixel": false,
+    "scale": 1
+}

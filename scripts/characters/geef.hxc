@@ -43,7 +43,18 @@ class GeefCharacter extends MultiSparrowCharacter
 
         if (posterCooldown > 0) posterCooldown--;
 
-        if (!isPlayingPoster && posterCooldown <= 0) 
+        var game = PlayState.instance;
+        var isBannedSong:Bool = false;
+        
+        if (game != null && game.currentSong != null) {
+            var songId:String = game.currentSong.id.toLowerCase();
+            if (songId == "bean-tutorial" || songId == "warm-up") {
+                isBannedSong = true;
+            }
+        }
+
+        
+        if (!isBannedSong && !isPlayingPoster && posterCooldown <= 0) 
         {
             var currentAcc:Float = 100.0;
             var totalNotes:Int = 0;
@@ -79,6 +90,7 @@ class GeefCharacter extends MultiSparrowCharacter
             }
         }
 
+        
         if (isPlayingPoster && this.animation.curAnim != null && this.animation.curAnim.name == "poster") 
         {
             var isDone:Bool = false;
@@ -118,9 +130,6 @@ class GeefCharacter extends MultiSparrowCharacter
         }
     }
 
-    
-    
-    
     override function playAnimation(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)
     {
         
@@ -130,7 +139,29 @@ class GeefCharacter extends MultiSparrowCharacter
         if (isPlayingPoster && name != "poster") return;
         
         
+        
+        
+        
+        if (name == "poster" && !isPlayingPoster) {
+            isPlayingPoster = true; 
+            
+            
+            if (!isAltIdle) {
+                isAltIdle = true;
+                reversed = false; 
+            } else {
+                isAltIdle = false;
+                reversed = true; 
+            }
+        }
+
         super.playAnimation(name, force, reversed, frame);
+
+        
+        if (name == "poster" && reversed && this.animation.curAnim != null) {
+            this.animation.curAnim.reversed = true;
+            this.animation.curAnim.curFrame = this.animation.curAnim.numFrames - 1;
+        }
     }
 
     override function dance(force:Bool = false) 

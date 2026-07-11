@@ -1,0 +1,40 @@
+{
+ "version": "2.2.4",
+ "songName": "Embrace",
+ "artist": "VamCatJay",
+ "charter": "Unknown",
+ "offsets": { },
+ "playData": {
+  "difficulties": [
+   "easy",
+   "normal",
+   "hard"
+  ],
+  "characters": {
+   "player": "beef",
+   "girlfriend": "geef",
+   "opponent": "syor",
+   "opponentVocals": [
+    "syor"
+   ],
+   "playerVocals": [
+    "beef"
+   ]
+  },
+  "stage": "bclubroom",
+  "noteStyle": "bean",
+  "ratings": {
+   "normal": 0,
+   "hard": 0
+  }
+ },
+ "generatedBy": "Friday Night Funkin' - v0.8.4",
+ "timeChanges": [
+  {
+   "t": 0,
+   "b": 0,
+   "bpm": 155,
+   "bt": [4, 4, 4, 4]
+  }
+ ]
+}

@@ -8,6 +8,7 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxTimer;
 import flixel.FlxG;
+import flixel.FlxCamera; 
 import funkin.Paths;
 
 class MusicianCredits extends Module 
@@ -36,19 +37,24 @@ class MusicianCredits extends Module
             actualSongName = "Tutorial";
         }
 
-        var topCam = state.camHUD;
+        
+        
+        
+        var creditCam = new FlxCamera();
+        creditCam.bgColor = 0x00000000;
+        FlxG.cameras.add(creditCam, false);
 
         var bg = new FlxSprite(FlxG.width, 300);
         bg.makeGraphic(350, 100, 0xFFE27E9E); 
         bg.alpha = 0.6;
-        bg.cameras = [topCam];
+        bg.cameras = [creditCam]; 
         state.add(bg);
 
         var songIcon = new FlxSprite(bg.x + 2, bg.y + 2);
         songIcon.loadGraphic(Paths.image("songIcons/" + iconName));
         songIcon.scale.set(0.6, 0.6);
         songIcon.updateHitbox();
-        songIcon.cameras = [topCam];
+        songIcon.cameras = [creditCam];
         state.add(songIcon);
 
         var songNameTxt = new FlxText(songIcon.x + songIcon.width, songIcon.y, 250, actualSongName, 40);
@@ -59,7 +65,7 @@ class MusicianCredits extends Module
             songNameTxt.size = 28;
         }
         songNameTxt.alignment = "left";
-        songNameTxt.cameras = [topCam];
+        songNameTxt.cameras = [creditCam];
         state.add(songNameTxt);
 
         var songMusicianTxt = new FlxText(songNameTxt.x + 30, songNameTxt.y + songNameTxt.height, 200, "By: " + musicianName, 25);
@@ -70,15 +76,12 @@ class MusicianCredits extends Module
             songMusicianTxt.size = 20;
         }
         songMusicianTxt.alignment = "left";
-        songMusicianTxt.cameras = [topCam];
+        songMusicianTxt.cameras = [creditCam];
         state.add(songMusicianTxt);
 
         songNameTxt.y = (bg.y + (bg.height / 2.0)) - (songNameTxt.height / 2.0) - (songMusicianTxt.height / 2.0);
         songMusicianTxt.y = songNameTxt.y + songNameTxt.height;
 
-        
-        
-        
         bg.zIndex = 999999;
         songIcon.zIndex = 999999;
         songNameTxt.zIndex = 999999;
@@ -104,6 +107,7 @@ class MusicianCredits extends Module
                 songIcon.destroy();
                 songNameTxt.destroy();
                 songMusicianTxt.destroy();
+                FlxG.cameras.remove(creditCam, true); 
             });
         });
     }

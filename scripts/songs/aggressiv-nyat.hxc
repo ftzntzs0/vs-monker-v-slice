@@ -1,0 +1,362 @@
+import funkin.play.song.Song;
+import funkin.play.PlayState;
+import funkin.Conductor;
+import funkin.modding.module.ModuleHandler;
+import flixel.FlxCamera;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.math.FlxMath;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import funkin.modding.events.ScriptEvent;
+import funkin.modding.events.SongTimeScriptEvent;
+import funkin.modding.events.UpdateScriptEvent;
+
+import flixel.addons.display.FlxRuntimeShader;
+import openfl.filters.ShaderFilter;
+import openfl.filters.BitmapFilter;
+import funkin.graphics.shaders.AdjustColorShader;
+
+class AggressivNyatScript extends Song
+{
+    var blackOverlay:FlxSprite = null;
+    var hideHUD:Bool = true; 
+
+    
+    
+    
+    var colorShaderGame:AdjustColorShader = null;
+    var abberationShaderGame:FlxRuntimeShader = null;
+    var bloomShaderGame:FlxRuntimeShader = null;
+
+    
+    
+    
+    var colorShaderHUD:AdjustColorShader = null;
+    var abberationShaderHUD:FlxRuntimeShader = null;
+    var bloomShaderHUD:FlxRuntimeShader = null;
+    
+    var curAberration:Float = 0.0;
+    var curBloom:Float = 0.0;
+    var targetBloom:Float = 0.0; 
+    var curSaturation:Float = 0.0;
+    var targetSaturation:Float = 0.0;
+
+    var abberationActive:Bool = false;
+    var bloomActive:Bool = false;
+    var hsvActive:Bool = false;
+
+    
+    
+    
+    var abberationCode:String = "
+        #pragma header
+        uniform float intensity;
+        vec2 brownConradyDistortion(vec2 uv, float scalar) {
+            uv = (uv - 0.5 ) * 2.0;
+            float barrelDistortion1 = -0.02 * scalar;
+            float r2 = dot(uv,uv);
+            uv *= 1.0 + barrelDistortion1 * r2;
+            return (uv / 2.0) + 0.5;
+        }
+        void main() {
+            vec2 uv = openfl_TextureCoordv.xy;
+            vec4 baseColor = flixel_texture2D(bitmap, uv);
+            
+            
+            if (baseColor.a == 0.0) {
+                gl_FragColor = vec4(0.0);
+                return;
+            }
+
+            float maxDistort = intensity * (1.0-1.0/openfl_TextureSize.x);
+            float scalar = 1.0 * maxDistort;
+            vec4 colourScalar = vec4(700.0, 560.0, 490.0, 1.0);
+            colourScalar /= max(max(colourScalar.x, colourScalar.y), colourScalar.z);
+            colourScalar *= 2.0 * scalar;
+            
+            vec3 finalColor = vec3( 0.0 );
+            for( float tap = 0.0; tap < 8.0; tap += 1.0 ) {
+                finalColor.r += flixel_texture2D(bitmap, brownConradyDistortion(uv, colourScalar.r)).r;
+                finalColor.g += flixel_texture2D(bitmap, brownConradyDistortion(uv, colourScalar.g)).g;
+                finalColor.b += flixel_texture2D(bitmap, brownConradyDistortion(uv, colourScalar.b)).b;
+                colourScalar *= 0.99;
+            }
+            gl_FragColor = vec4((finalColor.rgb / 8.0), baseColor.a);
+        }
+    ";
+
+    var bloomCode:String = "
+        #pragma header
+        const float blurSize = 1.0/200.0;
+        uniform float intensity;
+        void main() {
+            vec2 uv = openfl_TextureCoordv;
+            vec4 baseColor = flixel_texture2D(bitmap, uv);
+            
+            if (baseColor.a == 0.0) {
+                gl_FragColor = vec4(0.0);
+                return;
+            }
+
+            vec3 sum = vec3(0.0);
+            sum += flixel_texture2D(bitmap, vec2(uv.x - 4.0*blurSize, uv.y)).rgb * 0.05;
+            sum += flixel_texture2D(bitmap, vec2(uv.x - 3.0*blurSize, uv.y)).rgb * 0.09;
+            sum += flixel_texture2D(bitmap, vec2(uv.x - 2.0*blurSize, uv.y)).rgb * 0.12;
+            sum += flixel_texture2D(bitmap, vec2(uv.x, uv.y - 4.0*blurSize)).rgb * 0.05;
+            sum += flixel_texture2D(bitmap, vec2(uv.x, uv.y - 3.0*blurSize)).rgb * 0.09;
+            
+            gl_FragColor = vec4(sum * intensity + baseColor.rgb, baseColor.a);
+        }
+    ";
+
+    public function new() {
+        super('aggressiv-nyat');
+    }
+
+    function updateFilters() {
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        var filtersGame:Array<BitmapFilter> = [];
+        var filtersHUD:Array<BitmapFilter> = [];
+        
+        if (hsvActive) {
+            filtersGame.push(new ShaderFilter(colorShaderGame));
+            filtersHUD.push(new ShaderFilter(colorShaderHUD));
+        }
+
+        if (abberationActive) {
+            filtersGame.push(new ShaderFilter(abberationShaderGame));
+            filtersHUD.push(new ShaderFilter(abberationShaderHUD));
+        }
+
+        if (bloomActive) {
+            filtersGame.push(new ShaderFilter(bloomShaderGame));
+            filtersHUD.push(new ShaderFilter(bloomShaderHUD));
+        }
+        
+        if (game.camGame != null) game.camGame.filters = filtersGame;
+        if (game.camHUD != null) game.camHUD.filters = filtersHUD;
+    }
+
+    function pulseAberration(game:PlayState) {
+        if (game.camHUD != null) {
+            FlxTween.cancelTweensOf(game.camHUD);
+            game.camHUD.x = FlxG.random.float(-20, 20);
+            game.camHUD.y = FlxG.random.float(-20, 20);
+            FlxTween.tween(game.camHUD, {x: 0, y: 0}, (60.0 / Conductor.instance.bpm) * 8, {ease: FlxEase.expoOut});
+        }
+    }
+
+    override function onCountdownStart(event:ScriptEvent) {
+        super.onCountdownStart(event);
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        hideHUD = true; 
+        
+        if (game.currentStage != null) {
+            if (game.currentStage.getBoyfriend() != null) game.currentStage.getBoyfriend().shader = null;
+            if (game.currentStage.getDad() != null) game.currentStage.getDad().shader = null;
+            if (game.currentStage.getGirlfriend() != null) game.currentStage.getGirlfriend().shader = null;
+        }
+
+        if (game.camGame != null) game.camGame.filters = [];
+        if (game.camHUD != null) game.camHUD.filters = [];
+
+        var mod = ModuleHandler.getModule('teste');
+        if (mod != null) {
+            try { mod.barraOffsetY = -20; } catch(e:Dynamic) {}
+            try { mod.diamanteP2_OffsetY = 10; } catch(e:Dynamic) {}
+            try { mod.diamanteP1_OffsetY = 10; } catch(e:Dynamic) {}
+            try { mod.textoScore_OffsetY_Upscroll = -5; } catch(e:Dynamic) {}
+            try { mod.textoScore_OffsetY_Downscroll = -125; } catch(e:Dynamic) {}
+            var resetAlpha = function(obj:Dynamic) { if (obj != null) obj.alpha = 1; }
+            try { resetAlpha(mod.customHealthBG); resetAlpha(mod.customLeftBar); resetAlpha(mod.customRightBar); resetAlpha(mod.diamondP1); resetAlpha(mod.diamondP2); resetAlpha(mod.dummyIconP1); resetAlpha(mod.dummyIconP2); resetAlpha(mod.customScoreTxt); } catch(e:Dynamic) {}
+        }
+
+        colorShaderGame = new AdjustColorShader();
+        colorShaderHUD = new AdjustColorShader();
+
+        abberationShaderGame = new FlxRuntimeShader(abberationCode);
+        abberationShaderGame.setFloat("intensity", 0.0);
+        abberationShaderHUD = new FlxRuntimeShader(abberationCode);
+        abberationShaderHUD.setFloat("intensity", 0.0);
+
+        bloomShaderGame = new FlxRuntimeShader(bloomCode);
+        bloomShaderGame.setFloat("intensity", 0.0);
+        bloomShaderHUD = new FlxRuntimeShader(bloomCode);
+        bloomShaderHUD.setFloat("intensity", 0.0);
+
+        var topCam = game.camOther;
+        if (topCam == null) {
+            topCam = new FlxCamera();
+            topCam.bgColor = 0x00000000;
+            FlxG.cameras.add(topCam, false);
+        }
+        
+        blackOverlay = new FlxSprite();
+        blackOverlay.makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
+        blackOverlay.screenCenter();
+        blackOverlay.scrollFactor.set(0, 0);
+        blackOverlay.cameras = [topCam];
+        blackOverlay.alpha = 1;
+        blackOverlay.zIndex = 900000;
+        game.add(blackOverlay);
+
+        var beatDuration:Float = (60.0 / Conductor.instance.bpm);
+        FlxTween.tween(blackOverlay, {alpha: 0}, beatDuration * 32, {ease: FlxEase.linear});
+        
+        if (game.camGame != null) {
+            FlxTween.cancelTweensOf(game.camGame);
+            FlxTween.tween(game.camGame, {zoom: 0.8}, beatDuration * 64, {ease: FlxEase.expoIn});
+        }
+
+        game.refresh();
+    }
+
+    override function onUpdate(event:UpdateScriptEvent) {
+        super.onUpdate(event);
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        if (hideHUD) {
+            if (game.camHUD != null) game.camHUD.alpha = 0; 
+        } else {
+            if (game.camHUD != null) game.camHUD.alpha = 1; 
+        }
+
+        var speed:Float = event.elapsed * 6;
+        var colorSpeed:Float = event.elapsed * 4;
+
+        curAberration = FlxMath.lerp(curAberration, 0.0, speed);
+        curBloom = FlxMath.lerp(curBloom, targetBloom, speed); 
+        curSaturation = FlxMath.lerp(curSaturation, targetSaturation, colorSpeed);
+
+        if (colorShaderGame != null) colorShaderGame.saturation = curSaturation;
+        if (colorShaderHUD != null) colorShaderHUD.saturation = curSaturation;
+
+        if (abberationActive) {
+            abberationShaderGame.setFloat("intensity", curAberration);
+            abberationShaderHUD.setFloat("intensity", curAberration);
+        }
+        if (bloomActive) {
+            bloomShaderGame.setFloat("intensity", curBloom);
+            bloomShaderHUD.setFloat("intensity", curBloom);
+        }
+    }
+
+    override function onBeatHit(event:SongTimeScriptEvent) {
+        super.onBeatHit(event);
+        var curBeat:Int = event.beat;
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        var beatDuration:Float = (60.0 / Conductor.instance.bpm);
+
+        switch(curBeat) {
+            case 60:
+                if (game.camGame != null) game.camGame.zoom += 0.05;
+            case 61:
+                if (game.camGame != null) game.camGame.zoom += 0.05;
+            case 62:
+                if (blackOverlay != null) blackOverlay.alpha = 1;
+            case 64:
+                hideHUD = false; 
+                if (game.camGame != null) {
+                    try { game.defaultCamZoom = 0.65; } catch(e:Dynamic) {}
+                    game.camGame.zoom = 0.65;
+                }
+                if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, beatDuration * 4, null, true);
+                if (blackOverlay != null) blackOverlay.alpha = 0;
+
+            case 447:
+                var duration4Beats:Float = beatDuration * 4;
+                for (i in 0...4) {
+                    if (i != 1) { 
+                        if (game.opponentStrumline != null) {
+                            var oppStrum = game.opponentStrumline.getByIndex(i);
+                            if (oppStrum != null) FlxTween.tween(oppStrum, {y: 0, alpha: 0}, duration4Beats, {ease: FlxEase.expoIn});
+                        }
+                        if (game.playerStrumline != null) {
+                            var plrStrum = game.playerStrumline.getByIndex(i);
+                            if (plrStrum != null) FlxTween.tween(plrStrum, {y: 0, alpha: 0}, duration4Beats, {ease: FlxEase.expoIn});
+                        }
+                    }
+                }
+
+                var mod = ModuleHandler.getModule('teste');
+                if (mod != null) {
+                    FlxTween.num(mod.barraOffsetY, mod.barraOffsetY - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.barraOffsetY = val; } catch(e:Dynamic) {} });
+                    FlxTween.num(mod.diamanteP2_OffsetY, mod.diamanteP2_OffsetY - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.diamanteP2_OffsetY = val; } catch(e:Dynamic) {} });
+                    FlxTween.num(mod.diamanteP1_OffsetY, mod.diamanteP1_OffsetY - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.diamanteP1_OffsetY = val; } catch(e:Dynamic) {} });
+                    FlxTween.num(mod.textoScore_OffsetY_Upscroll, mod.textoScore_OffsetY_Upscroll - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.textoScore_OffsetY_Upscroll = val; } catch(e:Dynamic) {} });
+                    FlxTween.num(mod.textoScore_OffsetY_Downscroll, mod.textoScore_OffsetY_Downscroll - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.textoScore_OffsetY_Downscroll = val; } catch(e:Dynamic) {} });
+
+                    var fadeObj = function(obj:Dynamic) { if (obj != null) FlxTween.tween(obj, {alpha: 0}, duration4Beats, {ease: FlxEase.expoIn}); }
+                    try { fadeObj(mod.customHealthBG); fadeObj(mod.customLeftBar); fadeObj(mod.customRightBar); fadeObj(mod.diamondP1); fadeObj(mod.diamondP2); fadeObj(mod.dummyIconP1); fadeObj(mod.dummyIconP2); fadeObj(mod.customScoreTxt); } catch(e:Dynamic) {}
+                }
+        }
+    }
+
+    override function onStepHit(event:SongTimeScriptEvent) {
+        super.onStepHit(event);
+        var curStep:Int = event.step;
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        switch(curStep) {
+            case 1072: pulseAberration(game);
+            case 1078: pulseAberration(game);
+            case 1084: pulseAberration(game);
+            case 1200: pulseAberration(game);
+            case 1206: pulseAberration(game);
+            case 1212: pulseAberration(game);
+            case 1328: pulseAberration(game);
+            case 1334: pulseAberration(game);
+            case 1340: pulseAberration(game);
+            case 1456: pulseAberration(game);
+            case 1462: pulseAberration(game);
+            case 1468: pulseAberration(game);
+
+            case 1528:
+                if (!hsvActive) {
+                    hsvActive = true;
+                    updateFilters();
+                }
+                targetSaturation = -100.0; 
+
+            case 1536:
+                targetSaturation = 0.0; 
+                if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, (60 / Conductor.instance.bpm) * 4, null, true);
+
+            case 1792:
+                if (!bloomActive) {
+                    bloomActive = true;
+                    updateFilters();
+                }
+                targetBloom = 1.0; 
+                
+            
+            
+            
+            case 1807:
+                hideHUD = true; 
+                
+                if (blackOverlay != null) {
+                    FlxTween.cancelTweensOf(blackOverlay);
+                    blackOverlay.alpha = 1; 
+                }
+        }
+    }
+
+    override function onDestroy(event:ScriptEvent) {
+        super.onDestroy(event);
+        var game = PlayState.instance;
+        if (game != null) {
+            if (game.camGame != null) game.camGame.filters = [];
+            if (game.camHUD != null) game.camHUD.filters = [];
+        }
+    }
+}

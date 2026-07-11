@@ -1,0 +1,40 @@
+{
+ "version": "2.2.4",
+ "songName": "Aggressiv Nyat",
+ "artist": "Agami",
+ "charter": "Unknown",
+ "offsets": { },
+ "playData": {
+  "difficulties": [
+   "easy",
+   "normal",
+   "hard"
+  ],
+  "characters": {
+   "player": "beef",
+   "girlfriend": "geef",
+   "opponent": "natki",
+   "opponentVocals": [
+    "natki"
+   ],
+   "playerVocals": [
+    "beef"
+   ]
+  },
+  "stage": "bclubroom",
+  "noteStyle": "bean",
+  "ratings": {
+   "normal": 0,
+   "hard": 0
+  }
+ },
+ "generatedBy": "Friday Night Funkin' - v0.8.4",
+ "timeChanges": [
+  {
+   "t": 0,
+   "b": 0,
+   "bpm": 207,
+   "bt": [4, 4, 4, 4]
+  }
+ ]
+}

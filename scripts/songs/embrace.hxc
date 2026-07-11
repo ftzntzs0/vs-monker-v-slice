@@ -1,0 +1,77 @@
+import funkin.play.song.Song;
+import funkin.play.PlayState;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import funkin.modding.events.ScriptEvent;
+import funkin.modding.events.SongTimeScriptEvent;
+
+class EmbraceScript extends Song
+{
+    var blackOverlay:FlxSprite = null;
+
+    public function new() {
+        super('embrace');
+    }
+
+    override function onCountdownStart(event:ScriptEvent) {
+        super.onCountdownStart(event);
+
+        var game = PlayState.instance;
+        if (game == null) return;
+        
+        
+        var topCam = game.camHUD; 
+        
+        blackOverlay = new FlxSprite();
+        blackOverlay.makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
+        blackOverlay.screenCenter();
+        blackOverlay.scrollFactor.set(0, 0);
+        blackOverlay.cameras = [topCam];
+        blackOverlay.alpha = 0;
+        blackOverlay.visible = false; 
+        blackOverlay.zIndex = 900000; 
+        game.add(blackOverlay);
+
+        game.refresh(); 
+    }
+
+    override function onStepHit(event:SongTimeScriptEvent) {
+        super.onStepHit(event);
+        var curStep:Int = event.step;
+        var game = PlayState.instance;
+        if (game == null) return;
+        
+        switch(curStep) {
+            
+            
+            
+            
+            
+            case 640:
+                
+                if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 1.55, null, true);
+                if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, 1.55, null, true);
+
+            case 1016:
+                
+                if (blackOverlay != null) {
+                    blackOverlay.visible = true;
+                    blackOverlay.alpha = 1;
+                }
+                
+            case 1023:
+                
+                if (blackOverlay != null) {
+                    blackOverlay.visible = false;
+                    blackOverlay.alpha = 0;
+                }
+                if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, 0.775, null, true);
+                if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 0.775, null, true);
+        }
+    }
+
+    override function onDestroy(event:ScriptEvent) {
+        super.onDestroy(event);
+        blackOverlay = null; 
+    }
+}

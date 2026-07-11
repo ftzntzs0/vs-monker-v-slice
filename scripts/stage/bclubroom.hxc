@@ -20,6 +20,10 @@ class BClubroomStage extends Stage
         if (game.currentStage.getGirlfriend() != null && game.currentStage.getGirlfriend().hasAnimation('countdown')) {
             game.currentStage.getGirlfriend().playAnimation('countdown', true);
         }
+
+        if (FlxG.onMobile) {
+            PlayState.instance.currentStage.getNamedProp('room').scale.set(1.2, 1.0);
+        }
         
         var dadAtual = game.currentStage.getDad();
         if (dadAtual == null || dadAtual.characterName == null) return;

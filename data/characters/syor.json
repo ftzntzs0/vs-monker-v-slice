@@ -1,0 +1,57 @@
+{
+    "version": "1.0.0",
+    "name": "Syor",
+    "renderType": "multisparrow",
+    "offsets": [
+		-75,
+		300
+	],
+    "assetPath": "characters/syor-normal",
+    "flipX": false,
+    "cameraOffsets": [
+		-60,
+		0
+	],
+    "singTime": 6.1,
+    "animations": [
+        {
+            "name": "idle",
+            "prefix": "Syor Idle Dance0"
+        },
+        {
+            "name": "singLEFT",
+            "prefix": "Syor Left Note0",
+            "offsets": [
+                0,
+                27
+            ]
+        },
+        {
+            "name": "singDOWN",
+            "prefix": "Syor Down Note0",
+            "offsets": [
+                -81,
+                -5
+            ]
+        },
+        {
+            "name": "singUP",
+            "prefix": "Syor Up Note0",
+            "offsets": [
+                -61,
+                27
+            ]
+        },
+        {
+            "name": "singRIGHT",
+            "prefix": "Syor Right Note0",
+            "offsets": [
+                -105,
+                24
+            ]
+        }
+    ],
+    "startingAnimation": "",
+    "isPixel": false,
+    "scale": 1
+}

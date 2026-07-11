@@ -44,10 +44,10 @@ class Test extends Module
     var iconeInterno_P1_OffsetX:Float = 15;  
     var iconeInterno_P1_OffsetY:Float = 35; 
     
-    
-    
     var mobileStrumOffset:Float = -50; 
     
+    
+    var lastGameInstance:PlayState = null;
     
     var assetWidth:Float = 780;
     var assetHeight:Float = 145;
@@ -115,12 +115,12 @@ class Test extends Module
         else if (dadName.indexOf("syor") != -1) {
             corDoOponente = 0xFF9ACDF8;
             currentIconeP2_OffsetX = 15; 
-            currentIconeP2_OffsetY = 15; 
+            currentIconeP2_OffsetY = 30; 
         } 
         else if (dadName.indexOf("natki") != -1) {
             corDoOponente = 0xFFFCAADD;
-            currentIconeP2_OffsetX = 15; 
-            currentIconeP2_OffsetY = 15; 
+            currentIconeP2_OffsetX = 5; 
+            currentIconeP2_OffsetY = 20; 
         } 
         else if (dadName.indexOf("yur") != -1) {
             corDoOponente = 0xFFB090C5;
@@ -232,20 +232,20 @@ class Test extends Module
 
         atualDownscroll = Preferences.downscroll;
         
-        
         if (FlxG.onMobile) {
             atualDownscroll = true;
             
-            if (game.opponentStrumline != null) {
+            
+            if (game.opponentStrumline != null && game != lastGameInstance) {
                 for (i in 0...4) {
                     var oppNote = game.opponentStrumline.getByIndex(i);
                     if (oppNote != null) {
                         oppNote.x += mobileStrumOffset; 
                     }
                 }
+                lastGameInstance = game; 
             }
         }
-        
 
         var baseZ:Int = game.healthBar.zIndex;
         smoothHealth = game.healthBar.percent;
@@ -341,5 +341,6 @@ class Test extends Module
         dummyIconP1 = null;
         dummyIconP2 = null;
         customScoreTxt = null;
+        
     }
 }
