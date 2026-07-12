@@ -59,7 +59,7 @@ class YarisugiScript extends Song
             }
         }
 
-        var mod = ModuleHandler.getModule('teste');
+        var mod = ModuleHandler.getModule('beanbar');
         if (mod != null) {
             try { mod.barraOffsetY += 400; } catch(e:Dynamic) {}
             try { mod.diamanteP2_OffsetY += 400; } catch(e:Dynamic) {}
@@ -158,7 +158,7 @@ class YarisugiScript extends Song
         var game = PlayState.instance;
         if (game == null) return;
         
-        var mod = ModuleHandler.getModule('teste');
+        var mod = ModuleHandler.getModule('beanbar');
         switch(curStep) {
             
             case 0:

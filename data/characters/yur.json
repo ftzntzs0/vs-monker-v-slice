@@ -1,12 +1,12 @@
 {
     "version": "1.0.0",
-    "name": "Syor",
+    "name": "Yur",
     "renderType": "multisparrow",
     "offsets": [
-		-135,
-		300
+		-130,
+		295
 	],
-    "assetPath": "characters/syor-normal",
+    "assetPath": "characters/yur-normal",
     "flipX": false,
     "cameraOffsets": [
 		-60,
@@ -16,38 +16,46 @@
     "animations": [
         {
             "name": "idle",
-            "prefix": "Syor Idle Dance0"
+            "prefix": "Yur Idle Dance0"
         },
         {
             "name": "singLEFT",
-            "prefix": "Syor Left Note0",
+            "prefix": "Yur Left Note0",
             "offsets": [
-                0,
-                27
+                -26,
+                1
             ]
         },
         {
             "name": "singDOWN",
-            "prefix": "Syor Down Note0",
+            "prefix": "Yur Down Note0",
             "offsets": [
-                -81,
+                -26,
                 -5
             ]
         },
         {
             "name": "singUP",
-            "prefix": "Syor Up Note0",
+            "prefix": "Yur Up Note0",
             "offsets": [
-                -61,
-                27
+                -40,
+                1
             ]
         },
         {
             "name": "singRIGHT",
-            "prefix": "Syor Right Note0",
+            "prefix": "Yur Right Note0",
             "offsets": [
-                -105,
-                24
+                -41,
+                -3
+            ]
+        },
+                {
+            "name": "breath",
+            "prefix": "Yur Deep Breath0",
+            "offsets": [
+                -13,
+                5
             ]
         }
     ],

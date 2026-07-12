@@ -55,7 +55,7 @@ class Test extends Module
     var atualDownscroll:Bool = false;
 
     public function new() {
-        super('teste');
+        super('beanbar');
     }
 
     function isCustomDad():Bool {
@@ -123,14 +123,14 @@ class Test extends Module
             currentIconeP2_OffsetY = 20; 
         } 
         else if (dadName.indexOf("yur") != -1) {
-            corDoOponente = 0xFFB090C5;
-            currentIconeP2_OffsetX = 15; 
-            currentIconeP2_OffsetY = 15; 
+            corDoOponente = 0xFFC182EC;
+            currentIconeP2_OffsetX = 14; 
+            currentIconeP2_OffsetY = 35; 
         } 
         else if (dadName.indexOf("emcee") != -1) {
             corDoOponente = 0xFF93575E;
-            currentIconeP2_OffsetX = 15; 
-            currentIconeP2_OffsetY = 15; 
+            currentIconeP2_OffsetX = 25; 
+            currentIconeP2_OffsetY = 20; 
         } 
         else if (dadName.indexOf("tato") != -1) {
             corDoOponente = 0xFFF587A1;

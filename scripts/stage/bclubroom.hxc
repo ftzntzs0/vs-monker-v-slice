@@ -1,26 +1,59 @@
 import funkin.play.stage.Stage;
 import funkin.play.PlayState;
-import funkin.modding.events.ScriptEvent;
+import funkin.modding.events.CountdownScriptEvent; 
+import funkin.modding.events.ScriptEvent; 
+import flixel.FlxG;
 
 class BClubroomStage extends Stage 
 {
+    var contagemDoCountdown:Int = 0; 
+
     public function new() 
     {
         super('bclubroom');
     }
 
-    override function onCountdownStart(event:ScriptEvent) 
+    
+    
+    
+    override function onSongRetry(event:ScriptEvent) 
+    {
+        super.onSongRetry(event);
+        contagemDoCountdown = 0;
+    }
+
+    override function onCountdownStart(event:CountdownScriptEvent) 
     {
         super.onCountdownStart(event);
+        
+        contagemDoCountdown++; 
         
         var game = PlayState.instance;
         if (game == null || game.currentStage == null) return;
 
-        
-        if (game.currentStage.getGirlfriend() != null && game.currentStage.getGirlfriend().hasAnimation('countdown')) {
-            game.currentStage.getGirlfriend().playAnimation('countdown', true);
+        var songId:String = "";
+        if (game.currentSong != null) {
+            songId = game.currentSong.id.toLowerCase();
         }
 
+        
+        
+        
+        var podeAnimarGF:Bool = true;
+        
+        if (songId == "scholar" && contagemDoCountdown == 1) {
+            podeAnimarGF = false;
+        }
+
+        if (podeAnimarGF) {
+            if (game.currentStage.getGirlfriend() != null && game.currentStage.getGirlfriend().hasAnimation('countdown')) {
+                game.currentStage.getGirlfriend().playAnimation('countdown', true);
+            }
+        }
+
+        
+        
+        
         if (FlxG.onMobile) {
             PlayState.instance.currentStage.getNamedProp('room').scale.set(1.2, 1.0);
         }
@@ -30,9 +63,7 @@ class BClubroomStage extends Stage
 
         var dadName:String = dadAtual.characterName.toLowerCase();
         
-        
         var todosOsProps = ["monker", "syor", "yur", "natki", "emcee"];
-        
         
         for (nomeProp in todosOsProps) {
             var obj = game.currentStage.getNamedProp(nomeProp);
@@ -40,7 +71,6 @@ class BClubroomStage extends Stage
                 obj.visible = true;
             }
         }
-
         
         var propParaEsconder:String = "";
 
@@ -55,12 +85,11 @@ class BClubroomStage extends Stage
         } else if (dadName.indexOf("emcee") != -1) {
             propParaEsconder = "emcee";
         }
-
         
         if (propParaEsconder != "") {
             var objToHide = game.currentStage.getNamedProp(propParaEsconder);
             if (objToHide != null) {
-                objToHide.visible = false; 
+                objToHide.visible = false;
             }
         }
     }

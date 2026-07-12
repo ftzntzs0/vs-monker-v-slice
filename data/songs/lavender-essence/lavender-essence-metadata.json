@@ -1,0 +1,70 @@
+{
+ "version": "2.2.4",
+ "songName": "Lavender Essence",
+ "artist": "JustYuri",
+ "charter": "Unknown",
+ "offsets": { },
+ "playData": {
+  "difficulties": [
+   "easy",
+   "normal",
+   "hard"
+  ],
+  "characters": {
+   "player": "beef",
+   "girlfriend": "geef",
+   "opponent": "yur",
+   "opponentVocals": [
+    "yur"
+   ],
+   "playerVocals": [
+    "beef"
+   ]
+  },
+  "stage": "bclubroom",
+  "noteStyle": "bean",
+  "ratings": {
+   "normal": 0,
+   "hard": 0
+  }
+ },
+ "generatedBy": "Friday Night Funkin' - v0.8.4",
+ "timeChanges": [
+  {
+   "t": 0,
+   "b": 0,
+   "bpm": 115,
+   "bt": [4, 4, 4, 4]
+  },
+  {
+   "t": 0,
+   "b": 0,
+   "bpm": 95,
+   "bt": [4, 4, 4, 4]
+  },
+  {
+   "t": 50526.3157894737,
+   "b": 80,
+   "bpm": 115,
+   "bt": [4, 4, 4, 4]
+  },
+  {
+   "t": 83917.6201372998,
+   "b": 144,
+   "bpm": 57.5,
+   "bt": [4, 4, 4, 4]
+  },
+  {
+   "t": 117308.924485126,
+   "b": 176,
+   "bpm": 115,
+   "bt": [4, 4, 4, 4]
+  },
+  {
+   "t": 152787.185354691,
+   "b": 244,
+   "bpm": 0,
+   "bt": [4, 4, 4, 4]
+  }
+ ]
+}

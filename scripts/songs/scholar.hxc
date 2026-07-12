@@ -1,0 +1,134 @@
+import funkin.play.song.Song;
+import funkin.play.PlayState;
+import funkin.modding.events.CountdownScriptEvent;
+import funkin.modding.events.UpdateScriptEvent;
+import funkin.modding.events.SongTimeScriptEvent;
+import funkin.modding.events.ScriptEvent;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.FlxCamera;
+import funkin.Paths;
+
+class ScholarScript extends Song 
+{
+    var hasYawned:Bool = false;
+    var isYawning:Bool = false;
+    
+    var blackScreen:FlxSprite = null;
+    var topCam:FlxCamera = null;
+
+    public function new() 
+    {
+        super('scholar');
+    }
+
+    
+    
+    
+    override function onSongRetry(event:ScriptEvent) 
+    {
+        super.onSongRetry(event);
+        
+        
+        hasYawned = false;
+        isYawning = false;
+
+        
+        if (blackScreen != null) {
+            blackScreen.alpha = 0;
+        }
+    }
+
+    override function onCountdownStart(event:CountdownScriptEvent) 
+    {
+        super.onCountdownStart(event);
+        
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        
+        
+        
+        if (blackScreen == null) 
+        {
+            topCam = new FlxCamera();
+            topCam.bgColor = 0x00000000;
+            FlxG.cameras.add(topCam, false);
+
+            blackScreen = new FlxSprite().makeGraphic(Std.int(FlxG.width * 3), Std.int(FlxG.height * 3), 0xFF000000);
+            blackScreen.screenCenter();
+            blackScreen.scrollFactor.set(0, 0);
+            blackScreen.alpha = 0; 
+            blackScreen.cameras = [topCam];
+            game.add(blackScreen);
+        }
+
+        
+        
+        
+        if (!hasYawned) 
+        {
+            event.cancel(); 
+            
+            hasYawned = true; 
+            isYawning = true; 
+
+            FlxG.sound.play(Paths.sound('emcee_yawning'));
+
+            if (game.currentStage != null && game.currentStage.getDad() != null) {
+                game.currentStage.getDad().playAnimation('yawn', true);
+            }
+        }
+    }
+
+    override function onUpdate(event:UpdateScriptEvent) 
+    {
+        super.onUpdate(event);
+
+        if (isYawning) 
+        {
+            var game = PlayState.instance;
+            if (game != null && game.currentStage != null) 
+            {
+                var dad = game.currentStage.getDad();
+                
+                if (dad != null && dad.animation.curAnim != null) 
+                {
+                    if (dad.animation.curAnim.name == 'yawn' && dad.animation.finished) 
+                    {
+                        isYawning = false; 
+                        game.startCountdown(); 
+                    }
+                }
+            }
+        }
+    }
+
+    override function onStepHit(event:SongTimeScriptEvent) 
+    {
+        super.onStepHit(event);
+        var curStep:Int = event.step;
+
+        switch(curStep) 
+        {
+            case 1407:
+                FlxG.camera.flash(0xFFFFFFFF, 1.29, null, true);
+                
+            case 1663:
+                if (blackScreen != null) {
+                    blackScreen.alpha = 1; 
+                }
+        }
+    }
+
+    override function onDestroy(event:ScriptEvent) 
+    {
+        super.onDestroy(event);
+        hasYawned = false;
+        isYawning = false;
+
+        if (topCam != null) {
+            FlxG.cameras.remove(topCam, true);
+        }
+    }
+}

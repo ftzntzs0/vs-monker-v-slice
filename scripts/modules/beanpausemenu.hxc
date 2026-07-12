@@ -1,0 +1,312 @@
+import funkin.play.PlayState;
+import funkin.modding.module.Module;
+import flixel.FlxSprite;
+import funkin.play.PauseSubState;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import flixel.text.FlxTextBorderStyle;
+import flixel.text.FlxText;
+import funkin.PlayerSettings;
+import flixel.math.FlxMath;
+import flixel.util.FlxTimer;
+import flixel.FlxG;
+import funkin.Paths;
+import funkin.modding.events.UpdateScriptEvent;
+import funkin.modding.events.SubStateScriptEvent; 
+import openfl.filters.ShaderFilter;
+import funkin.graphics.shaders.AdjustColorShader;
+
+class CustomPauseMenu extends Module {
+    var portrait:FlxSprite;
+    var panel:FlxSprite;
+    var logo:FlxSprite;
+
+    var options:Array<FlxText> = [];
+    var curSelected:Int = 0;
+    var isCustomPause:Bool = false;
+
+    
+    var levelInfo:FlxText;
+    var beanText:FlxText;
+    var deathText:FlxText;
+
+    public function new() {
+        super("CustomPauseMenu");
+    }
+
+    override function onSubStateOpenEnd(event:SubStateScriptEvent) {
+        super.onSubStateOpenEnd(event);
+
+        if (Std.isOfType(event.targetState, PauseSubState)) {
+            
+            
+            
+            
+            isCustomPause = false;
+            options = [];
+            curSelected = 0;
+
+            
+            
+            
+            var dadName:String = "dad";
+            if (PlayState.instance != null && PlayState.instance.currentChart != null) {
+                dadName = PlayState.instance.currentChart.characters.opponent.toLowerCase();
+            }
+
+            var allowedDads = ["geef", "monker", "tato", "syor", "yur", "natki", "emcee"];
+            var isValidDad:Bool = false;
+
+            for (allowed in allowedDads) {
+                if (dadName.indexOf(allowed) != -1) {
+                    isValidDad = true;
+                    break;
+                }
+            }
+
+            if (!isValidDad) return;
+
+            
+            
+            
+            var state = event.targetState; 
+            isCustomPause = true;
+
+            try { state.remove(state.metadata); } catch(e:Dynamic) {}
+            try { state.remove(state.menuEntryText); } catch(e:Dynamic) {}
+            try { state.remove(state.metadataDeaths); } catch(e:Dynamic) {} 
+
+            if (dadName.indexOf("yur") != -1) {
+                var pauseShader = new AdjustColorShader();
+                pauseShader.hue = 0;
+                pauseShader.contrast = 0;
+                pauseShader.saturation = -75; 
+                pauseShader.brightness = 0;
+
+                
+                if (state.cameras != null && state.cameras.length > 0) {
+                    state.cameras[0].filters = [new ShaderFilter(pauseShader)];
+                }
+            }
+
+            
+            
+            
+            
+            var panelName = "panel";
+            var logoName = "logoMenu";
+            
+            if (dadName.indexOf("tato") != -1) {
+                panelName = "panel-tato";
+                logoName = "logoMenu-tato";
+            }
+
+            
+            var portraitOffsetX:Float = 0;
+            var portraitOffsetY:Float = 0;
+
+            if (dadName.indexOf("geef") != -1) {
+                
+                
+                portraitOffsetX = 6; 
+                portraitOffsetY = -45;  
+            }
+
+            portrait = new FlxSprite(FlxG.width, 0).loadGraphic(Paths.image('UI/pausemenu/portraits/' + dadName));
+            if (portrait.graphic != null) {
+                portrait.scale.set(0.8, 0.8); 
+                portrait.updateHitbox();
+
+                var portraitFinalX:Float = (FlxG.width - portrait.width - 160) + portraitOffsetX; 
+                var portraitFinalY:Float = 80 + portraitOffsetY; 
+
+                portrait.y = portraitFinalY;
+                state.add(portrait);
+
+                FlxTween.tween(portrait, {x: portraitFinalX}, 1.5, {
+                    ease: FlxEase.quartInOut,
+                    startDelay: 0.5
+                });
+            }
+
+            panel = new FlxSprite(-600, 0).loadGraphic(Paths.image('UI/pausemenu/' + panelName));
+            if (panel.graphic != null) {
+                panel.scale.set(0.7, 0.7); 
+                panel.updateHitbox();
+                state.add(panel);
+
+                FlxTween.tween(panel, {x: -25}, 1.0, {
+                    ease: FlxEase.quartInOut
+                });
+            }
+
+            logo = new FlxSprite(-600, -50).loadGraphic(Paths.image('UI/pausemenu/' + logoName));
+            if (logo.graphic != null) {
+                logo.scale.set(0.73, 0.73); 
+                logo.updateHitbox();
+                state.add(logo);
+
+                FlxTween.tween(logo, {x: 82}, 1.0, {
+                    ease: FlxEase.quartInOut,
+                });
+            }
+
+            
+            
+            
+            
+            var songNameString:String = "";
+            if (PlayState.instance != null && PlayState.instance.currentChart != null) {
+                songNameString = PlayState.instance.currentChart.songName;
+            }
+            levelInfo = new FlxText(20, 15, 0, songNameString, 32);
+            levelInfo.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
+            levelInfo.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
+            levelInfo.alpha = 0;
+            levelInfo.x = FlxG.width - (levelInfo.width + 20);
+            state.add(levelInfo);
+
+            beanText = new FlxText(20, 15 + 32, 0, "BEAN", 32);
+            beanText.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
+            beanText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
+            beanText.alpha = 0;
+            beanText.x = FlxG.width - (beanText.width + 20);
+            state.add(beanText);
+
+            var deaths:Int = 0;
+            if (PlayState.instance != null) deaths = PlayState.instance.deathCounter;
+            
+            deathText = new FlxText(20, 15 + 64, 0, "Beanovered: " + deaths, 32);
+            deathText.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
+            deathText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
+            deathText.alpha = 0;
+            deathText.x = FlxG.width - (deathText.width + 20);
+            state.add(deathText);
+
+            FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
+            FlxTween.tween(beanText, {alpha: 1, y: beanText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+            FlxTween.tween(deathText, {alpha: 1, y: deathText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
+
+            
+            
+            
+            var textX:Int = 45;
+            var textStartY:Int = 420; 
+            var textSpacing:Int = 50; 
+            var entryIndex:Int = 0;
+
+            if (state.currentMenuEntries != null) {
+                var filteredEntries = [];
+                for (entry in state.currentMenuEntries) {
+                    var lowerText = entry.text.toLowerCase();
+                    if (lowerText == 'resume' || lowerText == 'restart song' || lowerText == 'restart' || lowerText == 'exit to menu') {
+                        filteredEntries.push(entry);
+                    }
+                }
+                
+                state.currentMenuEntries = filteredEntries;
+
+                for (entry in state.currentMenuEntries) {
+                    if (entry.text.toLowerCase() == 'resume') {
+                        entry.callback = function() { resume(); }; 
+                    }
+
+                    var songText:FlxText = new FlxText(-400, textStartY + (entryIndex * textSpacing), 0, entry.text);
+                    songText.setFormat(Paths.font("RifficFree-Bold.ttf"), 28, 0xFFFFFFFF, "left"); 
+                    songText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFFC876AD, 3);
+                    
+                    options.push(songText);
+                    state.add(songText);
+
+                    FlxTween.tween(songText, {x: textX}, 1.5, {
+                        ease: FlxEase.quartOut,
+                        startDelay: 0.5 + (entryIndex * 0.15) 
+                    });
+
+                    entryIndex++;
+                }
+            }
+
+            changeSelection(0);
+        }
+    }
+
+    
+    
+    
+    function changeSelection(change:Int) {
+        if (options.length == 0) return;
+        
+        curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
+        
+        for (i in 0...options.length) {
+            if (options[i] != null) { 
+                options[i].color = 0xFFFFFFFF; 
+                options[i].setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFFC876AD, 3); 
+            }
+        }
+        
+        if (options[curSelected] != null) { 
+            options[curSelected].setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFFFFAACC, 3); 
+        }
+
+        FlxG.sound.play(Paths.sound('scrollMenu-bean'), 0.7);
+    }
+
+    override function onUpdate(event:UpdateScriptEvent) {
+        super.onUpdate(event);
+        
+        var state = FlxG.state.subState;
+        
+        if (state != null && isCustomPause && Std.isOfType(state, PauseSubState) && state.allowInput) {
+            if (PlayerSettings.player1.controls.UI_UP_P) changeSelection(-1);
+            if (PlayerSettings.player1.controls.UI_DOWN_P) changeSelection(1);
+            
+            if (PlayerSettings.player1.controls.BACK_P && !state.justOpened) {
+                resume();
+            }
+        }
+    }
+
+    function resume() {
+        var state = FlxG.state.subState;
+        if (state != null) state.allowInput = false;
+
+        if (portrait != null) {
+            FlxTween.cancelTweensOf(portrait);
+            FlxTween.tween(portrait, {x: FlxG.width}, 0.7, {ease: FlxEase.quartInOut});
+        }
+        if (panel != null) {
+            FlxTween.cancelTweensOf(panel);
+            FlxTween.tween(panel, {x: -600}, 0.7, {ease: FlxEase.quartInOut});
+        }
+        if (logo != null) {
+            FlxTween.cancelTweensOf(logo);
+            FlxTween.tween(logo, {x: -600}, 0.7, {ease: FlxEase.quartInOut});
+        }
+        
+        if (levelInfo != null) FlxTween.tween(levelInfo, {alpha: 0}, 0.6, {ease: FlxEase.quartInOut});
+        if (beanText != null) FlxTween.tween(beanText, {alpha: 0}, 0.6, {ease: FlxEase.quartInOut});
+        if (deathText != null) FlxTween.tween(deathText, {alpha: 0}, 0.6, {ease: FlxEase.quartInOut});
+
+        if (state != null && state.background != null) {
+            FlxTween.cancelTweensOf(state.background);
+            FlxTween.tween(state.background, {alpha: 0}, 0.6, {ease: FlxEase.quartInOut});
+        }
+
+        for (i in 0...options.length) {
+            if (options[i] != null) { 
+                FlxTween.cancelTweensOf(options[i]);
+                FlxTween.tween(options[i], {x: -400}, 0.5, {
+                    ease: FlxEase.quartInOut,
+                    startDelay: (i * 0.1)
+                });
+            }
+        }
+
+        new FlxTimer().start(0.6 + (options.length * 0.1), function(tmr:FlxTimer) {
+            isCustomPause = false;
+            if (state != null) state.close();
+        });
+    }
+}

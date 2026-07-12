@@ -11,6 +11,10 @@ import flixel.FlxG;
 import flixel.FlxCamera; 
 import funkin.Paths;
 
+
+import openfl.filters.ShaderFilter;
+import funkin.graphics.shaders.AdjustColorShader;
+
 class MusicianCredits extends Module 
 {
     public function new() 
@@ -36,18 +40,28 @@ class MusicianCredits extends Module
         if (songId == "bean-tutorial") {
             actualSongName = "Tutorial";
         }
-
-        
-        
         
         var creditCam = new FlxCamera();
         creditCam.bgColor = 0x00000000;
         FlxG.cameras.add(creditCam, false);
 
+        
+        
+        
+        if (songId == "lavender-essence") {
+            var colorShader = new AdjustColorShader();
+            colorShader.hue = 0;
+            colorShader.contrast = 0;
+            colorShader.saturation = -75; 
+            colorShader.brightness = 0;
+            
+            creditCam.filters = [new ShaderFilter(colorShader)];
+        }
+
         var bg = new FlxSprite(FlxG.width, 300);
         bg.makeGraphic(350, 100, 0xFFE27E9E); 
         bg.alpha = 0.6;
-        bg.cameras = [creditCam]; 
+        bg.cameras = [creditCam];
         state.add(bg);
 
         var songIcon = new FlxSprite(bg.x + 2, bg.y + 2);
@@ -60,14 +74,13 @@ class MusicianCredits extends Module
         var songNameTxt = new FlxText(songIcon.x + songIcon.width, songIcon.y, 250, actualSongName, 40);
         songNameTxt.font = Paths.font("RifficFree-Bold.ttf"); 
         songNameTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
-        
         if (songId == "aggressiv-nyat" || songId == "lavender-essence") {
             songNameTxt.size = 28;
         }
         songNameTxt.alignment = "left";
         songNameTxt.cameras = [creditCam];
         state.add(songNameTxt);
-
+        
         var songMusicianTxt = new FlxText(songNameTxt.x + 30, songNameTxt.y + songNameTxt.height, 200, "By: " + musicianName, 25);
         songMusicianTxt.font = Paths.font("RifficFree-Bold.ttf");
         songMusicianTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
@@ -78,10 +91,10 @@ class MusicianCredits extends Module
         songMusicianTxt.alignment = "left";
         songMusicianTxt.cameras = [creditCam];
         state.add(songMusicianTxt);
-
+        
         songNameTxt.y = (bg.y + (bg.height / 2.0)) - (songNameTxt.height / 2.0) - (songMusicianTxt.height / 2.0);
         songMusicianTxt.y = songNameTxt.y + songNameTxt.height;
-
+        
         bg.zIndex = 999999;
         songIcon.zIndex = 999999;
         songNameTxt.zIndex = 999999;
@@ -93,7 +106,7 @@ class MusicianCredits extends Module
         FlxTween.tween(songIcon, {x: destX + 2}, 0.7, {ease: FlxEase.quadInOut});
         FlxTween.tween(songNameTxt, {x: destX + 2 + songIcon.width}, 0.8, {ease: FlxEase.quadInOut});
         FlxTween.tween(songMusicianTxt, {x: destX + 2 + songIcon.width + 30}, 0.85, {ease: FlxEase.quadInOut});
-
+        
         new FlxTimer().start(2.35, function(tmr:FlxTimer) 
         {
             var outX = FlxG.width;

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="icon-emcee.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="losing0000" x="17" y="17" width="108" height="100"/>
+	<SubTexture name="losing0001" x="17" y="17" width="108" height="100"/>
+	<SubTexture name="losing0002" x="134" y="17" width="108" height="100"/>
+	<SubTexture name="losing0003" x="134" y="17" width="108" height="100"/>
+	<SubTexture name="losing0004" x="251" y="17" width="108" height="100"/>
+	<SubTexture name="losing0005" x="251" y="17" width="108" height="100"/>
+	<SubTexture name="losing0006" x="368" y="17" width="108" height="100"/>
+	<SubTexture name="losing0007" x="368" y="17" width="108" height="100"/>
+	<SubTexture name="losing0008" x="368" y="17" width="108" height="100"/>
+	<SubTexture name="losing0009" x="368" y="17" width="108" height="100"/>
+	<SubTexture name="losing0010" x="368" y="17" width="108" height="100"/>
+	<SubTexture name="losing0011" x="368" y="17" width="108" height="100"/>
+	<SubTexture name="idle0000" x="485" y="17" width="108" height="96"/>
+	<SubTexture name="idle0001" x="485" y="17" width="108" height="96"/>
+	<SubTexture name="idle0002" x="602" y="17" width="108" height="96"/>
+	<SubTexture name="idle0003" x="602" y="17" width="108" height="96"/>
+	<SubTexture name="idle0004" x="719" y="17" width="108" height="96"/>
+	<SubTexture name="idle0005" x="719" y="17" width="108" height="96"/>
+	<SubTexture name="idle0006" x="836" y="17" width="108" height="96"/>
+	<SubTexture name="idle0007" x="836" y="17" width="108" height="96"/>
+	<SubTexture name="idle0008" x="836" y="17" width="108" height="96"/>
+	<SubTexture name="idle0009" x="836" y="17" width="108" height="96"/>
+	<SubTexture name="idle0010" x="836" y="17" width="108" height="96"/>
+	<SubTexture name="idle0011" x="836" y="17" width="108" height="96"/>
+	<SubTexture name="winning0000" x="17" y="126" width="128" height="99"/>
+	<SubTexture name="winning0001" x="17" y="126" width="128" height="99"/>
+	<SubTexture name="winning0002" x="154" y="126" width="128" height="99"/>
+	<SubTexture name="winning0003" x="291" y="126" width="128" height="99"/>
+	<SubTexture name="winning0004" x="428" y="126" width="128" height="99"/>
+	<SubTexture name="winning0005" x="428" y="126" width="128" height="99"/>
+	<SubTexture name="winning0006" x="565" y="126" width="128" height="99"/>
+	<SubTexture name="winning0007" x="565" y="126" width="128" height="99"/>
+	<SubTexture name="winning0008" x="565" y="126" width="128" height="99"/>
+	<SubTexture name="winning0009" x="702" y="126" width="128" height="99"/>
+	<SubTexture name="winning0010" x="702" y="126" width="128" height="99"/>
+	<SubTexture name="winning0011" x="702" y="126" width="128" height="99"/>
+	<SubTexture name="fromLosing0000" x="839" y="126" width="106" height="98"/>
+	<SubTexture name="fromLosing0001" x="17" y="234" width="106" height="98"/>
+	<SubTexture name="fromLosing0002" x="17" y="234" width="106" height="98"/>
+	<SubTexture name="fromLosing0003" x="132" y="234" width="106" height="98"/>
+	<SubTexture name="fromLosing0004" x="132" y="234" width="106" height="98"/>
+	<SubTexture name="toLosing0000" x="247" y="234" width="106" height="99"/>
+	<SubTexture name="toLosing0001" x="362" y="234" width="106" height="99"/>
+	<SubTexture name="toLosing0002" x="362" y="234" width="106" height="99"/>
+	<SubTexture name="toLosing0003" x="477" y="234" width="106" height="99"/>
+	<SubTexture name="toLosing0004" x="477" y="234" width="106" height="99"/>
+	<SubTexture name="toWinning0000" x="592" y="234" width="127" height="98"/>
+	<SubTexture name="toWinning0001" x="728" y="234" width="127" height="98"/>
+	<SubTexture name="toWinning0002" x="728" y="234" width="127" height="98"/>
+	<SubTexture name="toWinning0003" x="864" y="234" width="127" height="98"/>
+	<SubTexture name="toWinning0004" x="864" y="234" width="127" height="98"/>
+	<SubTexture name="fromWinning0000" x="17" y="342" width="127" height="98"/>
+	<SubTexture name="fromWinning0001" x="153" y="342" width="127" height="98"/>
+	<SubTexture name="fromWinning0002" x="153" y="342" width="127" height="98"/>
+	<SubTexture name="fromWinning0003" x="289" y="342" width="127" height="98"/>
+	<SubTexture name="fromWinning0004" x="289" y="342" width="127" height="98"/>
+</TextureAtlas>

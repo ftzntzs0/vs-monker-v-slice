@@ -1,0 +1,22 @@
+{
+	"timeFormat": "ms",
+	"artist": "JustYuri",
+	"charter": "Unknown",
+	"playData": {
+		"stage": "bclubroom",
+		"noteStyle": "funkin",
+		"difficulties": ["easy", "normal", "hard"],
+		"characters": {"girlfriend": "geef", "opponent": "yur", "player": "beef"}
+	},
+	"songName": "Lavender Essence",
+	"timeChanges": [
+		{"t": 0, "bpm": 115},
+		{"t": 0, "bpm": 95},
+		{"t": 50526.3157894737, "bpm": 115},
+		{"t": 83917.6201372998, "bpm": 57.5},
+		{"t": 117308.924485126, "bpm": 115},
+		{"t": 152787.185354691, "bpm": 0}
+	],
+	"generatedBy": "Psych Engine v1.0.4 - Chart Editor V-Slice Exporter",
+	"version": "2.2.3"
+}

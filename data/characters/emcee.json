@@ -1,53 +1,61 @@
 {
     "version": "1.0.0",
-    "name": "Syor",
+    "name": "Emcee",
     "renderType": "multisparrow",
     "offsets": [
-		-135,
-		300
+		-95,
+		295
 	],
-    "assetPath": "characters/syor-normal",
+    "assetPath": "characters/emcee-normal",
     "flipX": false,
     "cameraOffsets": [
-		-60,
-		0
+		-170,
+		8
 	],
     "singTime": 6.1,
     "animations": [
         {
             "name": "idle",
-            "prefix": "Syor Idle Dance0"
+            "prefix": "Emcee Idle Dance0"
         },
         {
             "name": "singLEFT",
-            "prefix": "Syor Left Note0",
+            "prefix": "Emcee Left Note0",
             "offsets": [
-                0,
-                27
+                19,
+                3
             ]
         },
         {
             "name": "singDOWN",
-            "prefix": "Syor Down Note0",
+            "prefix": "Emcee Down Note 0",
             "offsets": [
-                -81,
+                30,
                 -5
             ]
         },
         {
             "name": "singUP",
-            "prefix": "Syor Up Note0",
+            "prefix": "Emcee Up Note0",
             "offsets": [
-                -61,
-                27
+                13,
+                12
             ]
         },
         {
             "name": "singRIGHT",
-            "prefix": "Syor Right Note0",
+            "prefix": "Emcee Right Note 0",
             "offsets": [
-                -105,
-                24
+                12,
+                -1
+            ]
+        },
+                {
+            "name": "yawn",
+            "prefix": "Emcee Yawning 0",
+            "offsets": [
+                32,
+                7
             ]
         }
     ],

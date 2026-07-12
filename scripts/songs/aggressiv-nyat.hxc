@@ -21,17 +21,13 @@ class AggressivNyatScript extends Song
 {
     var blackOverlay:FlxSprite = null;
     var hideHUD:Bool = true; 
+    
+    var numTweens:Array<FlxTween> = []; 
 
-    
-    
-    
     var colorShaderGame:AdjustColorShader = null;
     var abberationShaderGame:FlxRuntimeShader = null;
     var bloomShaderGame:FlxRuntimeShader = null;
 
-    
-    
-    
     var colorShaderHUD:AdjustColorShader = null;
     var abberationShaderHUD:FlxRuntimeShader = null;
     var bloomShaderHUD:FlxRuntimeShader = null;
@@ -46,9 +42,6 @@ class AggressivNyatScript extends Song
     var bloomActive:Bool = false;
     var hsvActive:Bool = false;
 
-    
-    
-    
     var abberationCode:String = "
         #pragma header
         uniform float intensity;
@@ -62,7 +55,6 @@ class AggressivNyatScript extends Song
         void main() {
             vec2 uv = openfl_TextureCoordv.xy;
             vec4 baseColor = flixel_texture2D(bitmap, uv);
-            
             
             if (baseColor.a == 0.0) {
                 gl_FragColor = vec4(0.0);
@@ -141,6 +133,11 @@ class AggressivNyatScript extends Song
     }
 
     function pulseAberration(game:PlayState) {
+        // if (!abberationActive) {
+        //     abberationActive = true;
+        //     updateFilters();
+        // }
+        // curAberration = 1.0; 
         if (game.camHUD != null) {
             FlxTween.cancelTweensOf(game.camHUD);
             game.camHUD.x = FlxG.random.float(-20, 20);
@@ -154,7 +151,17 @@ class AggressivNyatScript extends Song
         var game = PlayState.instance;
         if (game == null) return;
 
+        
+        curAberration = 0.0;
+        curBloom = 0.0;
+        targetBloom = 0.0; 
+        curSaturation = 0.0;
+        targetSaturation = 0.0;
+        abberationActive = false;
+        bloomActive = false;
+        hsvActive = false;
         hideHUD = true; 
+        numTweens = []; 
         
         if (game.currentStage != null) {
             if (game.currentStage.getBoyfriend() != null) game.currentStage.getBoyfriend().shader = null;
@@ -165,7 +172,7 @@ class AggressivNyatScript extends Song
         if (game.camGame != null) game.camGame.filters = [];
         if (game.camHUD != null) game.camHUD.filters = [];
 
-        var mod = ModuleHandler.getModule('teste');
+        var mod = ModuleHandler.getModule('beanbar');
         if (mod != null) {
             try { mod.barraOffsetY = -20; } catch(e:Dynamic) {}
             try { mod.diamanteP2_OffsetY = 10; } catch(e:Dynamic) {}
@@ -286,13 +293,13 @@ class AggressivNyatScript extends Song
                     }
                 }
 
-                var mod = ModuleHandler.getModule('teste');
+                var mod = ModuleHandler.getModule('beanbar');
                 if (mod != null) {
-                    FlxTween.num(mod.barraOffsetY, mod.barraOffsetY - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.barraOffsetY = val; } catch(e:Dynamic) {} });
-                    FlxTween.num(mod.diamanteP2_OffsetY, mod.diamanteP2_OffsetY - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.diamanteP2_OffsetY = val; } catch(e:Dynamic) {} });
-                    FlxTween.num(mod.diamanteP1_OffsetY, mod.diamanteP1_OffsetY - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.diamanteP1_OffsetY = val; } catch(e:Dynamic) {} });
-                    FlxTween.num(mod.textoScore_OffsetY_Upscroll, mod.textoScore_OffsetY_Upscroll - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.textoScore_OffsetY_Upscroll = val; } catch(e:Dynamic) {} });
-                    FlxTween.num(mod.textoScore_OffsetY_Downscroll, mod.textoScore_OffsetY_Downscroll - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.textoScore_OffsetY_Downscroll = val; } catch(e:Dynamic) {} });
+                    numTweens.push(FlxTween.num(mod.barraOffsetY, mod.barraOffsetY - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.barraOffsetY = val; } catch(e:Dynamic) {} }));
+                    numTweens.push(FlxTween.num(mod.diamanteP2_OffsetY, mod.diamanteP2_OffsetY - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.diamanteP2_OffsetY = val; } catch(e:Dynamic) {} }));
+                    numTweens.push(FlxTween.num(mod.diamanteP1_OffsetY, mod.diamanteP1_OffsetY - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.diamanteP1_OffsetY = val; } catch(e:Dynamic) {} }));
+                    numTweens.push(FlxTween.num(mod.textoScore_OffsetY_Upscroll, mod.textoScore_OffsetY_Upscroll - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.textoScore_OffsetY_Upscroll = val; } catch(e:Dynamic) {} }));
+                    numTweens.push(FlxTween.num(mod.textoScore_OffsetY_Downscroll, mod.textoScore_OffsetY_Downscroll - 400, duration4Beats, {ease: FlxEase.expoIn}, function(val:Float) { try { mod.textoScore_OffsetY_Downscroll = val; } catch(e:Dynamic) {} }));
 
                     var fadeObj = function(obj:Dynamic) { if (obj != null) FlxTween.tween(obj, {alpha: 0}, duration4Beats, {ease: FlxEase.expoIn}); }
                     try { fadeObj(mod.customHealthBG); fadeObj(mod.customLeftBar); fadeObj(mod.customRightBar); fadeObj(mod.diamondP1); fadeObj(mod.diamondP2); fadeObj(mod.dummyIconP1); fadeObj(mod.dummyIconP2); fadeObj(mod.customScoreTxt); } catch(e:Dynamic) {}
@@ -338,12 +345,8 @@ class AggressivNyatScript extends Song
                 }
                 targetBloom = 1.0; 
                 
-            
-            
-            
             case 1807:
                 hideHUD = true; 
-                
                 if (blackOverlay != null) {
                     FlxTween.cancelTweensOf(blackOverlay);
                     blackOverlay.alpha = 1; 
@@ -351,12 +354,61 @@ class AggressivNyatScript extends Song
         }
     }
 
+    
+    
+    
     override function onDestroy(event:ScriptEvent) {
         super.onDestroy(event);
-        var game = PlayState.instance;
-        if (game != null) {
-            if (game.camGame != null) game.camGame.filters = [];
-            if (game.camHUD != null) game.camHUD.filters = [];
-        }
+        
+        
+        try {
+            var game = PlayState.instance;
+            if (game != null) {
+                if (game.camGame != null) game.camGame.filters = [];
+                if (game.camHUD != null) {
+                    game.camHUD.filters = [];
+                    game.camHUD.alpha = 1;
+                }
+            }
+        } catch(e:Dynamic) {}
+
+        
+        try {
+            for (t in numTweens) {
+                if (t != null) {
+                    try { t.cancel(); } catch(e:Dynamic) {}
+                }
+            }
+        } catch(e:Dynamic) {}
+
+        
+        try {
+            var mod = ModuleHandler.getModule('beanbar');
+            if (mod != null) {
+                try { mod.barraOffsetY = -20; } catch(e:Dynamic) {}
+                try { mod.diamanteP2_OffsetY = 10; } catch(e:Dynamic) {}
+                try { mod.diamanteP1_OffsetY = 10; } catch(e:Dynamic) {}
+                try { mod.textoScore_OffsetY_Upscroll = -5; } catch(e:Dynamic) {}
+                try { mod.textoScore_OffsetY_Downscroll = -125; } catch(e:Dynamic) {}
+                
+                var resetObject = function(obj:Dynamic) { 
+                    try {
+                        if (obj != null) {
+                            FlxTween.cancelTweensOf(obj);
+                            obj.alpha = 1; 
+                        }
+                    } catch(e:Dynamic) {}
+                }
+                
+                resetObject(mod.customHealthBG); 
+                resetObject(mod.customLeftBar); 
+                resetObject(mod.customRightBar); 
+                resetObject(mod.diamondP1); 
+                resetObject(mod.diamondP2); 
+                resetObject(mod.dummyIconP1); 
+                resetObject(mod.dummyIconP2); 
+                resetObject(mod.customScoreTxt); 
+            }
+        } catch(e:Dynamic) {}
     }
 }

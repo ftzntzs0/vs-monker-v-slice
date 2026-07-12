@@ -1,0 +1,428 @@
+import funkin.play.song.Song;
+import funkin.play.PlayState;
+import funkin.Conductor;
+import funkin.modding.module.ModuleHandler;
+import flixel.FlxCamera;
+import flixel.FlxSprite;
+import flixel.FlxG;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import funkin.modding.events.ScriptEvent;
+import funkin.modding.events.CountdownScriptEvent; 
+import funkin.modding.events.SongTimeScriptEvent;
+import funkin.modding.events.UpdateScriptEvent;
+
+
+import openfl.filters.ShaderFilter;
+import funkin.graphics.shaders.AdjustColorShader;
+
+class LavenderEssenceScript extends Song
+{
+    var blackBG:FlxSprite = null;
+    var blackCover:FlxSprite = null;
+    
+    var topCam:FlxCamera = null;
+    var createdTopCam:Bool = false;
+
+    var numTweens:Array<FlxTween> = [];
+    var opponentOrigY:Array<Float> = [];
+    
+    var forceOpponentInvisible:Bool = false; 
+
+    
+    var colorShaderGame:AdjustColorShader = null;
+    var colorShaderHUD:AdjustColorShader = null;
+
+    public function new() {
+        super('lavender-essence');
+    }
+
+    override function onCountdownStart(event:CountdownScriptEvent) {
+        
+        
+        
+        event.cancel();
+        
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        game.isInCountdown = true; 
+        game.mayPauseGame = true; 
+        game.startSong();
+
+        super.onCountdownStart(event);
+
+        numTweens = [];
+        opponentOrigY = [];
+        forceOpponentInvisible = false;
+
+        
+        
+        
+        colorShaderGame = new AdjustColorShader();
+        colorShaderGame.hue = 0;
+        colorShaderGame.contrast = 0;
+        colorShaderGame.saturation = -75; 
+        colorShaderGame.brightness = 0;
+
+        colorShaderHUD = new AdjustColorShader();
+        colorShaderHUD.hue = 0;
+        colorShaderHUD.contrast = 0;
+        colorShaderHUD.saturation = -75;
+        colorShaderHUD.brightness = 0;
+
+        if (game.camGame != null) game.camGame.filters = [new ShaderFilter(colorShaderGame)];
+        if (game.camHUD != null) game.camHUD.filters = [new ShaderFilter(colorShaderHUD)];
+
+        
+        
+        
+        blackBG = new FlxSprite(-5000, -5000).makeGraphic(10, 10, 0xFF000000);
+        blackBG.scale.set(1000, 1000);
+        blackBG.updateHitbox();
+        blackBG.scrollFactor.set(1, 1); 
+        blackBG.alpha = 1;
+        blackBG.cameras = [game.camGame];
+
+        if (game.currentStage != null && game.currentStage.members != null) {
+            var minIdx:Int = game.currentStage.members.length;
+            var minZ:Float = 999999;
+            var chars = [game.currentStage.getDad(), game.currentStage.getGirlfriend(), game.currentStage.getBoyfriend()];
+
+            for (char in chars) {
+                if (char != null) {
+                    var idx = game.currentStage.members.indexOf(char);
+                    if (idx != -1 && idx < minIdx) minIdx = idx;
+                    try { if (char.zIndex < minZ) minZ = char.zIndex;
+                    } catch(e:Dynamic) {}
+                }
+            }
+            
+            if (minZ != 999999) blackBG.zIndex = Std.int(minZ - 1);
+
+            if (minIdx < game.currentStage.members.length && minIdx >= 0) {
+                game.currentStage.insert(minIdx, blackBG);
+            } else {
+                game.currentStage.insert(0, blackBG);
+            }
+        } else {
+            game.insert(0, blackBG);
+        }
+
+        
+        
+        
+        topCam = new FlxCamera();
+        topCam.bgColor = 0x00000000;
+        FlxG.cameras.add(topCam, false);
+        createdTopCam = true; 
+
+        blackCover = new FlxSprite().makeGraphic(Std.int(FlxG.width * 3), Std.int(FlxG.height * 3), 0xFF000000);
+        blackCover.screenCenter();
+        blackCover.scrollFactor.set(0, 0);
+        blackCover.alpha = 0; 
+        
+        game.add(blackCover);
+        blackCover.cameras = [topCam]; 
+
+        
+        
+        
+        if (game.currentStage != null) {
+            if (game.currentStage.getBoyfriend() != null) game.currentStage.getBoyfriend().visible = false;
+            if (game.currentStage.getDad() != null) game.currentStage.getDad().alpha = 0;
+            if (game.currentStage.getGirlfriend() != null) game.currentStage.getGirlfriend().visible = false;
+        }
+
+        if (game.camHUD != null) game.camHUD.alpha = 0;
+
+        var hideObj = function(obj:Dynamic) { if (obj != null) obj.alpha = 0; }
+        try {
+            hideObj(game.healthBar);
+            hideObj(game.healthBarBG); hideObj(game.iconP1); hideObj(game.iconP2); hideObj(game.scoreTxt);
+            var mod = ModuleHandler.getModule('beanbar');
+            if (mod != null) {
+                hideObj(mod.customHealthBG);
+                hideObj(mod.customLeftBar); hideObj(mod.customRightBar);
+                hideObj(mod.diamondP1); hideObj(mod.diamondP2); hideObj(mod.dummyIconP1); hideObj(mod.dummyIconP2);
+                hideObj(mod.customScoreTxt); hideObj(mod.timeBarBG); hideObj(mod.timeBarTxt);
+            }
+        } catch(e:Dynamic) {}
+
+        game.refresh();
+    }
+
+    override function onUpdate(event:UpdateScriptEvent) {
+        super.onUpdate(event);
+
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        if (forceOpponentInvisible) {
+            if (game.opponentStrumline != null) {
+                for (i in 0...game.opponentStrumline.length) {
+                    var strum = game.opponentStrumline.getByIndex(i);
+                    if (strum != null) strum.alpha = 0;
+                }
+            }
+            if (game.notes != null && game.notes.members != null) {
+                for (i in 0...game.notes.members.length) {
+                    var note = game.notes.members[i];
+                    if (note != null && note.mustPress == false) { 
+                        note.alpha = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    override function onStepHit(event:SongTimeScriptEvent) {
+        super.onStepHit(event);
+        var curStep:Int = event.step;
+
+        switch(curStep) {
+            case 320:
+                FlxG.camera.flash(0xFFFFFFFF, 2.52, null, true);
+            case 447:
+                FlxG.camera.flash(0xFFFFFFFF, 1.26, null, true);
+            case 576:
+                FlxG.camera.flash(0xFFFFFFFF, 2.52, null, true);
+            case 703:
+                FlxG.camera.flash(0xFFFFFFFF, 1.26, null, true);
+            case 832:
+                FlxG.camera.flash(0xFFFFFFFF, 1.26, null, true);
+            case 960:
+                FlxG.camera.flash(0xFFFFFFFF, 1.26, null, true);
+        }
+    }
+
+    function triggerBGShow(duration:Float) {
+        if (blackBG != null) {
+            FlxTween.cancelTweensOf(blackBG);
+            blackBG.alpha = 0.6;
+            numTweens.push(FlxTween.tween(blackBG, {alpha: 0.8}, duration, {ease: FlxEase.expoOut}));
+        }
+    }
+
+    override function onBeatHit(event:SongTimeScriptEvent) {
+        super.onBeatHit(event);
+
+        var curBeat:Int = event.beat;
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        var beatDur:Float = (60.0 / Conductor.instance.bpm);
+
+        switch(curBeat) {
+            case 1:
+                if (game.currentStage != null && game.currentStage.getDad() != null) {
+                    game.currentStage.getDad().alpha = 1;
+                    numTweens.push(FlxTween.tween(game.currentStage.getDad(), {alpha: 0}, 1.0, {ease: FlxEase.cubeIn}));
+                }
+
+            case 4:
+                
+                if (game.camHUD != null) game.camHUD.alpha = 1;
+
+                if (blackCover != null) {
+                    blackCover.alpha = 1;
+                    numTweens.push(FlxTween.tween(blackCover, {alpha: 0}, beatDur * 3, {ease: FlxEase.quadIn}));
+                }
+
+                if (game.currentStage != null) {
+                    if (game.currentStage.getBoyfriend() != null) {
+                        game.currentStage.getBoyfriend().visible = true;
+                        game.currentStage.getBoyfriend().alpha = 1;
+                    }
+                    if (game.currentStage.getGirlfriend() != null) {
+                        game.currentStage.getGirlfriend().visible = true;
+                        game.currentStage.getGirlfriend().alpha = 1;
+                    }
+                    if (game.currentStage.getDad() != null) game.currentStage.getDad().alpha = 1;
+                }
+                if (blackBG != null) numTweens.push(FlxTween.tween(blackBG, {alpha: 0.8}, beatDur * 3, {ease: FlxEase.expoIn}));
+
+            case 6: triggerBGShow(beatDur * 8);
+            case 14, 22, 30, 38, 46, 54, 62, 70: triggerBGShow(beatDur * 12);
+
+            case 71:
+                if (blackCover != null) numTweens.push(FlxTween.tween(blackCover, {alpha: 1}, beatDur * 1, {ease: FlxEase.linear}));
+
+            case 76:
+                if (blackBG != null) {
+                    FlxTween.cancelTweensOf(blackBG);
+                    blackBG.alpha = 1;
+                }
+
+                if (game.currentStage != null) {
+                    if (game.currentStage.getBoyfriend() != null) game.currentStage.getBoyfriend().visible = false;
+                    if (game.currentStage.getGirlfriend() != null) game.currentStage.getGirlfriend().visible = false;
+                    if (game.currentStage.getDad() != null) game.currentStage.getDad().alpha = 0;
+                }
+
+                forceOpponentInvisible = true; 
+
+                if (game.opponentStrumline != null) {
+                    for (i in 0...game.opponentStrumline.length) {
+                        var strum = game.opponentStrumline.getByIndex(i);
+                        if (strum != null) {
+                            if (opponentOrigY.length <= i) opponentOrigY.push(strum.y);
+                            else opponentOrigY[i] = strum.y; 
+                            strum.y -= 25; 
+                        }
+                    }
+                }
+
+                if (blackCover != null) {
+                    FlxTween.cancelTweensOf(blackCover);
+                    numTweens.push(FlxTween.tween(blackCover, {alpha: 0}, beatDur * 1, {ease: FlxEase.linear}));
+                }
+
+            case 78:
+                if (blackCover != null) {
+                    FlxTween.cancelTweensOf(blackCover);
+                    blackCover.alpha = 0; 
+                }
+
+                
+                
+                
+                if (game.currentStage != null) {
+                    var bf = game.currentStage.getBoyfriend();
+                    if (bf != null) {
+                        bf.visible = true;
+                        bf.alpha = 0;
+                        numTweens.push(FlxTween.tween(bf, {alpha: 1}, beatDur * 3, {ease: FlxEase.cubeIn}));
+                    }
+                    
+                    var gf = game.currentStage.getGirlfriend();
+                    if (gf != null) {
+                        gf.visible = true;
+                        gf.alpha = 0;
+                        numTweens.push(FlxTween.tween(gf, {alpha: 1}, beatDur * 3, {ease: FlxEase.cubeIn}));
+                    }
+                    
+                    var dad = game.currentStage.getDad();
+                    if (dad != null) {
+                        dad.alpha = 0;
+                        numTweens.push(FlxTween.tween(dad, {alpha: 1}, beatDur * 3, {ease: FlxEase.cubeIn}));
+                    }
+                }
+
+                var showObj = function(obj:Dynamic) { if (obj != null) numTweens.push(FlxTween.tween(obj, {alpha: 1}, beatDur * 3, {ease: FlxEase.cubeIn})); }
+                try {
+                    showObj(game.healthBar);
+                    showObj(game.healthBarBG); showObj(game.iconP1); showObj(game.iconP2); showObj(game.scoreTxt);
+                    var mod = ModuleHandler.getModule('beanbar');
+                    if (mod != null) {
+                        showObj(mod.customHealthBG);
+                        showObj(mod.customLeftBar); showObj(mod.customRightBar);
+                        showObj(mod.diamondP1); showObj(mod.diamondP2); showObj(mod.dummyIconP1); showObj(mod.dummyIconP2);
+                        showObj(mod.customScoreTxt); showObj(mod.timeBarBG); showObj(mod.timeBarTxt);
+                    }
+                } catch(e:Dynamic) {}
+                
+                if (blackBG != null) {
+                    FlxTween.cancelTweensOf(blackBG);
+                    numTweens.push(FlxTween.tween(blackBG, {alpha: 0}, beatDur * 3, {ease: FlxEase.cubeIn}));
+                }
+
+            
+            
+            
+            case 80:
+                if (colorShaderGame != null) colorShaderGame.saturation = -50;
+                if (colorShaderHUD != null) colorShaderHUD.saturation = -50;
+                
+            case 176:
+                if (colorShaderGame != null) colorShaderGame.saturation = -25;
+                if (colorShaderHUD != null) colorShaderHUD.saturation = -25;
+                
+            case 240:
+                if (colorShaderGame != null) colorShaderGame.saturation = 0;
+                if (colorShaderHUD != null) colorShaderHUD.saturation = 0;
+
+            case 93: 
+                forceOpponentInvisible = false;
+
+                if (game.opponentStrumline != null) {
+                    for (i in 0...game.opponentStrumline.length) {
+                        var strum = game.opponentStrumline.getByIndex(i);
+
+                        if (strum != null) {
+                            var targetY = (opponentOrigY.length > i) ? opponentOrigY[i] : strum.y + 25;
+                            numTweens.push(FlxTween.tween(strum, {alpha: 1, y: targetY}, beatDur * 2, {ease: FlxEase.cubeOut}));
+                        }
+                    }
+                }
+                
+                if (game.notes != null && game.notes.members != null) {
+                    for (i in 0...game.notes.members.length) {
+                        var note = game.notes.members[i];
+
+                        if (note != null && note.mustPress == false) note.alpha = 1;
+                    }
+                }
+        }
+    }
+
+    override function onDestroy(event:ScriptEvent) {
+        super.onDestroy(event);
+
+        try {
+            var game = PlayState.instance;
+            
+            
+            if (game != null) {
+                if (game.camGame != null) game.camGame.filters = [];
+                if (game.camHUD != null) game.camHUD.filters = [];
+
+                if (game.camHUD != null) game.camHUD.alpha = 1;
+                if (game.currentStage != null) {
+                    if (game.currentStage.getBoyfriend() != null) {
+                        game.currentStage.getBoyfriend().visible = true;
+                        game.currentStage.getBoyfriend().alpha = 1;
+                    }
+                    if (game.currentStage.getDad() != null) game.currentStage.getDad().alpha = 1;
+                    if (game.currentStage.getGirlfriend() != null) {
+                        game.currentStage.getGirlfriend().visible = true;
+                        game.currentStage.getGirlfriend().alpha = 1;
+                    }
+                }
+                
+                if (game.healthBar != null) game.healthBar.alpha = 1;
+                if (game.healthBarBG != null) game.healthBarBG.alpha = 1;
+                if (game.iconP1 != null) game.iconP1.alpha = 1;
+                if (game.iconP2 != null) game.iconP2.alpha = 1;
+                if (game.scoreTxt != null) game.scoreTxt.alpha = 1;
+            }
+        } catch(e:Dynamic) {}
+
+        try { for (t in numTweens) { if (t != null) { try { t.cancel(); } catch(e:Dynamic) {} } } } catch(e:Dynamic) {}
+
+        try {
+            var mod = ModuleHandler.getModule('beanbar');
+            if (mod != null) {
+                var resetObject = function(obj:Dynamic) { try { if (obj != null) { FlxTween.cancelTweensOf(obj); obj.alpha = 1; } } catch(e:Dynamic) {} }
+                resetObject(mod.customHealthBG); resetObject(mod.customLeftBar); resetObject(mod.customRightBar); 
+                resetObject(mod.diamondP1); resetObject(mod.diamondP2); resetObject(mod.dummyIconP1); resetObject(mod.dummyIconP2); 
+                resetObject(mod.customScoreTxt); resetObject(mod.timeBarBG); resetObject(mod.timeBarTxt); 
+            }
+        } catch(e:Dynamic) {}
+        
+        try {
+            var game = PlayState.instance;
+            if (game != null && game.opponentStrumline != null) {
+                for (i in 0...game.opponentStrumline.length) {
+                    var strum = game.opponentStrumline.getByIndex(i);
+                    if (strum != null) {
+                        strum.alpha = 1;
+                        if (opponentOrigY.length > i && opponentOrigY[i] != null) strum.y = opponentOrigY[i];
+                    }
+                }
+            }
+        } catch(e:Dynamic) {}
+
+        if (createdTopCam && topCam != null) FlxG.cameras.remove(topCam, true);
+    }
+}
