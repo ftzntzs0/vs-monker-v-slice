@@ -12,9 +12,15 @@ import funkin.modding.events.CountdownScriptEvent;
 import funkin.modding.events.SongTimeScriptEvent;
 import funkin.modding.events.UpdateScriptEvent;
 
-
 import openfl.filters.ShaderFilter;
 import funkin.graphics.shaders.AdjustColorShader;
+
+
+
+
+#if mobile
+import funkin.util.HapticUtil;
+#end
 
 class LavenderEssenceScript extends Song
 {
@@ -29,7 +35,6 @@ class LavenderEssenceScript extends Song
     
     var forceOpponentInvisible:Bool = false; 
 
-    
     var colorShaderGame:AdjustColorShader = null;
     var colorShaderHUD:AdjustColorShader = null;
 
@@ -37,12 +42,26 @@ class LavenderEssenceScript extends Song
         super('lavender-essence');
     }
 
+    
+    
+    
+    #if mobile
+    function vibrate(duration:Float, amplitude:Float, sharpness:Float, period:Float = 0.02) {
+        try {
+            var hapticPreset:Dynamic = {
+                period: period,
+                duration: duration,
+                amplitude: amplitude,
+                sharpness: sharpness
+            };
+            HapticUtil.vibrateByPreset(hapticPreset);
+        } catch(e:Dynamic) {}
+    }
+    #end
+
     override function onCountdownStart(event:CountdownScriptEvent) {
         
-        
-        
         event.cancel();
-        
         var game = PlayState.instance;
         if (game == null) return;
 
@@ -56,13 +75,10 @@ class LavenderEssenceScript extends Song
         opponentOrigY = [];
         forceOpponentInvisible = false;
 
-        
-        
-        
         colorShaderGame = new AdjustColorShader();
         colorShaderGame.hue = 0;
         colorShaderGame.contrast = 0;
-        colorShaderGame.saturation = -75; 
+        colorShaderGame.saturation = -75;
         colorShaderGame.brightness = 0;
 
         colorShaderHUD = new AdjustColorShader();
@@ -70,12 +86,9 @@ class LavenderEssenceScript extends Song
         colorShaderHUD.contrast = 0;
         colorShaderHUD.saturation = -75;
         colorShaderHUD.brightness = 0;
-
+        
         if (game.camGame != null) game.camGame.filters = [new ShaderFilter(colorShaderGame)];
         if (game.camHUD != null) game.camHUD.filters = [new ShaderFilter(colorShaderHUD)];
-
-        
-        
         
         blackBG = new FlxSprite(-5000, -5000).makeGraphic(10, 10, 0xFF000000);
         blackBG.scale.set(1000, 1000);
@@ -83,12 +96,12 @@ class LavenderEssenceScript extends Song
         blackBG.scrollFactor.set(1, 1); 
         blackBG.alpha = 1;
         blackBG.cameras = [game.camGame];
-
+        
         if (game.currentStage != null && game.currentStage.members != null) {
             var minIdx:Int = game.currentStage.members.length;
             var minZ:Float = 999999;
             var chars = [game.currentStage.getDad(), game.currentStage.getGirlfriend(), game.currentStage.getBoyfriend()];
-
+            
             for (char in chars) {
                 if (char != null) {
                     var idx = game.currentStage.members.indexOf(char);
@@ -99,7 +112,7 @@ class LavenderEssenceScript extends Song
             }
             
             if (minZ != 999999) blackBG.zIndex = Std.int(minZ - 1);
-
+            
             if (minIdx < game.currentStage.members.length && minIdx >= 0) {
                 game.currentStage.insert(minIdx, blackBG);
             } else {
@@ -109,9 +122,6 @@ class LavenderEssenceScript extends Song
             game.insert(0, blackBG);
         }
 
-        
-        
-        
         topCam = new FlxCamera();
         topCam.bgColor = 0x00000000;
         FlxG.cameras.add(topCam, false);
@@ -125,9 +135,6 @@ class LavenderEssenceScript extends Song
         game.add(blackCover);
         blackCover.cameras = [topCam]; 
 
-        
-        
-        
         if (game.currentStage != null) {
             if (game.currentStage.getBoyfriend() != null) game.currentStage.getBoyfriend().visible = false;
             if (game.currentStage.getDad() != null) game.currentStage.getDad().alpha = 0;
@@ -135,8 +142,9 @@ class LavenderEssenceScript extends Song
         }
 
         if (game.camHUD != null) game.camHUD.alpha = 0;
-
+        
         var hideObj = function(obj:Dynamic) { if (obj != null) obj.alpha = 0; }
+        
         try {
             hideObj(game.healthBar);
             hideObj(game.healthBarBG); hideObj(game.iconP1); hideObj(game.iconP2); hideObj(game.scoreTxt);
@@ -183,20 +191,31 @@ class LavenderEssenceScript extends Song
         switch(curStep) {
             case 320:
                 FlxG.camera.flash(0xFFFFFFFF, 2.52, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
             case 447:
                 FlxG.camera.flash(0xFFFFFFFF, 1.26, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
             case 576:
                 FlxG.camera.flash(0xFFFFFFFF, 2.52, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
             case 703:
                 FlxG.camera.flash(0xFFFFFFFF, 1.26, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
             case 832:
                 FlxG.camera.flash(0xFFFFFFFF, 1.26, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
             case 960:
                 FlxG.camera.flash(0xFFFFFFFF, 1.26, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
         }
     }
 
+    
+    
+    
     function triggerBGShow(duration:Float) {
+        #if mobile vibrate(0.35, 0.5, 0.0, 0.03); #end
+        
         if (blackBG != null) {
             FlxTween.cancelTweensOf(blackBG);
             blackBG.alpha = 0.6;
@@ -206,13 +225,12 @@ class LavenderEssenceScript extends Song
 
     override function onBeatHit(event:SongTimeScriptEvent) {
         super.onBeatHit(event);
-
         var curBeat:Int = event.beat;
         var game = PlayState.instance;
         if (game == null) return;
 
         var beatDur:Float = (60.0 / Conductor.instance.bpm);
-
+        
         switch(curBeat) {
             case 1:
                 if (game.currentStage != null && game.currentStage.getDad() != null) {
@@ -221,9 +239,8 @@ class LavenderEssenceScript extends Song
                 }
 
             case 4:
-                
                 if (game.camHUD != null) game.camHUD.alpha = 1;
-
+                
                 if (blackCover != null) {
                     blackCover.alpha = 1;
                     numTweens.push(FlxTween.tween(blackCover, {alpha: 0}, beatDur * 3, {ease: FlxEase.quadIn}));
@@ -241,13 +258,13 @@ class LavenderEssenceScript extends Song
                     if (game.currentStage.getDad() != null) game.currentStage.getDad().alpha = 1;
                 }
                 if (blackBG != null) numTweens.push(FlxTween.tween(blackBG, {alpha: 0.8}, beatDur * 3, {ease: FlxEase.expoIn}));
-
+                
             case 6: triggerBGShow(beatDur * 8);
             case 14, 22, 30, 38, 46, 54, 62, 70: triggerBGShow(beatDur * 12);
-
+            
             case 71:
                 if (blackCover != null) numTweens.push(FlxTween.tween(blackCover, {alpha: 1}, beatDur * 1, {ease: FlxEase.linear}));
-
+                
             case 76:
                 if (blackBG != null) {
                     FlxTween.cancelTweensOf(blackBG);
@@ -260,8 +277,8 @@ class LavenderEssenceScript extends Song
                     if (game.currentStage.getDad() != null) game.currentStage.getDad().alpha = 0;
                 }
 
-                forceOpponentInvisible = true; 
-
+                forceOpponentInvisible = true;
+                
                 if (game.opponentStrumline != null) {
                     for (i in 0...game.opponentStrumline.length) {
                         var strum = game.opponentStrumline.getByIndex(i);
@@ -284,9 +301,6 @@ class LavenderEssenceScript extends Song
                     blackCover.alpha = 0; 
                 }
 
-                
-                
-                
                 if (game.currentStage != null) {
                     var bf = game.currentStage.getBoyfriend();
                     if (bf != null) {
@@ -310,6 +324,7 @@ class LavenderEssenceScript extends Song
                 }
 
                 var showObj = function(obj:Dynamic) { if (obj != null) numTweens.push(FlxTween.tween(obj, {alpha: 1}, beatDur * 3, {ease: FlxEase.cubeIn})); }
+                
                 try {
                     showObj(game.healthBar);
                     showObj(game.healthBarBG); showObj(game.iconP1); showObj(game.iconP2); showObj(game.scoreTxt);
@@ -327,9 +342,6 @@ class LavenderEssenceScript extends Song
                     numTweens.push(FlxTween.tween(blackBG, {alpha: 0}, beatDur * 3, {ease: FlxEase.cubeIn}));
                 }
 
-            
-            
-            
             case 80:
                 if (colorShaderGame != null) colorShaderGame.saturation = -50;
                 if (colorShaderHUD != null) colorShaderHUD.saturation = -50;
@@ -344,11 +356,10 @@ class LavenderEssenceScript extends Song
 
             case 93: 
                 forceOpponentInvisible = false;
-
+                
                 if (game.opponentStrumline != null) {
                     for (i in 0...game.opponentStrumline.length) {
                         var strum = game.opponentStrumline.getByIndex(i);
-
                         if (strum != null) {
                             var targetY = (opponentOrigY.length > i) ? opponentOrigY[i] : strum.y + 25;
                             numTweens.push(FlxTween.tween(strum, {alpha: 1, y: targetY}, beatDur * 2, {ease: FlxEase.cubeOut}));
@@ -359,7 +370,6 @@ class LavenderEssenceScript extends Song
                 if (game.notes != null && game.notes.members != null) {
                     for (i in 0...game.notes.members.length) {
                         var note = game.notes.members[i];
-
                         if (note != null && note.mustPress == false) note.alpha = 1;
                     }
                 }
@@ -368,16 +378,15 @@ class LavenderEssenceScript extends Song
 
     override function onDestroy(event:ScriptEvent) {
         super.onDestroy(event);
-
+        
         try {
             var game = PlayState.instance;
-            
-            
             if (game != null) {
                 if (game.camGame != null) game.camGame.filters = [];
                 if (game.camHUD != null) game.camHUD.filters = [];
 
                 if (game.camHUD != null) game.camHUD.alpha = 1;
+                
                 if (game.currentStage != null) {
                     if (game.currentStage.getBoyfriend() != null) {
                         game.currentStage.getBoyfriend().visible = true;
@@ -404,7 +413,8 @@ class LavenderEssenceScript extends Song
             var mod = ModuleHandler.getModule('beanbar');
             if (mod != null) {
                 var resetObject = function(obj:Dynamic) { try { if (obj != null) { FlxTween.cancelTweensOf(obj); obj.alpha = 1; } } catch(e:Dynamic) {} }
-                resetObject(mod.customHealthBG); resetObject(mod.customLeftBar); resetObject(mod.customRightBar); 
+                resetObject(mod.customHealthBG);
+                resetObject(mod.customLeftBar); resetObject(mod.customRightBar); 
                 resetObject(mod.diamondP1); resetObject(mod.diamondP2); resetObject(mod.dummyIconP1); resetObject(mod.dummyIconP2); 
                 resetObject(mod.customScoreTxt); resetObject(mod.timeBarBG); resetObject(mod.timeBarTxt); 
             }

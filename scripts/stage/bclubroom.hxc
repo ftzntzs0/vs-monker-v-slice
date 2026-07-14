@@ -16,6 +16,21 @@ class BClubroomStage extends Stage
     
     
     
+    override function onCreate(event:ScriptEvent)
+    {
+        super.onCreate(event);
+        contagemDoCountdown = 0;
+    }
+
+    
+    
+    
+    override function onDestroy(event:ScriptEvent)
+    {
+        super.onDestroy(event);
+        contagemDoCountdown = 0;
+    }
+
     override function onSongRetry(event:ScriptEvent) 
     {
         super.onSongRetry(event);
@@ -36,9 +51,6 @@ class BClubroomStage extends Stage
             songId = game.currentSong.id.toLowerCase();
         }
 
-        
-        
-        
         var podeAnimarGF:Bool = true;
         
         if (songId == "scholar" && contagemDoCountdown == 1) {
@@ -51,9 +63,6 @@ class BClubroomStage extends Stage
             }
         }
 
-        
-        
-        
         if (FlxG.onMobile) {
             PlayState.instance.currentStage.getNamedProp('room').scale.set(1.2, 1.0);
         }

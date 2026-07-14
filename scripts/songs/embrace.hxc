@@ -5,6 +5,13 @@ import flixel.FlxSprite;
 import funkin.modding.events.ScriptEvent;
 import funkin.modding.events.SongTimeScriptEvent;
 
+
+
+
+#if mobile
+import funkin.util.HapticUtil;
+#end
+
 class EmbraceScript extends Song
 {
     var blackOverlay:FlxSprite = null;
@@ -13,12 +20,28 @@ class EmbraceScript extends Song
         super('embrace');
     }
 
+    
+    
+    
+    #if mobile
+    function vibrate(duration:Float, amplitude:Float, sharpness:Float, period:Float = 0.02) {
+        try {
+            var hapticPreset:Dynamic = {
+                period: period,
+                duration: duration,
+                amplitude: amplitude,
+                sharpness: sharpness
+            };
+            HapticUtil.vibrateByPreset(hapticPreset);
+        } catch(e:Dynamic) {}
+    }
+    #end
+
     override function onCountdownStart(event:ScriptEvent) {
         super.onCountdownStart(event);
 
         var game = PlayState.instance;
         if (game == null) return;
-        
         
         var topCam = game.camHUD; 
         
@@ -35,6 +58,22 @@ class EmbraceScript extends Song
         game.refresh(); 
     }
 
+    
+    
+    
+    override function onBeatHit(event:SongTimeScriptEvent) {
+        super.onBeatHit(event);
+        var curBeat:Int = event.beat;
+        
+        #if mobile
+        
+        if (curBeat >= 16 && curBeat < 30) {
+            
+            vibrate(0.15, 0.4, 0.1, 0.02);
+        }
+        #end
+    }
+
     override function onStepHit(event:SongTimeScriptEvent) {
         super.onStepHit(event);
         var curStep:Int = event.step;
@@ -43,30 +82,25 @@ class EmbraceScript extends Song
         
         switch(curStep) {
             
-            
-            
-            
-            
-            case 640:
+           case 640:
                 
                 if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 1.55, null, true);
                 if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, 1.55, null, true);
 
             case 1016:
-                
                 if (blackOverlay != null) {
                     blackOverlay.visible = true;
                     blackOverlay.alpha = 1;
                 }
                 
             case 1023:
-                
                 if (blackOverlay != null) {
                     blackOverlay.visible = false;
                     blackOverlay.alpha = 0;
                 }
                 if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, 0.775, null, true);
                 if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 0.775, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
         }
     }
 

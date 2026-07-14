@@ -8,6 +8,7 @@ import flixel.text.FlxTextBorderStyle;
 import flixel.text.FlxText;
 import funkin.PlayerSettings;
 import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import flixel.util.FlxTimer;
 import flixel.FlxG;
 import funkin.Paths;
@@ -16,16 +17,19 @@ import funkin.modding.events.SubStateScriptEvent;
 import openfl.filters.ShaderFilter;
 import funkin.graphics.shaders.AdjustColorShader;
 
+import funkin.ui.freeplay.FreeplayState;
+
 class CustomPauseMenu extends Module {
     var portrait:FlxSprite;
     var panel:FlxSprite;
+    var panelFiller:FlxSprite; // A nossa nova cor sólida de fundo!
     var logo:FlxSprite;
 
     var options:Array<FlxText> = [];
     var curSelected:Int = 0;
     var isCustomPause:Bool = false;
+    var allowCustomInput:Bool = false;
 
-    
     var levelInfo:FlxText;
     var beanText:FlxText;
     var deathText:FlxText;
@@ -36,19 +40,13 @@ class CustomPauseMenu extends Module {
 
     override function onSubStateOpenEnd(event:SubStateScriptEvent) {
         super.onSubStateOpenEnd(event);
-
         if (Std.isOfType(event.targetState, PauseSubState)) {
             
-            
-            
-            
             isCustomPause = false;
+            allowCustomInput = false;
             options = [];
             curSelected = 0;
 
-            
-            
-            
             var dadName:String = "dad";
             if (PlayState.instance != null && PlayState.instance.currentChart != null) {
                 dadName = PlayState.instance.currentChart.characters.opponent.toLowerCase();
@@ -56,143 +54,170 @@ class CustomPauseMenu extends Module {
 
             var allowedDads = ["geef", "monker", "tato", "syor", "yur", "natki", "emcee"];
             var isValidDad:Bool = false;
+            var matchedDad:String = "geef"; 
 
             for (allowed in allowedDads) {
                 if (dadName.indexOf(allowed) != -1) {
                     isValidDad = true;
+                    matchedDad = allowed; 
                     break;
                 }
             }
 
             if (!isValidDad) return;
-
-            
-            
-            
-            var state = event.targetState; 
+            var state:Dynamic = event.targetState; 
             isCustomPause = true;
 
-            try { state.remove(state.metadata); } catch(e:Dynamic) {}
-            try { state.remove(state.menuEntryText); } catch(e:Dynamic) {}
-            try { state.remove(state.metadataDeaths); } catch(e:Dynamic) {} 
+            try { if (state.metadata != null) { state.metadata.visible = false; } } catch(e:Dynamic) {}
+            try { if (state.menuEntryText != null) { state.menuEntryText.visible = false; state.menuEntryText.active = false; } } catch(e:Dynamic) {}
+            try { if (state.metadataDeaths != null) { state.metadataDeaths.visible = false; } } catch(e:Dynamic) {}
+            try { if (state.virtualPad != null) { state.virtualPad.visible = false; state.virtualPad.active = false; } } catch(e:Dynamic) {}
+            try { if (state.mobileControls != null) { state.mobileControls.visible = false; state.mobileControls.active = false; } } catch(e:Dynamic) {}
 
-            if (dadName.indexOf("yur") != -1) {
-                var pauseShader = new AdjustColorShader();
-                pauseShader.hue = 0;
-                pauseShader.contrast = 0;
-                pauseShader.saturation = -75; 
-                pauseShader.brightness = 0;
-
-                
-                if (state.cameras != null && state.cameras.length > 0) {
-                    state.cameras[0].filters = [new ShaderFilter(pauseShader)];
+            try {
+                if (matchedDad == "yur") {
+                    var pauseShader = new AdjustColorShader();
+                    pauseShader.hue = 0;
+                    pauseShader.contrast = 0;
+                    pauseShader.saturation = -75; 
+                    pauseShader.brightness = 0;
+                    if (state.cameras != null && state.cameras.length > 0) {
+                        state.cameras[0].filters = [new ShaderFilter(pauseShader)];
+                    }
                 }
-            }
+            } catch(e:Dynamic) {}
 
-            
-            
-            
-            
             var panelName = "panel";
             var logoName = "logoMenu";
             
-            if (dadName.indexOf("tato") != -1) {
+            if (matchedDad == "tato") {
                 panelName = "panel-tato";
                 logoName = "logoMenu-tato";
             }
 
-            
             var portraitOffsetX:Float = 0;
             var portraitOffsetY:Float = 0;
 
-            if (dadName.indexOf("geef") != -1) {
-                
-                
-                portraitOffsetX = 6; 
+            if (matchedDad == "geef") {
+                portraitOffsetX = 6;
                 portraitOffsetY = -45;  
+            } else {
+                if (FlxG.onMobile) {
+                    portraitOffsetX = 60; 
+                    portraitOffsetY = 10;
+                }
             }
 
-            portrait = new FlxSprite(FlxG.width, 0).loadGraphic(Paths.image('UI/pausemenu/portraits/' + dadName));
-            if (portrait.graphic != null) {
-                portrait.scale.set(0.8, 0.8); 
-                portrait.updateHitbox();
-
-                var portraitFinalX:Float = (FlxG.width - portrait.width - 160) + portraitOffsetX; 
-                var portraitFinalY:Float = 80 + portraitOffsetY; 
-
-                portrait.y = portraitFinalY;
-                state.add(portrait);
-
-                FlxTween.tween(portrait, {x: portraitFinalX}, 1.5, {
-                    ease: FlxEase.quartInOut,
-                    startDelay: 0.5
-                });
-            }
-
-            panel = new FlxSprite(-600, 0).loadGraphic(Paths.image('UI/pausemenu/' + panelName));
-            if (panel.graphic != null) {
-                panel.scale.set(0.7, 0.7); 
-                panel.updateHitbox();
-                state.add(panel);
-
-                FlxTween.tween(panel, {x: -25}, 1.0, {
-                    ease: FlxEase.quartInOut
-                });
-            }
-
-            logo = new FlxSprite(-600, -50).loadGraphic(Paths.image('UI/pausemenu/' + logoName));
-            if (logo.graphic != null) {
-                logo.scale.set(0.73, 0.73); 
-                logo.updateHitbox();
-                state.add(logo);
-
-                FlxTween.tween(logo, {x: 82}, 1.0, {
-                    ease: FlxEase.quartInOut,
-                });
-            }
-
-            
-            
-            
-            
-            var songNameString:String = "";
-            if (PlayState.instance != null && PlayState.instance.currentChart != null) {
-                songNameString = PlayState.instance.currentChart.songName;
-            }
-            levelInfo = new FlxText(20, 15, 0, songNameString, 32);
-            levelInfo.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
-            levelInfo.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
-            levelInfo.alpha = 0;
-            levelInfo.x = FlxG.width - (levelInfo.width + 20);
-            state.add(levelInfo);
-
-            beanText = new FlxText(20, 15 + 32, 0, "BEAN", 32);
-            beanText.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
-            beanText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
-            beanText.alpha = 0;
-            beanText.x = FlxG.width - (beanText.width + 20);
-            state.add(beanText);
-
-            var deaths:Int = 0;
-            if (PlayState.instance != null) deaths = PlayState.instance.deathCounter;
-            
-            deathText = new FlxText(20, 15 + 64, 0, "Beanovered: " + deaths, 32);
-            deathText.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
-            deathText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
-            deathText.alpha = 0;
-            deathText.x = FlxG.width - (deathText.width + 20);
-            state.add(deathText);
-
-            FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
-            FlxTween.tween(beanText, {alpha: 1, y: beanText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
-            FlxTween.tween(deathText, {alpha: 1, y: deathText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
-
-            
-            
-            
+            var textSize:Int = 28;
             var textX:Int = 45;
+            var textSpacing:Int = 50;
+
+            if (FlxG.onMobile) {
+                textX = 145;        
+                textSize = 32;      
+                textSpacing = 62;   
+            }
+
+            try {
+                portrait = new FlxSprite(FlxG.width, 0).loadGraphic(Paths.image('UI/pausemenu/portraits/' + matchedDad));
+                if (portrait.graphic != null) {
+                    portrait.scale.set(0.8, 0.8);
+                    portrait.updateHitbox();
+
+                    var portraitFinalX:Float = (FlxG.width - portrait.width - 160) + portraitOffsetX; 
+                    var portraitFinalY:Float = 80 + portraitOffsetY; 
+
+                    portrait.y = portraitFinalY;
+                    portrait.scrollFactor.set(0, 0);
+                    state.add(portrait);
+
+                    FlxTween.tween(portrait, {x: portraitFinalX}, 1.5, {
+                        ease: FlxEase.quartInOut,
+                        startDelay: 0.5
+                    });
+                }
+            } catch(e:Dynamic) {}
+
+            try {
+                // =======================================================
+                // NOVO: Bloco de cor FFE6F4 para fechar o "buraco" no mobile
+                // =======================================================
+                if (FlxG.onMobile) {
+                    // Cria um bloco gigante de 1500x2000 pixels usando a cor 0xFFFFE6F4
+                    panelFiller = new FlxSprite(-2025, -200).makeGraphic(1500, 2000, 0xFFFFE6F4);
+                    panelFiller.scrollFactor.set(0, 0);
+                    state.add(panelFiller);
+
+                    // Desliza o bloco junto com o painel!
+                    FlxTween.tween(panelFiller, {x: -1350}, 1.0, {
+                        ease: FlxEase.quartInOut
+                    });
+                }
+
+                panel = new FlxSprite(-600, 0).loadGraphic(Paths.image('UI/pausemenu/' + panelName));
+                if (panel.graphic != null) {
+                    panel.scale.set(0.7, 0.7);
+                    panel.updateHitbox();
+                    panel.scrollFactor.set(0, 0);
+                    state.add(panel);
+
+                    FlxTween.tween(panel, {x: (FlxG.onMobile ? 75 : -25)}, 1.0, {
+                        ease: FlxEase.quartInOut
+                    });
+                }
+            } catch(e:Dynamic) {}
+
+            try {
+                logo = new FlxSprite(-600, -50).loadGraphic(Paths.image('UI/pausemenu/' + logoName));
+                if (logo.graphic != null) {
+                    logo.scale.set(0.73, 0.73);
+                    logo.updateHitbox();
+                    logo.scrollFactor.set(0, 0);
+                    state.add(logo);
+
+                    FlxTween.tween(logo, {x: (FlxG.onMobile ? 182 : 82)}, 1.0, {
+                        ease: FlxEase.quartInOut,
+                    });
+                }
+            } catch(e:Dynamic) {}
+
+            try {
+                var songNameString:String = "";
+                if (PlayState.instance != null && PlayState.instance.currentChart != null) {
+                    songNameString = PlayState.instance.currentChart.songName;
+                }
+                levelInfo = new FlxText(20, 15, 0, songNameString, 32);
+                levelInfo.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
+                levelInfo.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
+                levelInfo.scrollFactor.set(0, 0);
+                levelInfo.alpha = 0;
+                levelInfo.x = FlxG.width - (levelInfo.width + 20);
+                state.add(levelInfo);
+
+                beanText = new FlxText(20, 15 + 32, 0, "BEAN", 32);
+                beanText.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
+                beanText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
+                beanText.scrollFactor.set(0, 0);
+                beanText.alpha = 0;
+                beanText.x = FlxG.width - (beanText.width + 20);
+                state.add(beanText);
+
+                var deaths:Int = 0;
+                if (PlayState.instance != null) deaths = PlayState.instance.deathCounter;
+                deathText = new FlxText(20, 15 + 64, 0, "Beanovered: " + deaths, 32);
+                deathText.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
+                deathText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
+                deathText.scrollFactor.set(0, 0);
+                deathText.alpha = 0;
+                deathText.x = FlxG.width - (deathText.width + 20);
+                state.add(deathText);
+
+                FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
+                FlxTween.tween(beanText, {alpha: 1, y: beanText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+                FlxTween.tween(deathText, {alpha: 1, y: deathText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
+            } catch(e:Dynamic) {}
+
             var textStartY:Int = 420; 
-            var textSpacing:Int = 50; 
             var entryIndex:Int = 0;
 
             if (state.currentMenuEntries != null) {
@@ -205,15 +230,16 @@ class CustomPauseMenu extends Module {
                 }
                 
                 state.currentMenuEntries = filteredEntries;
-
+                
                 for (entry in state.currentMenuEntries) {
                     if (entry.text.toLowerCase() == 'resume') {
                         entry.callback = function() { resume(); }; 
                     }
 
                     var songText:FlxText = new FlxText(-400, textStartY + (entryIndex * textSpacing), 0, entry.text);
-                    songText.setFormat(Paths.font("RifficFree-Bold.ttf"), 28, 0xFFFFFFFF, "left"); 
+                    songText.setFormat(Paths.font("RifficFree-Bold.ttf"), textSize, 0xFFFFFFFF, "left"); 
                     songText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFFC876AD, 3);
+                    songText.scrollFactor.set(0, 0);
                     
                     options.push(songText);
                     state.add(songText);
@@ -222,60 +248,131 @@ class CustomPauseMenu extends Module {
                         ease: FlxEase.quartOut,
                         startDelay: 0.5 + (entryIndex * 0.15) 
                     });
-
                     entryIndex++;
                 }
             }
 
             changeSelection(0);
+            
+            new FlxTimer().start(0.15, function(tmr:FlxTimer) {
+                allowCustomInput = true;
+            });
         }
     }
 
-    
-    
-    
     function changeSelection(change:Int) {
         if (options.length == 0) return;
-        
         curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
         
         for (i in 0...options.length) {
             if (options[i] != null) { 
-                options[i].color = 0xFFFFFFFF; 
+                options[i].color = 0xFFFFFFFF;
                 options[i].setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFFC876AD, 3); 
             }
         }
         
         if (options[curSelected] != null) { 
-            options[curSelected].setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFFFFAACC, 3); 
+            options[curSelected].setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFFFFAACC, 3);
         }
 
         FlxG.sound.play(Paths.sound('scrollMenu-bean'), 0.7);
     }
 
-    override function onUpdate(event:UpdateScriptEvent) {
-        super.onUpdate(event);
+    function confirmItem(index:Int, state:Dynamic) {
+        if (!allowCustomInput) return;
+        if (state == null || state.currentMenuEntries == null || state.currentMenuEntries[index] == null) return;
         
-        var state = FlxG.state.subState;
-        
-        if (state != null && isCustomPause && Std.isOfType(state, PauseSubState) && state.allowInput) {
-            if (PlayerSettings.player1.controls.UI_UP_P) changeSelection(-1);
-            if (PlayerSettings.player1.controls.UI_DOWN_P) changeSelection(1);
-            
-            if (PlayerSettings.player1.controls.BACK_P && !state.justOpened) {
-                resume();
-            }
+        allowCustomInput = false;
+
+        var cb = state.currentMenuEntries[index].callback;
+        var txt = state.currentMenuEntries[index].text.toLowerCase();
+
+        if (cb != null) {
+            new FlxTimer().start(0.1, function(tmr:FlxTimer) {
+                try {
+                    cb();
+                } catch(e:Dynamic) {
+                    if (txt.indexOf('restart') != -1) {
+                        FlxG.resetState();
+                    } else if (txt.indexOf('exit') != -1) {
+                        try { if (FlxG.sound.music != null) FlxG.sound.music.stop(); } catch(err:Dynamic) {}
+                        
+                        FlxG.switchState(new FreeplayState());
+                    } else {
+                        state.close();
+                    }
+                }
+            });
         }
     }
 
+    override function onUpdate(event:UpdateScriptEvent) {
+        super.onUpdate(event);
+        
+        var state:Dynamic = FlxG.state.subState;
+        if (state == null || !isCustomPause || !Std.isOfType(state, PauseSubState) || !allowCustomInput) return;
+        
+        if (PlayerSettings.player1.controls.UI_UP_P) changeSelection(-1);
+        if (PlayerSettings.player1.controls.UI_DOWN_P) changeSelection(1);
+        
+        if (PlayerSettings.player1.controls.BACK_P && !state.justOpened) {
+            resume();
+            return;
+        }
+
+        if (PlayerSettings.player1.controls.ACCEPT && !state.justOpened) {
+            confirmItem(curSelected, state);
+            return;
+        }
+
+        #if mobile
+        var clickedIndex:Int = -1;
+        var cam = state.cameras != null && state.cameras.length > 0 ? state.cameras[0] : FlxG.camera;
+
+        for (touch in FlxG.touches.list) {
+            if (touch.justPressed) {
+                var touchPos:FlxPoint = touch.getWorldPosition(cam);
+                
+                for (i in 0...options.length) {
+                    var opt = options[i];
+                    if (opt != null && opt.overlapsPoint(touchPos)) {
+                        clickedIndex = i;
+                        break;
+                    }
+                }
+                touchPos.put();
+            }
+            if (clickedIndex != -1) break;
+        }
+
+        if (clickedIndex != -1) {
+            if (curSelected != clickedIndex) {
+                curSelected = clickedIndex;
+                changeSelection(0);
+            }
+            confirmItem(clickedIndex, state);
+            return;
+        }
+        #end
+    }
+
     function resume() {
-        var state = FlxG.state.subState;
-        if (state != null) state.allowInput = false;
+        allowCustomInput = false;
+        isCustomPause = false; 
+
+        var state:Dynamic = FlxG.state.subState;
 
         if (portrait != null) {
             FlxTween.cancelTweensOf(portrait);
             FlxTween.tween(portrait, {x: FlxG.width}, 0.7, {ease: FlxEase.quartInOut});
         }
+        
+        // Esconde o bloco de cor junto
+        if (panelFiller != null) {
+            FlxTween.cancelTweensOf(panelFiller);
+            FlxTween.tween(panelFiller, {x: -2025}, 0.7, {ease: FlxEase.quartInOut});
+        }
+
         if (panel != null) {
             FlxTween.cancelTweensOf(panel);
             FlxTween.tween(panel, {x: -600}, 0.7, {ease: FlxEase.quartInOut});
@@ -288,7 +385,6 @@ class CustomPauseMenu extends Module {
         if (levelInfo != null) FlxTween.tween(levelInfo, {alpha: 0}, 0.6, {ease: FlxEase.quartInOut});
         if (beanText != null) FlxTween.tween(beanText, {alpha: 0}, 0.6, {ease: FlxEase.quartInOut});
         if (deathText != null) FlxTween.tween(deathText, {alpha: 0}, 0.6, {ease: FlxEase.quartInOut});
-
         if (state != null && state.background != null) {
             FlxTween.cancelTweensOf(state.background);
             FlxTween.tween(state.background, {alpha: 0}, 0.6, {ease: FlxEase.quartInOut});
@@ -305,8 +401,14 @@ class CustomPauseMenu extends Module {
         }
 
         new FlxTimer().start(0.6 + (options.length * 0.1), function(tmr:FlxTimer) {
-            isCustomPause = false;
-            if (state != null) state.close();
+            if (FlxG.state != null && FlxG.state.subState != null) {
+                var subState:Dynamic = FlxG.state.subState; 
+                
+                if (subState.cameras != null && subState.cameras.length > 0 && subState.cameras[0] != null) {
+                    subState.cameras[0].filters = [];
+                }
+                subState.close();
+            }
         });
     }
 }

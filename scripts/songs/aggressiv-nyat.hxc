@@ -17,6 +17,13 @@ import openfl.filters.ShaderFilter;
 import openfl.filters.BitmapFilter;
 import funkin.graphics.shaders.AdjustColorShader;
 
+
+
+
+#if mobile
+import funkin.util.HapticUtil;
+#end
+
 class AggressivNyatScript extends Song
 {
     var blackOverlay:FlxSprite = null;
@@ -41,6 +48,14 @@ class AggressivNyatScript extends Song
     var abberationActive:Bool = false;
     var bloomActive:Bool = false;
     var hsvActive:Bool = false;
+
+    
+    
+    
+    var isRampingVib:Bool = false;
+    var rampVibTimer:Float = 0;
+    var rampProgressTimer:Float = 0;
+    var rampMaxTime:Float = 0;
 
     var abberationCode:String = "
         #pragma header
@@ -106,6 +121,23 @@ class AggressivNyatScript extends Song
         super('aggressiv-nyat');
     }
 
+    
+    
+    
+    #if mobile
+    function vibrate(duration:Float, amplitude:Float, sharpness:Float, period:Float = 0.02) {
+        try {
+            var hapticPreset:Dynamic = {
+                period: period,
+                duration: duration,
+                amplitude: amplitude,
+                sharpness: sharpness
+            };
+            HapticUtil.vibrateByPreset(hapticPreset);
+        } catch(e:Dynamic) {}
+    }
+    #end
+
     function updateFilters() {
         var game = PlayState.instance;
         if (game == null) return;
@@ -133,11 +165,8 @@ class AggressivNyatScript extends Song
     }
 
     function pulseAberration(game:PlayState) {
-        // if (!abberationActive) {
-        //     abberationActive = true;
-        //     updateFilters();
-        // }
-        // curAberration = 1.0; 
+        #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
+        
         if (game.camHUD != null) {
             FlxTween.cancelTweensOf(game.camHUD);
             game.camHUD.x = FlxG.random.float(-20, 20);
@@ -151,7 +180,6 @@ class AggressivNyatScript extends Song
         var game = PlayState.instance;
         if (game == null) return;
 
-        
         curAberration = 0.0;
         curBloom = 0.0;
         targetBloom = 0.0; 
@@ -162,6 +190,10 @@ class AggressivNyatScript extends Song
         hsvActive = false;
         hideHUD = true; 
         numTweens = []; 
+        
+        isRampingVib = false;
+        rampVibTimer = 0;
+        rampProgressTimer = 0;
         
         if (game.currentStage != null) {
             if (game.currentStage.getBoyfriend() != null) game.currentStage.getBoyfriend().shader = null;
@@ -252,6 +284,30 @@ class AggressivNyatScript extends Song
             bloomShaderGame.setFloat("intensity", curBloom);
             bloomShaderHUD.setFloat("intensity", curBloom);
         }
+
+        
+        
+        
+        #if mobile
+        if (isRampingVib) {
+            rampProgressTimer += event.elapsed;
+            rampVibTimer += event.elapsed;
+            
+            
+            if (rampVibTimer >= 0.04) {
+                rampVibTimer = 0;
+                
+                
+                var progress = rampProgressTimer / rampMaxTime;
+                if (progress > 1.0) progress = 1.0;
+                
+                
+                var currentAmp = 0.1 + (0.9 * progress); 
+                
+                vibrate(0.04, currentAmp, 0.8, 0.01);
+            }
+        }
+        #end
     }
 
     override function onBeatHit(event:SongTimeScriptEvent) {
@@ -265,10 +321,13 @@ class AggressivNyatScript extends Song
         switch(curBeat) {
             case 60:
                 if (game.camGame != null) game.camGame.zoom += 0.05;
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
             case 61:
                 if (game.camGame != null) game.camGame.zoom += 0.05;
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
             case 62:
                 if (blackOverlay != null) blackOverlay.alpha = 1;
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
             case 64:
                 hideHUD = false; 
                 if (game.camGame != null) {
@@ -277,6 +336,7 @@ class AggressivNyatScript extends Song
                 }
                 if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, beatDuration * 4, null, true);
                 if (blackOverlay != null) blackOverlay.alpha = 0;
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
 
             case 447:
                 var duration4Beats:Float = beatDuration * 4;
@@ -333,10 +393,16 @@ class AggressivNyatScript extends Song
                     updateFilters();
                 }
                 targetSaturation = -100.0; 
+                
+                #if mobile 
+                var duration2Beats:Float = (60.0 / Conductor.instance.bpm) * 2;
+                vibrate(duration2Beats, 0.4, 0.0, 0.04); 
+                #end
 
             case 1536:
                 targetSaturation = 0.0; 
                 if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, (60 / Conductor.instance.bpm) * 4, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
 
             case 1792:
                 if (!bloomActive) {
@@ -345,21 +411,31 @@ class AggressivNyatScript extends Song
                 }
                 targetBloom = 1.0; 
                 
+                
+                #if mobile
+                isRampingVib = true;
+                rampVibTimer = 0;
+                rampProgressTimer = 0;
+                
+                rampMaxTime = 15 * (Conductor.instance.stepCrochet / 1000.0);
+                #end
+                
             case 1807:
                 hideHUD = true; 
                 if (blackOverlay != null) {
                     FlxTween.cancelTweensOf(blackOverlay);
                     blackOverlay.alpha = 1; 
                 }
+                
+                
+                #if mobile
+                isRampingVib = false;
+                #end
         }
     }
 
-    
-    
-    
     override function onDestroy(event:ScriptEvent) {
         super.onDestroy(event);
-        
         
         try {
             var game = PlayState.instance;
@@ -372,7 +448,6 @@ class AggressivNyatScript extends Song
             }
         } catch(e:Dynamic) {}
 
-        
         try {
             for (t in numTweens) {
                 if (t != null) {
@@ -381,7 +456,6 @@ class AggressivNyatScript extends Song
             }
         } catch(e:Dynamic) {}
 
-        
         try {
             var mod = ModuleHandler.getModule('beanbar');
             if (mod != null) {

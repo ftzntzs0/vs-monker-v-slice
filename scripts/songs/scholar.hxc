@@ -9,6 +9,13 @@ import flixel.FlxSprite;
 import flixel.FlxCamera;
 import funkin.Paths;
 
+
+
+
+#if mobile
+import funkin.util.HapticUtil;
+#end
+
 class ScholarScript extends Song 
 {
     var hasYawned:Bool = false;
@@ -25,15 +32,27 @@ class ScholarScript extends Song
     
     
     
+    #if mobile
+    function vibrate(duration:Float, amplitude:Float, sharpness:Float, period:Float = 0.02) {
+        try {
+            var hapticPreset:Dynamic = {
+                period: period,
+                duration: duration,
+                amplitude: amplitude,
+                sharpness: sharpness
+            };
+            HapticUtil.vibrateByPreset(hapticPreset);
+        } catch(e:Dynamic) {}
+    }
+    #end
+    
     override function onSongRetry(event:ScriptEvent) 
     {
         super.onSongRetry(event);
         
-        
         hasYawned = false;
         isYawning = false;
 
-        
         if (blackScreen != null) {
             blackScreen.alpha = 0;
         }
@@ -46,9 +65,6 @@ class ScholarScript extends Song
         var game = PlayState.instance;
         if (game == null) return;
 
-        
-        
-        
         if (blackScreen == null) 
         {
             topCam = new FlxCamera();
@@ -63,9 +79,6 @@ class ScholarScript extends Song
             game.add(blackScreen);
         }
 
-        
-        
-        
         if (!hasYawned) 
         {
             event.cancel(); 
@@ -113,6 +126,7 @@ class ScholarScript extends Song
         {
             case 1407:
                 FlxG.camera.flash(0xFFFFFFFF, 1.29, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
                 
             case 1663:
                 if (blackScreen != null) {

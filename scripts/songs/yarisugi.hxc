@@ -12,6 +12,13 @@ import funkin.modding.events.ScriptEvent;
 import funkin.modding.events.SongTimeScriptEvent;
 import funkin.modding.events.UpdateScriptEvent;
 
+
+
+
+#if mobile
+import funkin.util.HapticUtil;
+#end
+
 class YarisugiScript extends Song
 {
     var defaultOpponentY:Array<Float> = [];
@@ -26,9 +33,33 @@ class YarisugiScript extends Song
     var customBopInterval:Int = 4;
     var customBopIntensity:Float = 1.0;
 
+    
+    
+    
+    var currentVibKey:String = "none";
+    var vibTimer:Float = 0;
+    var vibStep:Int = 0; 
+
     public function new() {
         super('yarisugi');
     }
+
+    
+    
+    
+    #if mobile
+    function vibrate(duration:Float, amplitude:Float, sharpness:Float, period:Float = 0.02) {
+        try {
+            var hapticPreset:Dynamic = {
+                period: period,
+                duration: duration,
+                amplitude: amplitude,
+                sharpness: sharpness
+            };
+            HapticUtil.vibrateByPreset(hapticPreset);
+        } catch(e:Dynamic) {}
+    }
+    #end
 
     override function onCountdownStart(event:ScriptEvent) {
         super.onCountdownStart(event);
@@ -42,6 +73,10 @@ class YarisugiScript extends Song
         plrOffsets = [-400, -400, -400, -400];
         customBopInterval = 4;
         customBopIntensity = 1.0;
+
+        currentVibKey = "none";
+        vibTimer = 0;
+        vibStep = 0;
 
         try { game.camZooming = true; } catch(e:Dynamic) {}
 
@@ -129,6 +164,11 @@ class YarisugiScript extends Song
         var game = PlayState.instance;
         if (game == null) return;
 
+        
+        
+        
+
+
         if (game.opponentStrumline != null) {
             for (i in 0...4) {
                 var oppNote = game.opponentStrumline.getByIndex(i);
@@ -158,11 +198,20 @@ class YarisugiScript extends Song
         var game = PlayState.instance;
         if (game == null) return;
         
+        #if mobile
+        if (curStep >= 112 && curStep < 123) {
+            if (curStep % 2 == 0) {
+                vibrate(0.06, 0.6, 0.8, 0.02); 
+            } else {
+                vibrate(0.04, 0.3, 0.4, 0.02); 
+            }
+        }
+        #end
+
         var mod = ModuleHandler.getModule('beanbar');
         switch(curStep) {
             
             case 0:
-                
                 if (introFade != null) {
                     introFade.alpha = 1; 
                     FlxTween.tween(introFade, {alpha: 0}, 6.8, {ease: FlxEase.linear, onComplete: function(twn:FlxTween) {
@@ -182,15 +231,26 @@ class YarisugiScript extends Song
                     blackOverlay.alpha = 0;
                 }
                 if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, 0.775, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
                 
             case 384:
                 if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 0.775, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
+
             case 640:
                 if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 0.775, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
+            
+            
+            
+            
             case 896:
                 if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 1.55, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
+
             case 1183:
                 if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 0.775, null, true);
+                #if mobile vibrate(0.12, 0.6, 0.5, 0.01); #end
                 
             case 827:
                 try { game.camZoomingDecay = 4; } catch(e:Dynamic) {}
@@ -202,10 +262,17 @@ class YarisugiScript extends Song
             case 1168:
                 try { game.camZoomingDecay = 2; } catch(e:Dynamic) {}
                 forceBop(0.0075, 0.0075);
-            case 1171 | 1174:
+                
+            case 1171:
                 forceBop(0.0075, 0.0075);
-            case 1177 | 1180:
+            case 1174:
+                forceBop(0.0075, 0.0075);
+                
+            case 1177:
                 forceBop(0.0125, 0.0125);
+            case 1180:
+                forceBop(0.0125, 0.0125);
+                
             case 1184:
                 customBopInterval = 2;
             case 1440:
@@ -214,26 +281,43 @@ class YarisugiScript extends Song
                 try { game.camZoomingDecay = 1; } catch(e:Dynamic) {}
 
             case 66:
+                #if mobile vibrate(0.05, 0.8, 1.0, 0.02); #end 
                 if (mod != null) {
                     FlxTween.num(410, 10, 0.75, {ease: FlxEase.expoOut}, function(val:Float) {
                         try { mod.diamanteP2_OffsetY = val; } catch(e:Dynamic) {}
                     });
                 }
                 tweenOpponentNote(0, 0.75);
-            case 67: tweenOpponentNote(1, 0.75);
-            case 68: tweenOpponentNote(2, 0.75);
-            case 69: tweenOpponentNote(3, 0.75);
+            case 67: 
+                #if mobile vibrate(0.05, 0.8, 1.0, 0.02); #end 
+                tweenOpponentNote(1, 0.75);
+            case 68: 
+                #if mobile vibrate(0.05, 0.8, 1.0, 0.02); #end 
+                tweenOpponentNote(2, 0.75);
+            case 69: 
+                #if mobile vibrate(0.05, 0.8, 1.0, 0.02); #end 
+                tweenOpponentNote(3, 0.75);
+
             case 82:
+                #if mobile vibrate(0.05, 0.8, 1.0, 0.02); #end 
                 if (mod != null) {
                     FlxTween.num(410, 10, 0.75, {ease: FlxEase.expoOut}, function(val:Float) {
                         try { mod.diamanteP1_OffsetY = val; } catch(e:Dynamic) {}
                     });
                 }
                 tweenPlayerNote(3, 0.75);
-            case 83: tweenPlayerNote(2, 0.75);
-            case 84: tweenPlayerNote(1, 0.75);
-            case 85: tweenPlayerNote(0, 0.75);
+            case 83: 
+                #if mobile vibrate(0.05, 0.8, 1.0, 0.02); #end 
+                tweenPlayerNote(2, 0.75);
+            case 84: 
+                #if mobile vibrate(0.05, 0.8, 1.0, 0.02); #end 
+                tweenPlayerNote(1, 0.75);
+            case 85: 
+                #if mobile vibrate(0.05, 0.8, 1.0, 0.02); #end 
+                tweenPlayerNote(0, 0.75);
+
             case 98:
+                #if mobile vibrate(0.75, 0.25, 0.0, 0.02); #end 
                 if (mod != null) {
                     FlxTween.num(380, -20, 0.75, {ease: FlxEase.expoOut}, function(val:Float) {
                         try { mod.barraOffsetY = val; } catch(e:Dynamic) {}
@@ -264,10 +348,26 @@ class YarisugiScript extends Song
                 if (polkaBG != null) FlxTween.tween(polkaBG, {alpha: 1}, duration, {ease: FlxEase.cubeIn});
                 tweenStrumAlpha(0, duration);
                 if (game.camHUD != null) FlxTween.tween(game.camHUD, {alpha: 0}, duration, {ease: FlxEase.cubeIn});
+
             case 252:
-                if (polkaBG != null) FlxTween.tween(polkaBG, {alpha: 0}, duration, {ease: FlxEase.cubeIn});
+                if (polkaBG != null) {
+                    FlxTween.tween(polkaBG, {alpha: 0}, duration, {
+                        ease: FlxEase.cubeIn, 
+                        onComplete: function(twn:FlxTween) {
+                            currentVibKey = "none";
+                            vibTimer = 0;
+                            vibStep = 0;
+                        }
+                    });
+                } else {
+                    currentVibKey = "none";
+                    vibTimer = 0;
+                    vibStep = 0;
+                }
+                
                 tweenStrumAlpha(1, duration);
                 if (game.camHUD != null) FlxTween.tween(game.camHUD, {alpha: 1}, duration, {ease: FlxEase.cubeIn});
+
             case 368:
                 if (blackOverlay != null) {
                     blackOverlay.visible = true;
