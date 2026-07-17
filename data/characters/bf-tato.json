@@ -1,0 +1,196 @@
+{
+	"renderType": "multisparrow",
+	"offsets": [
+		50,
+		555
+	],
+	"applyStageMatrix": false,
+	"startingAnimation": "idle",
+	"healthIcon": {
+		"offsets": [
+			0,
+			0
+		],
+		"id": "bf-tato",
+		"flipX": true,
+		"isPixel": false,
+		"scale": 0.9
+	},
+	"assetPath": "characters/bf-tato",
+	"version": "1.0.0",
+	"danceEvery": 1,
+	"scale": 1,
+	"name": "bf-tato",
+	"flipX": true,
+	"cameraOffsets": [
+		-180,
+		0
+	],
+	"singTime": 4,
+	"isPixel": false,
+	"atlasSettings": {
+		"applyStageMatrix": false,
+		"useRenderTexture": false,
+		"filterQuality": 1,
+		"cacheOnLoad": false,
+		"swfMode": true
+	},
+	"animations": [
+		{
+			"flipY": false,
+			"offsets": [
+				0,
+				0
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Idle Dance0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "idle"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-9,
+				-4
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Down Note0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singDOWN"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-28,
+				10
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Up Note0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singUP"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-8,
+				-5
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Right Note 0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singRIGHT"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-5,
+				24
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Left Note Miss0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singLEFTmiss"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-9,
+				28
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Down Note Miss0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singDOWNmiss"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-33,
+				38
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Up Note Miss0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singUPmiss"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-9,
+				37
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Right Note Miss 0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singRIGHTmiss"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				0,
+				0
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Gameover0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "firstDeath"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				1,
+				0
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Gameover loop0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": true,
+			"name": "deathLoop"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				-5,
+				-5
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Left Note0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "singLEFT"
+		},
+		{
+			"flipY": false,
+			"offsets": [
+				27,
+				-131
+			],
+			"frameRate": 24,
+			"prefix": "BF tato Gameover confirm0",
+			"animType": "framelabel",
+			"flipX": false,
+			"looped": false,
+			"name": "deathConfirm"
+		}
+	]
+}

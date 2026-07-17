@@ -1,0 +1,40 @@
+{
+ "version": "2.2.4",
+ "songName": "Tater",
+ "artist": "Geniy186",
+ "charter": "Unknown",
+ "offsets": { },
+ "playData": {
+  "difficulties": [
+   "easy",
+   "normal",
+   "hard"
+  ],
+  "characters": {
+   "player": "bf-tato",
+   "girlfriend": "gf-tato",
+   "opponent": "tato",
+   "opponentVocals": [
+    "tato"
+   ],
+   "playerVocals": [
+    "bf-tato"
+   ]
+  },
+  "stage": "beanpark",
+  "noteStyle": "tato",
+  "ratings": {
+   "normal": 0,
+   "hard": 0
+  }
+ },
+ "generatedBy": "Friday Night Funkin' - v0.8.4",
+ "timeChanges": [
+  {
+   "t": 0,
+   "b": 0,
+   "bpm": 175,
+   "bt": [4, 4, 4, 4]
+  }
+ ]
+}

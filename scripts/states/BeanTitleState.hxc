@@ -1,0 +1,238 @@
+package bean.states;
+
+import flixel.FlxG;
+import flixel.effects.FlxFlicker;
+import flixel.util.FlxTimer;
+import flixel.addons.display.FlxBackdrop;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import funkin.Preferences;
+import funkin.graphics.FunkinSprite;
+import funkin.audio.FunkinSound;
+import funkin.ui.MusicBeatState;
+import funkin.ui.ScriptedMusicBeatState;
+import funkin.ui.ScriptedMusicBeatSubState;
+import funkin.ui.mainmenu.MainMenuState;
+import funkin.save.Save;
+import funkin.Paths;
+import funkin.Conductor;
+#if mobile
+import funkin.mobile.ui.FunkinButton;
+import funkin.util.TouchUtil;
+#end
+
+class BeanTitleState extends MusicBeatState
+{
+    var acceptInputs:Bool = true;
+    var isReady:Bool = false; 
+    
+    var isAltMenu:Bool = false;
+    
+    var bgDots:FlxBackdrop;
+    var logo:FunkinSprite;
+    var beef:FunkinSprite;
+    var geef:FunkinSprite;
+    var monker:FunkinSprite; 
+    var enterText:FunkinSprite;
+    
+    var beanBackButton:FunkinSprite;
+
+    var beefOffsetX:Float = -5; 
+    var beefOffsetY:Float = -195;  
+
+    var geefOffsetX:Float = 5;  
+    var geefOffsetY:Float = -175;  
+
+    var logoOffsetX:Float = 0;   
+    var logoOffsetY:Float = -155;  
+
+    var enterOffsetX:Float = 0;   
+    var enterOffsetY:Float = -50; 
+    
+    var monkerOffsetX:Float = -75;   
+    var monkerOffsetY:Float = -175;  
+    var logoAltOffsetX:Float = -300; 
+
+    override function create()
+    {
+        super.create();
+        
+        persistentUpdate = persistentDraw = true;
+
+        FunkinSound.playMusic('monkerMenu',
+        {
+            overrideExisting: true,
+            restartTrack: false,
+            persist: true
+        });
+
+        isAltMenu = FlxG.random.bool(30);
+
+        bgDots = new FlxBackdrop(Paths.image('ui/titlemenu/dotBG'), 0x11);
+        bgDots.velocity.set(-80, -80);
+        add(bgDots);
+
+        if (!isAltMenu) 
+        {
+            beef = new FunkinSprite(0, 0); 
+            beef.frames = Paths.getSparrowAtlas('ui/titlemenu/beefTitle');
+            beef.animation.addByPrefix('idle', 'idle', 24, false);
+            beef.animation.play('idle');
+            beef.x = beefOffsetX;
+            beef.y = (FlxG.height - beef.height) + beefOffsetY; 
+            beef.antialiasing = true;
+            add(beef);
+
+            geef = new FunkinSprite(0, 0);
+            geef.frames = Paths.getSparrowAtlas('ui/titlemenu/geefTitle');
+            geef.animation.addByPrefix('idle', 'idle', 24, false);
+            geef.animation.play('idle');
+            geef.x = (FlxG.width - geef.width) + geefOffsetX;
+            geef.y = (FlxG.height - geef.height) + geefOffsetY; 
+            geef.antialiasing = true;
+            add(geef);
+        }
+        else 
+        {
+            monker = new FunkinSprite(0, 0);
+            monker.frames = Paths.getSparrowAtlas('ui/titlemenu/monkerTitle');
+            monker.animation.addByPrefix('idle', 'idle', 24, false);
+            monker.animation.play('idle');
+            monker.x = (FlxG.width - monker.width) + monkerOffsetX;
+            monker.y = (FlxG.height - monker.height) + monkerOffsetY;
+            monker.antialiasing = true;
+            add(monker);
+        }
+
+        logo = new FunkinSprite(0, logoOffsetY); 
+        logo.frames = Paths.getSparrowAtlas('ui/titlemenu/logoBumpin');
+        logo.animation.addByPrefix('bump', 'logo bumpin', 24, false); 
+        logo.animation.play('bump');
+        logo.screenCenter(0x01); 
+        logo.scale.set(0.65, 0.65);
+        
+        if (isAltMenu) {
+            logo.x += logoAltOffsetX; 
+        } else {
+            logo.x += logoOffsetX;    
+        }
+
+        logo.antialiasing = true;
+        add(logo);
+
+        enterText = new FunkinSprite(0, 0);
+        
+        #if mobile
+        enterText.loadGraphic(Paths.image('ui/titlemenu/pressTAP'));
+        #else
+        enterText.loadGraphic(Paths.image('ui/titlemenu/pressEnter'));
+        #end
+        
+        enterText.screenCenter(0x01); 
+        
+        enterText.x += enterOffsetX;
+        enterText.y = (FlxG.height - enterText.height) + enterOffsetY; 
+        
+        enterText.antialiasing = true;
+        add(enterText);
+
+        #if mobile
+        beanBackButton = FunkinSprite.create(0, 0, 'mobile/backButton');
+        beanBackButton.setPosition(FlxG.width - beanBackButton.width - 5, FlxG.height - beanBackButton.height - 5);
+        beanBackButton.alpha = 0.5;
+        beanBackButton.onUp.add(_->{beanBackButton.animation.play('hold');});
+        beanBackButton.onDown.add(returnToBaseGame);
+        add(beanBackButton);
+        #end
+
+        var startTransition = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
+        openSubState(startTransition);
+        startTransition.transOut(); 
+
+        isReady = true; 
+    }
+
+    override function update(elapsed:Float)
+    {
+        if (Conductor.instance != null) {
+            Conductor.instance.update();
+        }
+
+        super.update(elapsed);
+
+        if (FlxG.keys.justPressed.ENTER && !FlxG.keys.justPressed.ESCAPE) moveToMainMenu();
+        if (FlxG.keys.justPressed.ESCAPE) returnToBaseGame();
+
+        #if mobile
+        if (TouchUtil.justPressed && !TouchUtil.overlaps(beanBackButton)) moveToMainMenu();
+        #end
+    }
+
+    override function beatHit()
+    {
+        super.beatHit();
+
+        
+        if (!isReady) return; 
+
+        var currentBeat:Int = 0;
+        if (Conductor.instance != null) currentBeat = Conductor.instance.currentBeat;
+
+        if (logo != null) {
+            if (logo.animation != null) {
+                logo.animation.play('bump', true);
+            }
+        }
+
+        if (currentBeat % 2 == 0) {
+            if (!isAltMenu) {
+                if (beef != null) {
+                    if (beef.animation != null) beef.animation.play('idle', true);
+                }
+                if (geef != null) {
+                    if (geef.animation != null) geef.animation.play('idle', true);
+                }
+            } else {
+                if (monker != null) {
+                    if (monker.animation != null) monker.animation.play('idle', true);
+                }
+            }
+        }
+    }
+
+    function moveToMainMenu()
+    {
+        if (!acceptInputs) return;
+
+        acceptInputs = false;
+
+        FlxG.camera.flash(0xFFFFFFFF, 1);
+        FlxTween.tween(logo, {y: -1000}, 0.8, {ease: FlxEase.backIn});
+
+        FlxFlicker.flicker(enterText, 1, 0.06, true, false); 
+        FunkinSound.playOnce(Paths.sound('confirmMenu-bean')); 
+
+        new FlxTimer().start(1, _->{
+            FlxTransitionableState.skipNextTransIn = true;
+            FlxTransitionableState.skipNextTransOut = true;
+
+            var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
+            openSubState(substate);
+            
+            substate.transIn(ScriptedMusicBeatState.init('bean.states.BeanMainMenuState'));
+        });
+    }
+
+    function returnToBaseGame()
+    {
+        if (!acceptInputs) return;
+        acceptInputs = false;
+        
+        FunkinSound.playOnce(Paths.sound('cancelMenu-bean'));
+        
+        var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
+        openSubState(substate);
+        substate.transIn(new MainMenuState());
+    }
+}

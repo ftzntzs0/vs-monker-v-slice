@@ -46,7 +46,6 @@ class Test extends Module
     
     var mobileStrumOffset:Float = -50; 
     
-    
     var lastGameInstance:PlayState = null;
     
     var assetWidth:Float = 780;
@@ -73,7 +72,6 @@ class Test extends Module
         if (dadName.indexOf("natki") != -1) return true;
         if (dadName.indexOf("yur") != -1) return true;
         if (dadName.indexOf("emcee") != -1) return true;
-        if (dadName.indexOf("tato") != -1) return true;
 
         return false;
     }
@@ -212,8 +210,8 @@ class Test extends Module
             dummyIconP2.y = diamondP2.y + (diamondP2.height - iconBaseSize) / 2 + currentIconeP2_OffsetY;
         }
 
-        if (customScoreTxt != null) {
-            customScoreTxt.text = "Score: " + Math.floor(game.songScore);
+        if (customScoreTxt != null && game.scoreText != null) {
+            customScoreTxt.text = game.scoreText.text;
             customScoreTxt.x = textoScore_OffsetX;
             if (isDownscroll) {
                 customScoreTxt.y = startY + assetHeight + textoScore_OffsetY_Downscroll;
@@ -234,7 +232,6 @@ class Test extends Module
         
         if (FlxG.onMobile) {
             atualDownscroll = true;
-            
             
             if (game.opponentStrumline != null && game != lastGameInstance) {
                 for (i in 0...4) {
@@ -341,6 +338,5 @@ class Test extends Module
         dummyIconP1 = null;
         dummyIconP2 = null;
         customScoreTxt = null;
-        
     }
 }

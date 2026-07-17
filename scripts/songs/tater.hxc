@@ -1,0 +1,108 @@
+import funkin.play.song.Song;
+import funkin.play.PlayState;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import funkin.Conductor;
+import funkin.modding.events.ScriptEvent;
+import funkin.modding.events.SongTimeScriptEvent;
+
+#if mobile
+import funkin.util.HapticUtil;
+#end
+
+class TaterScript extends Song
+{
+    var blackSprite:FlxSprite = null;
+
+    public function new() {
+        super('tater');
+    }
+
+    #if mobile
+    function vibrate(duration:Float, amplitude:Float, sharpness:Float, period:Float = 0.02) {
+        try {
+            var hapticPreset:Dynamic = {
+                period: period,
+                duration: duration,
+                amplitude: amplitude,
+                sharpness: sharpness
+            };
+            HapticUtil.vibrateByPreset(hapticPreset);
+        } catch(e:Dynamic) {}
+    }
+    #end
+
+    override function onCountdownStart(event:ScriptEvent) {
+        super.onCountdownStart(event);
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        
+        
+        
+        var topCam = game.camHUD;
+        
+        blackSprite = new FlxSprite();
+        blackSprite.makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
+        blackSprite.screenCenter();
+        blackSprite.scrollFactor.set(0, 0);
+        blackSprite.cameras = [topCam];
+        blackSprite.alpha = 0;
+        blackSprite.visible = false; 
+        blackSprite.zIndex = 900000;
+        
+        game.add(blackSprite);
+        game.refresh(); 
+    }
+
+    override function onStepHit(event:SongTimeScriptEvent) {
+        super.onStepHit(event);
+        var curStep:Int = event.step;
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        
+        
+        
+        if (curStep == 1024 || curStep == 1279) {
+            
+            
+            if (game.camGame != null) game.camGame.flash(0xFFFFFFFF, 1.6, null, true);
+            if (game.camHUD != null) game.camHUD.flash(0xFFFFFFFF, 1.6, null, true);
+            
+            
+            #if mobile
+            vibrate(1.6, 0.4, 0.1, 0.02);
+            #end
+        }
+    }
+
+    override function onBeatHit(event:SongTimeScriptEvent) {
+        super.onBeatHit(event);
+        var curBeat:Int = event.beat;
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        
+        
+        
+        if (curBeat == 320) {
+            
+            
+            var duration:Float = (60 / Conductor.instance.bpm) * 32;
+            
+            
+            if (blackSprite != null) {
+                blackSprite.visible = true;
+                FlxTween.tween(blackSprite, {alpha: 1}, duration, {ease: FlxEase.linear});
+            }
+            
+            
+            if (game.camGame != null) {
+                game.tweenCameraZoom(0.7, duration, true, FlxEase.linear);
+            }
+        }
+    }
+}

@@ -1,0 +1,55 @@
+package bean.modules;
+
+import flixel.FlxG;
+import flixel.addons.transition.FlxTransitionableState;
+import funkin.modding.module.Module;
+import funkin.FunkinMemory;
+import funkin.play.PlayState;
+import funkin.play.GameOverSubState;
+import funkin.play.PlayStatePlaylist;
+import funkin.util.ReflectUtil;
+import funkin.ui.ScriptedMusicBeatState;
+import funkin.ui.transition.stickers.StickerSubState;
+
+class BeanMenuHandler extends Module
+{
+    public var currentMenu:String = 'base';
+
+    function new() {
+        super('BeanMenuHandler');
+    }
+
+    public function onCreate(event)
+    {
+        super.onCreate(event);
+        cacheMenuShit();
+    }
+
+    public function onSubStateOpenEnd(event)
+    {
+        super.onSubStateOpenEnd(event);
+        if (PlayState.instance == null || PlayState.instance.currentStage == null) return;
+
+        if (ReflectUtil.getClassNameOf(event.targetState) == 'funkin.ui.transition.stickers.StickerSubState')
+            moveToBeanMenu();
+
+        else if (ReflectUtil.getClassNameOf(event.targetState) == 'funkin.play.ResultState' && !PlayStatePlaylist.isStoryMode)
+            moveToBeanMenu();
+    }
+
+    function moveToBeanMenu()
+    {
+        if (currentMenu == 'monker')
+        {
+            FlxTransitionableState.skipNextTransIn = true;
+		    FlxTransitionableState.skipNextTransOut = true;
+
+        }
+    }
+
+    function cacheMenuShit()
+    {
+        FunkinMemory.permanentCacheSound(Paths.music('monkerMenu/monkerMenu'));
+
+    }
+}

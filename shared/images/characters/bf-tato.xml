@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="bf-tato.png" width="2218" height="2291">
+	<SubTexture name="BF tato Gameover0000" x="1720" y="1747" width="235" height="194" frameX="-51" frameY="-205" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0001" x="1982" y="1" width="235" height="203" frameX="-51" frameY="-196" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0002" x="1708" y="343" width="244" height="203" frameX="-40" frameY="-196" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0003" x="1277" y="974" width="256" height="211" frameX="-40" frameY="-188" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0004" x="1277" y="1188" width="256" height="211" frameX="-40" frameY="-188" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0005" x="1386" y="757" width="267" height="214" frameX="-39" frameY="-185" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0006" x="1958" y="913" width="230" height="173" frameX="-39" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0007" x="1958" y="1089" width="229" height="173" frameX="-40" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0008" x="1958" y="913" width="230" height="173" frameX="-39" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0009" x="1958" y="1089" width="229" height="173" frameX="-40" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0010" x="1958" y="913" width="230" height="173" frameX="-39" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0011" x="1958" y="1089" width="229" height="173" frameX="-40" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0012" x="1958" y="1265" width="227" height="173" frameX="-42" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0013" x="1958" y="1441" width="227" height="173" frameX="-42" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0014" x="1958" y="1265" width="227" height="173" frameX="-42" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0015" x="1981" y="207" width="232" height="173" frameX="-37" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0016" x="1958" y="383" width="232" height="173" frameX="-37" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0017" x="1000" y="1881" width="237" height="173" frameX="-32" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0018" x="1240" y="1865" width="237" height="173" frameX="-32" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0019" x="253" y="1906" width="241" height="173" frameX="-28" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0020" x="1005" y="1186" width="269" height="188" frameX="-0" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0021" x="1462" y="1" width="269" height="188" frameX="-0" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0022" x="1436" y="383" width="268" height="184" frameX="-1" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0023" x="1386" y="570" width="268" height="184" frameX="-1" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0024" x="1436" y="192" width="269" height="188" frameX="-0" frameY="-226" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0025" x="1103" y="476" width="280" height="184" frameX="-0" frameY="-230" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0026" x="1103" y="663" width="280" height="183" frameX="-0" frameY="-230" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0027" x="391" y="1015" width="288" height="184" frameX="-0" frameY="-229" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0028" x="1171" y="1" width="288" height="184" frameX="-0" frameY="-229" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0029" x="785" y="734" width="306" height="177" frameX="-0" frameY="-236" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0030" x="391" y="835" width="306" height="177" frameX="-0" frameY="-236" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0031" x="785" y="734" width="306" height="177" frameX="-0" frameY="-236" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0032" x="391" y="835" width="306" height="177" frameX="-0" frameY="-236" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0033" x="785" y="734" width="306" height="177" frameX="-0" frameY="-236" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0034" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0035" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0036" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0037" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0038" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0039" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0040" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0041" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0042" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0043" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0044" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0045" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0046" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0047" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0048" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0049" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0050" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0051" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0052" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0053" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0054" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0055" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0056" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0057" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0058" x="781" y="1" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover0059" x="1" y="835" width="387" height="413" frameX="-0" frameY="-0" frameWidth="391" frameHeight="415"/>
+	<SubTexture name="BF tato Gameover confirm0000" x="1958" y="736" width="231" height="174" frameX="-68" frameY="-95" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0001" x="1171" y="188" width="262" height="285" frameX="-53" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0002" x="700" y="914" width="292" height="301" frameX="-37" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0003" x="785" y="417" width="315" height="314" frameX="-24" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0004" x="995" y="914" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0005" x="1" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0006" x="251" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0007" x="1" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0008" x="251" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0009" x="501" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0010" x="753" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0011" x="1" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0012" x="251" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0013" x="501" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0014" x="753" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0015" x="1" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0016" x="251" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0017" x="501" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0018" x="753" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0019" x="1" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0020" x="251" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0021" x="501" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0022" x="753" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0023" x="1" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0024" x="251" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0025" x="501" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0026" x="753" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0027" x="1" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0028" x="251" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0029" x="501" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0030" x="753" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0031" x="1" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0032" x="251" y="1251" width="247" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover confirm0033" x="501" y="1218" width="249" height="269" frameX="-68" frameY="-0" frameWidth="371" frameHeight="342"/>
+	<SubTexture name="BF tato Gameover loop0000" x="1" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0001" x="391" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0002" x="1" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0003" x="393" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0004" x="1" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0005" x="391" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0006" x="1" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0007" x="393" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0008" x="1" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0009" x="391" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0010" x="1" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0011" x="393" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0012" x="1" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0013" x="391" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0014" x="1" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0015" x="393" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0016" x="1" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0017" x="391" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0018" x="1" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0019" x="393" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0020" x="1" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0021" x="391" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0022" x="1" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0023" x="393" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0024" x="1" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0025" x="391" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0026" x="1" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0027" x="393" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0028" x="1" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0029" x="391" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0030" x="1" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0031" x="393" y="418" width="389" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0032" x="1" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Gameover loop0033" x="391" y="1" width="387" height="414" frameX="-0" frameY="-0" frameWidth="389" frameHeight="414"/>
+	<SubTexture name="BF tato Down Note Miss0000" x="1707" y="549" width="243" height="167" frameX="-0" frameY="-35" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0001" x="515" y="1490" width="250" height="186" frameX="-0" frameY="-16" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0002" x="768" y="1490" width="250" height="200" frameX="-0" frameY="-2" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0003" x="1021" y="1377" width="250" height="202" frameX="-0" frameY="-0" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0004" x="1021" y="1377" width="250" height="202" frameX="-0" frameY="-0" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0005" x="768" y="1490" width="250" height="200" frameX="-0" frameY="-2" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0006" x="768" y="1490" width="250" height="200" frameX="-0" frameY="-2" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0007" x="1021" y="1377" width="250" height="202" frameX="-0" frameY="-0" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0008" x="1021" y="1377" width="250" height="202" frameX="-0" frameY="-0" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0009" x="768" y="1490" width="250" height="200" frameX="-0" frameY="-2" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0010" x="768" y="1490" width="250" height="200" frameX="-0" frameY="-2" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0011" x="1021" y="1377" width="250" height="202" frameX="-0" frameY="-0" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0012" x="1021" y="1377" width="250" height="202" frameX="-0" frameY="-0" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0013" x="768" y="1490" width="250" height="200" frameX="-0" frameY="-2" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note Miss0014" x="768" y="1490" width="250" height="200" frameX="-0" frameY="-2" frameWidth="250" frameHeight="202"/>
+	<SubTexture name="BF tato Down Note0000" x="1734" y="174" width="244" height="166" frameX="-0" frameY="-4" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0001" x="1734" y="174" width="244" height="166" frameX="-0" frameY="-4" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0002" x="1657" y="719" width="242" height="169" frameX="-0" frameY="-1" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0003" x="1657" y="719" width="242" height="169" frameX="-0" frameY="-1" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0004" x="1656" y="891" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0005" x="1656" y="891" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0006" x="1515" y="1574" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0007" x="1515" y="1574" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0008" x="1515" y="1574" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0009" x="1515" y="1574" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0010" x="1515" y="1574" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0011" x="1515" y="1574" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0012" x="1515" y="1574" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0013" x="1515" y="1574" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Down Note0014" x="1515" y="1574" width="242" height="170" frameX="-0" frameY="-0" frameWidth="244" frameHeight="171"/>
+	<SubTexture name="BF tato Idle Dance0000" x="259" y="1523" width="253" height="166" frameX="-3" frameY="-8" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0001" x="259" y="1523" width="253" height="166" frameX="-3" frameY="-8" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0002" x="1" y="1523" width="255" height="169" frameX="-0" frameY="-5" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0003" x="1" y="1523" width="255" height="169" frameX="-0" frameY="-5" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0004" x="1734" y="1" width="245" height="170" frameX="-9" frameY="-4" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0005" x="1734" y="1" width="245" height="170" frameX="-9" frameY="-4" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0006" x="1958" y="559" width="232" height="174" frameX="-20" frameY="-0" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0007" x="1958" y="559" width="232" height="174" frameX="-20" frameY="-0" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0008" x="1958" y="1617" width="226" height="174" frameX="-26" frameY="-0" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0009" x="1945" y="1979" width="216" height="173" frameX="-36" frameY="-1" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0010" x="1945" y="1979" width="216" height="173" frameX="-36" frameY="-1" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0011" x="1945" y="1979" width="216" height="173" frameX="-36" frameY="-1" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0012" x="1945" y="1979" width="216" height="173" frameX="-36" frameY="-1" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0013" x="1945" y="1979" width="216" height="173" frameX="-36" frameY="-1" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Idle Dance0014" x="1945" y="1979" width="216" height="173" frameX="-36" frameY="-1" frameWidth="256" frameHeight="174"/>
+	<SubTexture name="BF tato Left Note Miss0000" x="1480" y="1754" width="237" height="168" frameX="-0" frameY="-30" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0001" x="1536" y="1064" width="242" height="184" frameX="-0" frameY="-14" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0002" x="1536" y="1251" width="242" height="198" frameX="-0" frameY="-1" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0003" x="1" y="1907" width="242" height="199" frameX="-0" frameY="-0" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0004" x="1" y="1907" width="242" height="199" frameX="-0" frameY="-0" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0005" x="1536" y="1251" width="242" height="198" frameX="-0" frameY="-1" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0006" x="1536" y="1251" width="242" height="198" frameX="-0" frameY="-1" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0007" x="1" y="1907" width="242" height="199" frameX="-0" frameY="-0" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0008" x="1" y="1907" width="242" height="199" frameX="-0" frameY="-0" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0009" x="1536" y="1251" width="242" height="198" frameX="-0" frameY="-1" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0010" x="1536" y="1251" width="242" height="198" frameX="-0" frameY="-1" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0011" x="1" y="1907" width="242" height="199" frameX="-0" frameY="-0" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0012" x="1" y="1907" width="242" height="199" frameX="-0" frameY="-0" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0013" x="1536" y="1251" width="242" height="198" frameX="-0" frameY="-1" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note Miss0014" x="1536" y="1251" width="242" height="198" frameX="-0" frameY="-1" frameWidth="242" frameHeight="199"/>
+	<SubTexture name="BF tato Left Note0000" x="1480" y="1925" width="237" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0001" x="1480" y="1925" width="237" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0002" x="756" y="1881" width="241" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0003" x="756" y="1881" width="241" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0004" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0005" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0006" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0007" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0008" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0009" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0010" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0011" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0012" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0013" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Left Note0014" x="511" y="1851" width="242" height="169" frameX="-0" frameY="-0" frameWidth="242" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0000" x="1274" y="1402" width="249" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0001" x="1274" y="1402" width="249" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0002" x="1017" y="1693" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0003" x="1017" y="1693" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0004" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0005" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0006" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0007" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0008" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0009" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0010" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0011" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0012" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0013" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note 0014" x="1266" y="1582" width="246" height="169" frameX="-0" frameY="-0" frameWidth="249" frameHeight="169"/>
+	<SubTexture name="BF tato Right Note Miss 0000" x="515" y="1679" width="248" height="169" frameX="-0" frameY="-41" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0001" x="766" y="1693" width="248" height="185" frameX="-0" frameY="-24" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0002" x="1" y="1695" width="249" height="209" frameX="-0" frameY="-1" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0003" x="259" y="1693" width="249" height="210" frameX="-0" frameY="-0" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0004" x="259" y="1693" width="249" height="210" frameX="-0" frameY="-0" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0005" x="1" y="1695" width="249" height="209" frameX="-0" frameY="-1" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0006" x="1" y="1695" width="249" height="209" frameX="-0" frameY="-1" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0007" x="259" y="1693" width="249" height="210" frameX="-0" frameY="-0" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0008" x="259" y="1693" width="249" height="210" frameX="-0" frameY="-0" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0009" x="1" y="1695" width="249" height="209" frameX="-0" frameY="-1" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0010" x="1" y="1695" width="249" height="209" frameX="-0" frameY="-1" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0011" x="259" y="1693" width="249" height="210" frameX="-0" frameY="-0" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0012" x="259" y="1693" width="249" height="210" frameX="-0" frameY="-0" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0013" x="1" y="1695" width="249" height="209" frameX="-0" frameY="-1" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Right Note Miss 0014" x="1" y="1695" width="249" height="209" frameX="-0" frameY="-1" frameWidth="249" frameHeight="210"/>
+	<SubTexture name="BF tato Up Note Miss0000" x="471" y="2082" width="219" height="185" frameX="-0" frameY="-27" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0001" x="246" y="2082" width="222" height="195" frameX="-0" frameY="-17" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0002" x="1720" y="1944" width="222" height="210" frameX="-0" frameY="-2" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0003" x="1240" y="2041" width="222" height="212" frameX="-0" frameY="-0" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0004" x="1240" y="2041" width="222" height="212" frameX="-0" frameY="-0" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0005" x="1720" y="1944" width="222" height="210" frameX="-0" frameY="-2" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0006" x="1720" y="1944" width="222" height="210" frameX="-0" frameY="-2" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0007" x="1240" y="2041" width="222" height="212" frameX="-0" frameY="-0" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0008" x="1240" y="2041" width="222" height="212" frameX="-0" frameY="-0" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0009" x="1720" y="1944" width="222" height="210" frameX="-0" frameY="-2" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0010" x="1720" y="1944" width="222" height="210" frameX="-0" frameY="-2" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0011" x="1240" y="2041" width="222" height="212" frameX="-0" frameY="-0" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0012" x="1240" y="2041" width="222" height="212" frameX="-0" frameY="-0" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0013" x="1720" y="1944" width="222" height="210" frameX="-0" frameY="-2" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note Miss0014" x="1720" y="1944" width="222" height="210" frameX="-0" frameY="-2" frameWidth="222" frameHeight="212"/>
+	<SubTexture name="BF tato Up Note0000" x="1465" y="2097" width="220" height="184" frameX="-3" frameY="-0" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0001" x="1465" y="2097" width="220" height="184" frameX="-3" frameY="-0" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0002" x="1958" y="1794" width="225" height="182" frameX="-0" frameY="-2" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0003" x="1958" y="1794" width="225" height="182" frameX="-0" frameY="-2" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0004" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0005" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0006" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0007" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0008" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0009" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0010" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0011" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0012" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0013" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+	<SubTexture name="BF tato Up Note0014" x="1" y="2109" width="225" height="181" frameX="-0" frameY="-3" frameWidth="225" frameHeight="184"/>
+</TextureAtlas>

@@ -1,0 +1,85 @@
+import funkin.play.PlayState;
+import funkin.play.stage.Stage;
+import flixel.FlxG;
+import flixel.FlxObject;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import flixel.util.FlxTimer;
+import funkin.modding.events.ScriptEvent; 
+
+class Beanpark extends Stage
+{
+    var finishedZoom:Bool = false;
+    var dummyCam:FlxObject = null;
+
+    public function new() {
+        super('beanpark');
+    }
+
+    override function onCreate(event:ScriptEvent) {
+        super.onCreate(event);
+        finishedZoom = false;
+        dummyCam = null;
+    }
+
+    override function onSongRetry(event:ScriptEvent) {
+        super.onSongRetry(event);
+        finishedZoom = false;
+        dummyCam = null;
+        
+        var game = PlayState.instance;
+        if (game != null) {
+            game.tweenCameraZoom(1.5, 0.01, true, FlxEase.linear);
+        }
+    }
+
+    override function onCountdownStart(event) {
+        super.onCountdownStart(event);
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        if (!finishedZoom) {
+            
+            event.cancel();
+            
+            dummyCam = new FlxObject(15000, -6000, 1, 1);
+            if (game.camGame != null) {
+                game.camGame.target = dummyCam;
+            }
+            
+            if (game.camHUD != null) game.camHUD.alpha = 0;
+            
+            
+            game.tweenCameraZoom(1.5, 0.01, true, FlxEase.linear);
+            
+            new FlxTimer().start(1.0, function(tmr:FlxTimer) {
+                
+                
+                game.tweenCameraZoom(0.7, 4.0, true, FlxEase.linear);
+                
+                if (dummyCam != null) {
+                    FlxTween.tween(dummyCam, {x: 950}, 2.0, {ease: FlxEase.quadOut});
+                    FlxTween.tween(dummyCam, {y: 750}, 3.0, {ease: FlxEase.quadOut});
+                }
+                
+                new FlxTimer().start(4.0, function(tmr2:FlxTimer) {
+                    
+                    finishedZoom = true;
+                    
+                    
+                    if (game.camGame != null && game.camFollow != null) {
+                        game.camGame.target = game.camFollow;
+                    }
+                    
+                    dummyCam = null; 
+                    game.startCountdown(); 
+                });
+            });
+            
+        } else {
+            if (game.camHUD != null) {
+                FlxTween.tween(game.camHUD, {alpha: 1}, 1.0, {ease: FlxEase.quadOut});
+            }
+        }
+    }
+}

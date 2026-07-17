@@ -22,13 +22,15 @@ import funkin.ui.freeplay.FreeplayState;
 class CustomPauseMenu extends Module {
     var portrait:FlxSprite;
     var panel:FlxSprite;
-    var panelFiller:FlxSprite; // A nossa nova cor sólida de fundo!
+    var panelFiller:FlxSprite; 
     var logo:FlxSprite;
 
     var options:Array<FlxText> = [];
     var curSelected:Int = 0;
     var isCustomPause:Bool = false;
     var allowCustomInput:Bool = false;
+    
+    var isTato:Bool = false;
 
     var levelInfo:FlxText;
     var beanText:FlxText;
@@ -67,12 +69,18 @@ class CustomPauseMenu extends Module {
             if (!isValidDad) return;
             var state:Dynamic = event.targetState; 
             isCustomPause = true;
-
-            try { if (state.metadata != null) { state.metadata.visible = false; } } catch(e:Dynamic) {}
-            try { if (state.menuEntryText != null) { state.menuEntryText.visible = false; state.menuEntryText.active = false; } } catch(e:Dynamic) {}
-            try { if (state.metadataDeaths != null) { state.metadataDeaths.visible = false; } } catch(e:Dynamic) {}
-            try { if (state.virtualPad != null) { state.virtualPad.visible = false; state.virtualPad.active = false; } } catch(e:Dynamic) {}
-            try { if (state.mobileControls != null) { state.mobileControls.visible = false; state.mobileControls.active = false; } } catch(e:Dynamic) {}
+            
+            isTato = (matchedDad == "tato");
+            try { if (state.metadata != null) { state.metadata.visible = false;
+            } } catch(e:Dynamic) {}
+            try { if (state.menuEntryText != null) { state.menuEntryText.visible = false;
+            state.menuEntryText.active = false; } } catch(e:Dynamic) {}
+            try { if (state.metadataDeaths != null) { state.metadataDeaths.visible = false;
+            } } catch(e:Dynamic) {}
+            try { if (state.virtualPad != null) { state.virtualPad.visible = false;
+            state.virtualPad.active = false; } } catch(e:Dynamic) {}
+            try { if (state.mobileControls != null) { state.mobileControls.visible = false;
+            state.mobileControls.active = false; } } catch(e:Dynamic) {}
 
             try {
                 if (matchedDad == "yur") {
@@ -87,23 +95,17 @@ class CustomPauseMenu extends Module {
                 }
             } catch(e:Dynamic) {}
 
-            var panelName = "panel";
-            var logoName = "logoMenu";
-            
-            if (matchedDad == "tato") {
-                panelName = "panel-tato";
-                logoName = "logoMenu-tato";
-            }
+            var panelName = isTato ? "panel-tato" : "panel";
+            var logoName = isTato ? "logoMenu-tato" : "logoMenu";
 
             var portraitOffsetX:Float = 0;
             var portraitOffsetY:Float = 0;
-
             if (matchedDad == "geef") {
                 portraitOffsetX = 6;
                 portraitOffsetY = -45;  
             } else {
                 if (FlxG.onMobile) {
-                    portraitOffsetX = 60; 
+                    portraitOffsetX = 60;
                     portraitOffsetY = 10;
                 }
             }
@@ -113,9 +115,31 @@ class CustomPauseMenu extends Module {
             var textSpacing:Int = 50;
 
             if (FlxG.onMobile) {
-                textX = 145;        
+                textX = 145;
                 textSize = 32;      
                 textSpacing = 62;   
+            }
+
+            var panelScaleX:Float = 0.7;
+            var panelScaleY:Float = 0.7;
+            var panelStartY:Float = 0;
+            var panelTargetX:Float = FlxG.onMobile ? 75 : -25;
+
+            var logoScaleX:Float = 0.73;
+            var logoScaleY:Float = 0.73;
+            var logoStartY:Float = -50;
+            var logoTargetX:Float = FlxG.onMobile ? 182 : 82;
+
+            if (isTato) {
+                panelScaleX = 1.0; 
+                panelScaleY = 1.0;
+                panelStartY = 0;   
+                panelTargetX = FlxG.onMobile ? 75 : -25; 
+
+                logoScaleX = 0.73; 
+                logoScaleY = 0.73;
+                logoStartY = -50;  
+                logoTargetX = FlxG.onMobile ? 182 : 82; 
             }
 
             try {
@@ -139,43 +163,50 @@ class CustomPauseMenu extends Module {
             } catch(e:Dynamic) {}
 
             try {
-                // =======================================================
-                // NOVO: Bloco de cor FFE6F4 para fechar o "buraco" no mobile
-                // =======================================================
                 if (FlxG.onMobile) {
-                    // Cria um bloco gigante de 1500x2000 pixels usando a cor 0xFFFFE6F4
-                    panelFiller = new FlxSprite(-2025, -200).makeGraphic(1500, 2000, 0xFFFFE6F4);
+                    panelFiller = new FlxSprite(-2025, -200);
+                    
+                    
+                    
+                    
+                    if (isTato) {
+                        
+                        panelFiller.loadGraphic(Paths.image('UI/panelfiller-tato'));
+                    } else {
+                        
+                        panelFiller.makeGraphic(1500, 2000, 0xFFFFE6F4);
+                    }
+                    
                     panelFiller.scrollFactor.set(0, 0);
                     state.add(panelFiller);
 
-                    // Desliza o bloco junto com o painel!
                     FlxTween.tween(panelFiller, {x: -1350}, 1.0, {
                         ease: FlxEase.quartInOut
                     });
                 }
 
-                panel = new FlxSprite(-600, 0).loadGraphic(Paths.image('UI/pausemenu/' + panelName));
+                panel = new FlxSprite(-600, panelStartY).loadGraphic(Paths.image('UI/pausemenu/' + panelName));
                 if (panel.graphic != null) {
-                    panel.scale.set(0.7, 0.7);
+                    panel.scale.set(panelScaleX, panelScaleY);
                     panel.updateHitbox();
                     panel.scrollFactor.set(0, 0);
                     state.add(panel);
 
-                    FlxTween.tween(panel, {x: (FlxG.onMobile ? 75 : -25)}, 1.0, {
+                    FlxTween.tween(panel, {x: panelTargetX}, 1.0, {
                         ease: FlxEase.quartInOut
                     });
                 }
             } catch(e:Dynamic) {}
 
             try {
-                logo = new FlxSprite(-600, -50).loadGraphic(Paths.image('UI/pausemenu/' + logoName));
+                logo = new FlxSprite(-600, logoStartY).loadGraphic(Paths.image('UI/pausemenu/' + logoName));
                 if (logo.graphic != null) {
-                    logo.scale.set(0.73, 0.73);
+                    logo.scale.set(logoScaleX, logoScaleY);
                     logo.updateHitbox();
                     logo.scrollFactor.set(0, 0);
                     state.add(logo);
 
-                    FlxTween.tween(logo, {x: (FlxG.onMobile ? 182 : 82)}, 1.0, {
+                    FlxTween.tween(logo, {x: logoTargetX}, 1.0, {
                         ease: FlxEase.quartInOut,
                     });
                 }
@@ -186,16 +217,18 @@ class CustomPauseMenu extends Module {
                 if (PlayState.instance != null && PlayState.instance.currentChart != null) {
                     songNameString = PlayState.instance.currentChart.songName;
                 }
+                
+                var infoFont:String = isTato ? "DrewHandwriting.ttf" : "Aller.ttf";
+
                 levelInfo = new FlxText(20, 15, 0, songNameString, 32);
-                levelInfo.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
+                levelInfo.setFormat(Paths.font(infoFont), 32, 0xFFFFFFFF, "right");
                 levelInfo.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
                 levelInfo.scrollFactor.set(0, 0);
                 levelInfo.alpha = 0;
                 levelInfo.x = FlxG.width - (levelInfo.width + 20);
                 state.add(levelInfo);
-
                 beanText = new FlxText(20, 15 + 32, 0, "BEAN", 32);
-                beanText.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
+                beanText.setFormat(Paths.font(infoFont), 32, 0xFFFFFFFF, "right");
                 beanText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
                 beanText.scrollFactor.set(0, 0);
                 beanText.alpha = 0;
@@ -205,21 +238,22 @@ class CustomPauseMenu extends Module {
                 var deaths:Int = 0;
                 if (PlayState.instance != null) deaths = PlayState.instance.deathCounter;
                 deathText = new FlxText(20, 15 + 64, 0, "Beanovered: " + deaths, 32);
-                deathText.setFormat(Paths.font("Aller.ttf"), 32, 0xFFFFFFFF, "right");
+                deathText.setFormat(Paths.font(infoFont), 32, 0xFFFFFFFF, "right");
                 deathText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 2);
                 deathText.scrollFactor.set(0, 0);
                 deathText.alpha = 0;
                 deathText.x = FlxG.width - (deathText.width + 20);
                 state.add(deathText);
-
                 FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
                 FlxTween.tween(beanText, {alpha: 1, y: beanText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
                 FlxTween.tween(deathText, {alpha: 1, y: deathText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
             } catch(e:Dynamic) {}
 
-            var textStartY:Int = 420; 
+            var textStartY:Int = 420;
             var entryIndex:Int = 0;
-
+            
+            var optionsFont:String = isTato ? "CabinSketch-Bold.ttf" : "RifficFree-Bold.ttf";
+            var unselectedColor:Int = isTato ? 0xFF000000 : 0xFFC876AD;
             if (state.currentMenuEntries != null) {
                 var filteredEntries = [];
                 for (entry in state.currentMenuEntries) {
@@ -230,20 +264,18 @@ class CustomPauseMenu extends Module {
                 }
                 
                 state.currentMenuEntries = filteredEntries;
-                
                 for (entry in state.currentMenuEntries) {
                     if (entry.text.toLowerCase() == 'resume') {
                         entry.callback = function() { resume(); }; 
                     }
 
                     var songText:FlxText = new FlxText(-400, textStartY + (entryIndex * textSpacing), 0, entry.text);
-                    songText.setFormat(Paths.font("RifficFree-Bold.ttf"), textSize, 0xFFFFFFFF, "left"); 
-                    songText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFFC876AD, 3);
+                    songText.setFormat(Paths.font(optionsFont), textSize, 0xFFFFFFFF, "left"); 
+                    songText.setBorderStyle(FlxTextBorderStyle.OUTLINE, unselectedColor, 3);
                     songText.scrollFactor.set(0, 0);
                     
                     options.push(songText);
                     state.add(songText);
-
                     FlxTween.tween(songText, {x: textX}, 1.5, {
                         ease: FlxEase.quartOut,
                         startDelay: 0.5 + (entryIndex * 0.15) 
@@ -253,7 +285,6 @@ class CustomPauseMenu extends Module {
             }
 
             changeSelection(0);
-            
             new FlxTimer().start(0.15, function(tmr:FlxTimer) {
                 allowCustomInput = true;
             });
@@ -264,15 +295,17 @@ class CustomPauseMenu extends Module {
         if (options.length == 0) return;
         curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
         
+        var unselectedColor:Int = isTato ? 0xFF000000 : 0xFFC876AD;
+        var selectedColor:Int   = isTato ? 0xFF818181 : 0xFFFFAACC;
         for (i in 0...options.length) {
             if (options[i] != null) { 
                 options[i].color = 0xFFFFFFFF;
-                options[i].setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFFC876AD, 3); 
+                options[i].setBorderStyle(FlxTextBorderStyle.OUTLINE, unselectedColor, 3); 
             }
         }
         
         if (options[curSelected] != null) { 
-            options[curSelected].setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFFFFAACC, 3);
+            options[curSelected].setBorderStyle(FlxTextBorderStyle.OUTLINE, selectedColor, 3);
         }
 
         FlxG.sound.play(Paths.sound('scrollMenu-bean'), 0.7);
@@ -296,7 +329,6 @@ class CustomPauseMenu extends Module {
                         FlxG.resetState();
                     } else if (txt.indexOf('exit') != -1) {
                         try { if (FlxG.sound.music != null) FlxG.sound.music.stop(); } catch(err:Dynamic) {}
-                        
                         FlxG.switchState(new FreeplayState());
                     } else {
                         state.close();
@@ -308,7 +340,6 @@ class CustomPauseMenu extends Module {
 
     override function onUpdate(event:UpdateScriptEvent) {
         super.onUpdate(event);
-        
         var state:Dynamic = FlxG.state.subState;
         if (state == null || !isCustomPause || !Std.isOfType(state, PauseSubState) || !allowCustomInput) return;
         
@@ -328,11 +359,9 @@ class CustomPauseMenu extends Module {
         #if mobile
         var clickedIndex:Int = -1;
         var cam = state.cameras != null && state.cameras.length > 0 ? state.cameras[0] : FlxG.camera;
-
         for (touch in FlxG.touches.list) {
             if (touch.justPressed) {
                 var touchPos:FlxPoint = touch.getWorldPosition(cam);
-                
                 for (i in 0...options.length) {
                     var opt = options[i];
                     if (opt != null && opt.overlapsPoint(touchPos)) {
@@ -367,7 +396,6 @@ class CustomPauseMenu extends Module {
             FlxTween.tween(portrait, {x: FlxG.width}, 0.7, {ease: FlxEase.quartInOut});
         }
         
-        // Esconde o bloco de cor junto
         if (panelFiller != null) {
             FlxTween.cancelTweensOf(panelFiller);
             FlxTween.tween(panelFiller, {x: -2025}, 0.7, {ease: FlxEase.quartInOut});
@@ -404,7 +432,8 @@ class CustomPauseMenu extends Module {
             if (FlxG.state != null && FlxG.state.subState != null) {
                 var subState:Dynamic = FlxG.state.subState; 
                 
-                if (subState.cameras != null && subState.cameras.length > 0 && subState.cameras[0] != null) {
+                if (subState.cameras != null && 
+                    subState.cameras.length > 0 && subState.cameras[0] != null) {
                     subState.cameras[0].filters = [];
                 }
                 subState.close();

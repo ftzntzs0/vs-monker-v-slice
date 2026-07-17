@@ -1,0 +1,244 @@
+import funkin.play.PlayState;
+import funkin.modding.module.Module;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import funkin.Paths;
+import flixel.math.FlxRect; 
+import flixel.text.FlxText;
+import flixel.text.FlxTextBorderStyle;
+import funkin.Preferences; 
+
+class TatoBar extends Module
+{
+    var customHealthBG:FlxSprite = null;      
+    var customLeftBar:FlxSprite = null;       
+    var customRightBar:FlxSprite = null;      
+    var customScoreTxt:FlxText = null;
+    
+    
+    var customFlowerBG:FlxSprite = null; 
+
+    var barraFluidez:Float = 0.15; 
+    var smoothHealth:Float = 50; 
+
+    var hudY_Upscroll:Float = 585;    
+    var hudY_Downscroll:Float = 30;   
+    
+    var barraOffsetY:Float = -20; 
+
+    var textoScore_OffsetY_Upscroll:Float = -40; 
+    var textoScore_OffsetY_Downscroll:Float = -40; 
+    
+    var textoScore_OffsetX:Float = 100; 
+    
+    var mobileStrumOffset:Float = -50; 
+    
+    var lastGameInstance:PlayState = null;
+    
+    var assetWidth:Float = 761;
+    var assetHeight:Float = 157;
+    
+    var atualDownscroll:Bool = false;
+
+    public function new() {
+        super('tatobar');
+    }
+
+    function isCustomDad():Bool {
+        var game = PlayState.instance;
+        if (game == null || game.currentStage == null || game.currentStage.getDad() == null) return false;
+        
+        var dadName:String = game.currentStage.getDad().characterName.toLowerCase();
+        
+        if (dadName.indexOf("tato") != -1) return true;
+
+        return false;
+    }
+
+    override function onUpdate(event) {
+        super.onUpdate(event);
+        var game = PlayState.instance;
+        if (game == null) return;
+
+        if (!isCustomDad()) {
+            if (customHealthBG != null) customHealthBG.visible = false;
+            if (customLeftBar != null) customLeftBar.visible = false;
+            if (customRightBar != null) customRightBar.visible = false;
+            if (customScoreTxt != null) customScoreTxt.visible = false;
+            if (customFlowerBG != null) customFlowerBG.visible = false;
+            return; 
+        }
+
+        var dadName:String = game.currentStage.getDad().characterName.toLowerCase();
+        var corDoOponente:Int = 0xFFFF0000;
+        var corDoJogador:Int = 0xFF31B0CD;
+        
+        if (dadName.indexOf("tato") != -1) corDoOponente = 0xFFF587A1;
+
+        if (customHealthBG == null || customLeftBar == null || customRightBar == null) return;
+
+        if (game.healthBar != null) game.healthBar.alpha = 0;
+        if (game.healthBarBG != null) game.healthBarBG.alpha = 0;
+        if (game.scoreText != null) game.scoreText.alpha = 0;
+
+        if (game.iconP1 != null) { game.iconP1.visible = true; game.iconP1.alpha = 1; }
+        if (game.iconP2 != null) { game.iconP2.visible = true; game.iconP2.alpha = 1; }
+
+        customHealthBG.visible = true;
+        customLeftBar.visible = true;
+        customRightBar.visible = true;
+        if (customScoreTxt != null) customScoreTxt.visible = true;
+
+        var isDownscroll:Bool = atualDownscroll;
+        
+        
+        if (customFlowerBG != null) {
+            customFlowerBG.visible = isDownscroll;
+        }
+
+        var hudY:Float = isDownscroll ? hudY_Downscroll : hudY_Upscroll;
+        var diffY:Float = FlxG.height - 720;
+        var baseHUD_Y:Float = hudY + diffY;
+        
+        var startX = (FlxG.width - assetWidth) / 2;
+        var startY = baseHUD_Y + barraOffsetY;
+
+        customHealthBG.x = startX;  customHealthBG.y = startY;
+        customLeftBar.x = startX;   customLeftBar.y = startY;
+        customRightBar.x = startX;  customRightBar.y = startY;
+        
+        
+        if (customFlowerBG != null && isDownscroll) {
+            customFlowerBG.x = startX + (assetWidth - customFlowerBG.width) / 2;
+            customFlowerBG.y = startY + (assetHeight - customFlowerBG.height) / 2;
+        }
+
+        if (game.healthBar != null) {
+            game.healthBar.x = startX + (assetWidth - game.healthBar.width) / 2;
+            game.healthBar.y = startY + (assetHeight - game.healthBar.height) / 2;
+        }
+
+        customLeftBar.color = corDoOponente;
+        customRightBar.color = corDoJogador;
+        
+        var alvoHealth = game.healthBar.percent;
+        if (alvoHealth < 0) alvoHealth = 0;
+        if (alvoHealth > 100) alvoHealth = 100;
+        smoothHealth = smoothHealth + (alvoHealth - smoothHealth) * barraFluidez;
+
+        var splitX = assetWidth * ((100 - smoothHealth) / 100);
+        customLeftBar.clipRect = FlxRect.get(0, 0, splitX, assetHeight); 
+        customRightBar.clipRect = FlxRect.get(splitX, 0, assetWidth - splitX, assetHeight);
+
+        if (customScoreTxt != null && game.scoreText != null) {
+            customScoreTxt.text = game.scoreText.text;
+            
+            customScoreTxt.x = textoScore_OffsetX;
+            
+            if (isDownscroll) {
+                customScoreTxt.y = startY + assetHeight + textoScore_OffsetY_Downscroll;
+            } else {
+                customScoreTxt.y = startY + assetHeight + textoScore_OffsetY_Upscroll;
+            }
+        }
+    }
+
+    override function onCountdownStart(event) {
+        super.onCountdownStart(event);
+        var game = PlayState.instance;
+        if (game == null || game.healthBar == null) return;
+
+        if (!isCustomDad()) return;
+
+        atualDownscroll = Preferences.downscroll;
+        
+        if (FlxG.onMobile) {
+            atualDownscroll = true;
+            if (game.opponentStrumline != null && game != lastGameInstance) {
+                for (i in 0...4) {
+                    var oppNote = game.opponentStrumline.getByIndex(i);
+                    if (oppNote != null) {
+                        oppNote.x += mobileStrumOffset; 
+                    }
+                }
+                lastGameInstance = game; 
+            }
+        }
+
+        var baseZ:Int = game.healthBar.zIndex;
+        smoothHealth = game.healthBar.percent;
+        
+        
+        if (customFlowerBG == null) {
+            customFlowerBG = new FlxSprite();
+            customFlowerBG.frames = Paths.getSparrowAtlas("tato/healthBarBG"); 
+            customFlowerBG.animation.addByPrefix("idle", "idle", 24, true);
+            customFlowerBG.animation.play("idle");
+            customFlowerBG.scrollFactor.set(0, 0);
+            customFlowerBG.cameras = [game.camHUD];
+            customFlowerBG.alpha = 0.4; 
+            customFlowerBG.zIndex = baseZ - 1; 
+            game.add(customFlowerBG);
+        } else { customFlowerBG.zIndex = baseZ - 1; }
+        
+        if (customLeftBar == null) {
+            customLeftBar = new FlxSprite();
+            customLeftBar.frames = Paths.getSparrowAtlas("tato/healthBar");
+            customLeftBar.animation.addByPrefix("idle", "idle", 24, true);
+            customLeftBar.animation.play("idle");
+            customLeftBar.scrollFactor.set(0, 0);
+            customLeftBar.cameras = [game.camHUD];
+            customLeftBar.zIndex = baseZ; 
+            game.add(customLeftBar);
+        } else { customLeftBar.zIndex = baseZ; }
+
+        if (customRightBar == null) {
+            customRightBar = new FlxSprite();
+            customRightBar.frames = Paths.getSparrowAtlas("tato/healthBar");
+            customRightBar.animation.addByPrefix("idle", "idle", 24, true);
+            customRightBar.animation.play("idle");
+            customRightBar.scrollFactor.set(0, 0);
+            customRightBar.cameras = [game.camHUD];
+            customRightBar.zIndex = baseZ + 1; 
+            game.add(customRightBar);
+        } else { customRightBar.zIndex = baseZ + 1; }
+
+        if (customHealthBG == null) {
+            customHealthBG = new FlxSprite();
+            customHealthBG.frames = Paths.getSparrowAtlas("tato/healthBarEmpty");
+            customHealthBG.animation.addByPrefix("idle", "idle", 24, true);
+            customHealthBG.animation.play("idle");
+            customHealthBG.scrollFactor.set(0, 0);
+            customHealthBG.cameras = [game.camHUD];
+            customHealthBG.zIndex = baseZ + 2; 
+            game.add(customHealthBG);
+        } else { customHealthBG.zIndex = baseZ + 2; }
+
+        if (game.iconP1 != null) game.iconP1.zIndex = baseZ + 3;
+        if (game.iconP2 != null) game.iconP2.zIndex = baseZ + 4;
+
+        if (customScoreTxt == null) {
+            if (game.scoreText != null) game.scoreText.alpha = 0;
+            customScoreTxt = new FlxText(0, 0, FlxG.width, "", 24);
+            customScoreTxt.setFormat(Paths.font("CabinSketch-Bold.ttf"), 20, 0xFFFFFFFF, "center", FlxTextBorderStyle.OUTLINE, 0xFF000000);
+            customScoreTxt.borderSize = 1; 
+            customScoreTxt.scrollFactor.set(0, 0);
+            customScoreTxt.cameras = [game.camHUD];
+            customScoreTxt.zIndex = baseZ + 5; 
+            game.add(customScoreTxt);
+        } else {
+            customScoreTxt.zIndex = baseZ + 5;
+        }
+
+        game.refresh();
+    }
+
+    override function onDestroy(event) {
+        super.onDestroy(event);
+        customHealthBG = null;
+        customLeftBar = null;
+        customRightBar = null;
+        customScoreTxt = null;
+        customFlowerBG = null;
+    }
+}

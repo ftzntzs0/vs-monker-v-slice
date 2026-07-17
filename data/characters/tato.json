@@ -1,0 +1,67 @@
+{
+    "version": "1.0.0",
+    "name": "Tato",
+    "renderType": "multisparrow",
+    "offsets": [
+		120,
+		590
+	],
+    "healthIcon": {
+		"offsets": [
+			40,
+			0
+		],
+		"id": "tato",
+		"flipX": false,
+		"isPixel": false,
+		"scale": 0.6
+	},
+    "assetPath": "characters/tato",
+    "flipX": false,
+    "cameraOffsets": [
+		-180,
+		0
+	],
+    "singTime": 6.1,
+    "animations": [
+        {
+            "name": "idle",
+            "prefix": "Tato Idle 0"
+        },
+        {
+            "name": "singLEFT",
+            "prefix": "Tato Left Note0",
+            "offsets": [
+                2,
+                5
+            ]
+        },
+        {
+            "name": "singDOWN",
+            "prefix": "Tato Down Note0",
+            "offsets": [
+                -3,
+                1
+            ]
+        },
+        {
+            "name": "singUP",
+            "prefix": "Tato Up Note 0",
+            "offsets": [
+                -1,
+                8
+            ]
+        },
+        {
+            "name": "singRIGHT",
+            "prefix": "Tato Right Note0",
+            "offsets": [
+                -8,
+                6
+            ]
+        }
+    ],
+    "startingAnimation": "",
+    "isPixel": false,
+    "scale": 1
+}

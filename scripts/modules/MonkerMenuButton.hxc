@@ -1,0 +1,156 @@
+package bean.modules;
+
+import flixel.FlxG;
+import flixel.math.FlxMath;
+import funkin.graphics.FunkinSprite;
+import funkin.modding.module.Module;
+import funkin.ui.ScriptedMusicBeatState;
+import funkin.ui.ScriptedMusicBeatSubState;
+import funkin.ui.mainmenu.MainMenuState;
+import funkin.audio.FunkinSound;
+import funkin.util.ReflectUtil;
+#if mobile
+import funkin.util.TouchUtil;
+#end
+import funkin.util.WindowUtil;
+import funkin.modding.module.ModuleHandler;
+
+class MonkerMenuButton extends Module
+{
+    var beanButton:FunkinSprite;
+    var beanHitbox:FunkinSprite;
+    
+    
+    var beanLerpSize:Float = 1.0;
+    var selected:Bool = false;
+
+    function new()
+    {
+        
+        super('MonkerMenuButton', 1000, {state: MainMenuState});
+    }
+    
+    public function onStateChangeEnd(event)
+    {
+        super.onStateChangeEnd(event);
+        
+        
+        var menuHandler = ModuleHandler.getModule('BeanMenuHandler');
+        if (menuHandler != null)
+        {
+            if (menuHandler.currentMenu == 'monker')
+            {
+                FunkinSound.playMusic('freakyMenu',
+                {
+                    overrideExisting: true,
+                    restartTrack: false,
+                    persist: true
+                });
+            }
+            menuHandler.currentMenu = 'base';
+        }
+
+		WindowUtil.setWindowTitle("Friday Night Funkin'");
+        selected = false;
+
+        
+        beanButton = FunkinSprite.create(0, 0, 'UI/go');
+        beanButton.scale.set(0.1, 0.1); 
+        beanButton.updateHitbox();
+        
+        
+        var margin:Float = 20; 
+        beanButton.setPosition(margin, FlxG.height - beanButton.height - margin);
+        beanButton.scrollFactor.set();
+        FlxG.state.add(beanButton);
+
+        
+        beanHitbox = new FunkinSprite(beanButton.x, beanButton.y).makeSolidColor(beanButton.width, beanButton.height, 0xFF000000);
+        beanHitbox.alpha = 0;
+        beanHitbox.scrollFactor.set();
+        FlxG.state.add(beanHitbox);
+
+        #if !mobile 
+        FlxG.mouse.visible = true;
+        #end
+    }
+
+    public function onUpdate(event)
+    {
+        super.onUpdate(event);
+        if (beanButton == null || beanHitbox == null) return;
+
+        
+        beanButton.scale.x = FlxMath.lerp(beanButton.scale.x, beanLerpSize, event.elapsed * 12);
+        beanButton.scale.y = FlxMath.lerp(beanButton.scale.y, beanLerpSize, event.elapsed * 12);
+
+        var subState = FlxG.state.subState;
+		if (subState != null && ReflectUtil.getClassNameOf(subState) == "funkin.ui.freeplay.FreeplayState")
+			return;
+
+        #if mobile
+        if (TouchUtil.pressed)
+        {
+            if (TouchUtil.overlaps(beanHitbox))
+            {
+                beanLerpSize = 1.1; 
+                if (TouchUtil.justPressed) onButtonPress();
+            }
+            else
+                beanLerpSize = 1.0;
+        }
+        #else
+        if (FlxG.mouse.overlaps(beanHitbox))
+        {
+            beanLerpSize = 1.1; 
+            if (FlxG.mouse.justPressed) onButtonPress();
+        }
+        else
+            beanLerpSize = 1.0; 
+        #end
+    }
+
+    function onButtonPress()
+    {
+        if (selected) return;
+        selected = true;
+        
+        var menuHandler = ModuleHandler.getModule('BeanMenuHandler');
+        if (menuHandler != null) {
+            menuHandler.currentMenu = 'bean';
+        }
+        
+        #if !mobile 
+        FlxG.mouse.visible = false;
+        #end
+
+        FlxG.sound.music.fadeOut(0.6);
+
+        
+        var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
+        FlxG.state.openSubState(substate);
+        
+        
+        
+        
+        substate.transIn(ScriptedMusicBeatState.init('bean.states.BeanTitleState'));
+    }
+
+    public function onStateChangeBegin(event)
+    {
+        super.onStateChangeBegin(event);
+        #if !mobile FlxG.mouse.visible = false; #end
+    }
+
+    public function onSubStateOpenEnd(event)
+    {
+        super.onSubStateOpenEnd(event);
+        #if !mobile FlxG.mouse.visible = false; #end
+    }
+
+    public function onSubStateCloseEnd(event)
+    {
+        super.onSubStateCloseEnd(event);
+        #if !mobile FlxG.mouse.visible = true; #end
+    }
+}

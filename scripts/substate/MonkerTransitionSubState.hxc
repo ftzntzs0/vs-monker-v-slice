@@ -1,0 +1,124 @@
+package bean.substates;
+
+import flixel.FlxG;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import funkin.ui.MusicBeatState;
+import funkin.ui.MusicBeatSubState;
+import funkin.graphics.FunkinSprite;
+
+class MonkerTransitionSubState extends MusicBeatSubState
+{
+    
+    final TRANSITION_LENGTH:Float = 1.0;
+
+    var transitionSprite:FunkinSprite;
+    var blackBg:FunkinSprite; 
+    
+    var wallLeft:FunkinSprite;
+    var wallRight:FunkinSprite;
+    var wallTop:FunkinSprite;
+    var wallBottom:FunkinSprite;
+
+    
+    
+    
+    var maxScale:Float = 6.5; 
+
+    function new() {
+        super();
+
+        transitionSprite = FunkinSprite.create(0, 0, 'ui/monkerTransition');
+        transitionSprite.scrollFactor.set();
+        transitionSprite.origin.set(transitionSprite.frameWidth / 2, transitionSprite.frameHeight / 2);
+        transitionSprite.screenCenter();
+        add(transitionSprite);
+
+        
+        
+        
+        wallLeft = createOptimizedWall();
+        wallRight = createOptimizedWall();
+        wallTop = createOptimizedWall();
+        wallBottom = createOptimizedWall();
+
+        add(wallLeft); add(wallRight); add(wallTop); add(wallBottom);
+
+        
+        blackBg = new FunkinSprite().makeSolidColor(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
+        blackBg.scrollFactor.set();
+        blackBg.screenCenter();
+        blackBg.visible = false;
+        add(blackBg);
+
+        transitionSprite.scale.set(maxScale, maxScale);
+    }
+
+    
+    function createOptimizedWall():FunkinSprite {
+        var wall = new FunkinSprite().makeSolidColor(1, 1, 0xFF000000);
+        wall.origin.set(0, 0); 
+        wall.scale.set(3000, 3000); 
+        wall.updateHitbox();
+        wall.scrollFactor.set();
+        return wall;
+    }
+
+    public function transIn(targetState:MusicBeatState) {
+        transitionSprite.scale.set(maxScale, maxScale);
+        blackBg.visible = false;
+
+        FlxTween.tween(transitionSprite.scale, {x: 0, y: 0}, TRANSITION_LENGTH,
+        {
+            ease: FlxEase.quadIn, 
+            onComplete: _ -> {
+                blackBg.visible = true;
+                FlxG.switchState(targetState);
+            }
+        });
+    }
+
+    public function transOut() {
+        transitionSprite.scale.set(0, 0);
+        blackBg.visible = false;
+
+        FlxTween.tween(transitionSprite.scale, {x: maxScale, y: maxScale}, TRANSITION_LENGTH,
+        {
+            startDelay: 0.1, 
+            ease: FlxEase.quadOut,
+            onComplete: _ -> {
+                close();
+            }
+        });
+    }
+
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+
+        
+        if (transitionSprite != null && transitionSprite.graphic != null) {
+            var currentWidth = transitionSprite.frameWidth * transitionSprite.scale.x;
+            var currentHeight = transitionSprite.frameHeight * transitionSprite.scale.y;
+            
+            var cx = FlxG.width / 2;
+            var cy = FlxG.height / 2;
+            
+            var leftEdge = cx - (currentWidth / 2) + 2;
+            var rightEdge = cx + (currentWidth / 2) - 2;
+            var topEdge = cy - (currentHeight / 2) + 2;
+            var bottomEdge = cy + (currentHeight / 2) - 2;
+
+            wallLeft.x = leftEdge - wallLeft.width;
+            wallLeft.y = cy - (wallLeft.height / 2);
+
+            wallRight.x = rightEdge;
+            wallRight.y = cy - (wallRight.height / 2);
+
+            wallTop.x = cx - (wallTop.width / 2);
+            wallTop.y = topEdge - wallTop.height;
+
+            wallBottom.x = cx - (wallBottom.width / 2);
+            wallBottom.y = bottomEdge;
+        }
+    }
+}
