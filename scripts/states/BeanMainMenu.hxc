@@ -52,9 +52,6 @@ class BeanMainMenuState extends MusicBeatState
 
     var beanBackButton:FunkinSprite;
 
-    
-    
-    
     var panelScale:Float = 0.7;
     var panelTargetX:Float = -25;
     var panelStartY:Float = 0;
@@ -62,13 +59,13 @@ class BeanMainMenuState extends MusicBeatState
     var logoScale:Float = 0.73;
     var logoTargetX:Float = 82;
     var logoStartY:Float = -50;
-    
 
     override function create()
     {
         super.create();
         
         persistentUpdate = persistentDraw = true;
+
 
         FunkinSound.playMusic('monkerMenu',
         {
@@ -77,9 +74,6 @@ class BeanMainMenuState extends MusicBeatState
             persist: true
         });
 
-        
-        
-        
         var bgWhite = new FunkinSprite(0, 0);
         bgWhite.makeGraphic(FlxG.width, FlxG.height, 0xFFFFFFFF); 
         bgWhite.scrollFactor.set(0, 0); 
@@ -90,9 +84,6 @@ class BeanMainMenuState extends MusicBeatState
         bgDots.alpha = 0.5; 
         add(bgDots);
 
-        
-        
-        
         var randomChar = characterList[FlxG.random.int(0, characterList.length - 1)];
         
         var charTargetX:Float = 0;
@@ -146,8 +137,6 @@ class BeanMainMenuState extends MusicBeatState
         portrait.x = finalPortraitX; 
         add(portrait);
 
-
-        
         panel = new FunkinSprite(-600, panelStartY);
         panel.loadGraphic(Paths.image('UI/pausemenu/panel')); 
         panel.scale.set(panelScale, panelScale);
@@ -157,10 +146,6 @@ class BeanMainMenuState extends MusicBeatState
         
         FlxTween.tween(panel, {x: panelTargetX}, 1.1, {ease: FlxEase.elasticOut, startDelay: 0.1});
 
-
-        
-        
-        
         logo = new FunkinSprite(logoTargetX, -600);
         logo.loadGraphic(Paths.image('UI/pausemenu/logoMenu')); 
         logo.scale.set(logoScale, logoScale);
@@ -174,7 +159,6 @@ class BeanMainMenuState extends MusicBeatState
         add(particleGroup);
 
         new FlxTimer().start(0.75, function(tmr:FlxTimer) {
-            
             var particleOffsetX:Float = 60; 
             
             for (i in 0...160) { 
@@ -204,10 +188,6 @@ class BeanMainMenuState extends MusicBeatState
             }
         });
 
-
-        
-        
-        
         var textSize:Int = 28;
         var textX:Float = 45;
         var textSpacing:Float = 50;
@@ -241,25 +221,23 @@ class BeanMainMenuState extends MusicBeatState
         }
 
         #if mobile
-        beanBackButton = FunkinSprite.create(0, 0, 'mobile/backButton');
+        
+        beanBackButton = new FunkinSprite(0, 0);
+        beanBackButton.frames = Paths.getSparrowAtlas('backButton');
+        beanBackButton.animation.addByPrefix('back', 'back', 24, false);
+        beanBackButton.scale.set(0.75, 0.75);
+        beanBackButton.updateHitbox();
         beanBackButton.setPosition(FlxG.width - beanBackButton.width - 5, FlxG.height - beanBackButton.height - 5);
         beanBackButton.alpha = 0.5;
-        beanBackButton.onUp.add(_->{beanBackButton.animation.play('hold');});
-        beanBackButton.onDown.add(returnToBaseGame);
+        beanBackButton.antialiasing = true;
         add(beanBackButton);
         #end
 
-        
-        
-        
         FlxG.mouse.visible = true;
         FlxG.mouse.load(Paths.image('cursor')); 
 
         changeSelection(0);
 
-        
-        
-        
         var startTransition = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
         openSubState(startTransition);
         startTransition.transOut(); 
@@ -276,14 +254,12 @@ class BeanMainMenuState extends MusicBeatState
         if (FlxG.keys.justPressed.ENTER) selectOption();
         if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE) returnToBaseGame();
 
-        
         if (FlxG.mouse.justMoved)
         {
             for (i in 0...textGroup.length) {
                 if (FlxG.mouse.overlaps(textGroup[i]) && curSelected != i) {
                     curSelected = i;
                     changeSelection(0);
-                    
                     FunkinSound.playOnce(Paths.sound('scrollMenu-bean')); 
                 }
             }
@@ -303,7 +279,13 @@ class BeanMainMenuState extends MusicBeatState
         #if mobile
         if (TouchUtil.justPressed)
         {
-            if (TouchUtil.overlaps(beanBackButton)) return;
+            
+            if (TouchUtil.overlaps(beanBackButton)) {
+                beanBackButton.alpha = 1.0;
+                beanBackButton.animation.play('back', true);
+                returnToBaseGame();
+                return;
+            }
             
             for (i in 0...textGroup.length) {
                 if (TouchUtil.overlaps(textGroup[i])) {
@@ -358,10 +340,10 @@ class BeanMainMenuState extends MusicBeatState
             switch (optionList[curSelected]) 
             {
                 case 'Songs':
-                    substate.transIn(ScriptedMusicBeatState.init('beanredux.states.beanFreeplayState'));
+                    substate.transIn(ScriptedMusicBeatState.init('bean.states.BeanFreeplayState'));
                     
                 case 'Credits':
-                    substate.transIn(ScriptedMusicBeatState.init('beanredux.states.beanCreditsState'));
+                    substate.transIn(ScriptedMusicBeatState.init('bean.states.beanCreditsState'));
                     
                 case 'Back to Main Menu':
                     substate.transIn(new MainMenuState());

@@ -110,14 +110,15 @@ class MonkerMenuButton extends Module
         #end
     }
 
-    function onButtonPress()
+   function onButtonPress()
     {
         if (selected) return;
         selected = true;
         
         var menuHandler = ModuleHandler.getModule('BeanMenuHandler');
         if (menuHandler != null) {
-            menuHandler.currentMenu = 'bean';
+            
+            menuHandler.currentMenu = 'monker';
         }
         
         #if !mobile 
@@ -126,12 +127,8 @@ class MonkerMenuButton extends Module
 
         FlxG.sound.music.fadeOut(0.6);
 
-        
         var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
         FlxG.state.openSubState(substate);
-        
-        
-        
         
         substate.transIn(ScriptedMusicBeatState.init('bean.states.BeanTitleState'));
     }

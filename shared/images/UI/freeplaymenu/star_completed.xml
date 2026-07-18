@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="star_completed.png">
+	<!-- Created with Adobe Animate version 23.0.0.407 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="star idle0004" x="17" y="17" width="89" height="81" frameX="-3" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0005" x="115" y="17" width="92" height="84" frameX="0" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0006" x="115" y="17" width="92" height="84" frameX="0" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0007" x="216" y="17" width="87" height="80" frameX="-5" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0008" x="312" y="17" width="83" height="76" frameX="-9" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0009" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0010" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0011" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0012" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0013" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0014" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0015" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0016" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0017" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0018" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0019" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0020" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0021" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0022" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0023" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0024" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0025" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0026" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0027" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0028" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0029" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0030" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0031" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0032" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0033" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0034" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0035" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0036" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0037" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0038" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0039" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0040" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0041" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0042" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0043" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0044" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0045" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0046" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0047" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0048" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0049" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0050" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0051" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0052" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0053" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0054" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0055" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0056" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0057" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0058" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star idle0059" x="404" y="17" width="78" height="76" frameX="-14" frameY="0" frameWidth="103" frameHeight="84"/>
+	<SubTexture name="star transition0000" x="491" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0001" x="659" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0002" x="659" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0003" x="827" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0004" x="827" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0005" x="995" y="17" width="191" height="234"/>
+	<SubTexture name="star transition0006" x="995" y="17" width="191" height="234"/>
+	<SubTexture name="star transition0007" x="1195" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0008" x="1363" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0009" x="1531" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0010" x="1699" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0011" x="1867" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0012" x="2035" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+	<SubTexture name="star transition0013" x="2035" y="17" width="159" height="228" frameX="-19" frameY="0" frameWidth="191" frameHeight="234"/>
+</TextureAtlas>

@@ -20,10 +20,11 @@ class MonkerTransitionSubState extends MusicBeatSubState
     var wallTop:FunkinSprite;
     var wallBottom:FunkinSprite;
 
-    
-    
-    
+    #if mobile
+    var maxScale:Float = 6.8; 
+    #else
     var maxScale:Float = 6.5; 
+    #end
 
     function new() {
         super();
@@ -34,9 +35,6 @@ class MonkerTransitionSubState extends MusicBeatSubState
         transitionSprite.screenCenter();
         add(transitionSprite);
 
-        
-        
-        
         wallLeft = createOptimizedWall();
         wallRight = createOptimizedWall();
         wallTop = createOptimizedWall();

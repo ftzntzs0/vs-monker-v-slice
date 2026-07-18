@@ -18,7 +18,6 @@ import funkin.save.Save;
 import funkin.Paths;
 import funkin.Conductor;
 #if mobile
-import funkin.mobile.ui.FunkinButton;
 import funkin.util.TouchUtil;
 #end
 
@@ -35,8 +34,6 @@ class BeanTitleState extends MusicBeatState
     var geef:FunkinSprite;
     var monker:FunkinSprite; 
     var enterText:FunkinSprite;
-    
-    var beanBackButton:FunkinSprite;
 
     var beefOffsetX:Float = -5; 
     var beefOffsetY:Float = -195;  
@@ -137,15 +134,6 @@ class BeanTitleState extends MusicBeatState
         enterText.antialiasing = true;
         add(enterText);
 
-        #if mobile
-        beanBackButton = FunkinSprite.create(0, 0, 'mobile/backButton');
-        beanBackButton.setPosition(FlxG.width - beanBackButton.width - 5, FlxG.height - beanBackButton.height - 5);
-        beanBackButton.alpha = 0.5;
-        beanBackButton.onUp.add(_->{beanBackButton.animation.play('hold');});
-        beanBackButton.onDown.add(returnToBaseGame);
-        add(beanBackButton);
-        #end
-
         var startTransition = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
         openSubState(startTransition);
         startTransition.transOut(); 
@@ -165,7 +153,10 @@ class BeanTitleState extends MusicBeatState
         if (FlxG.keys.justPressed.ESCAPE) returnToBaseGame();
 
         #if mobile
-        if (TouchUtil.justPressed && !TouchUtil.overlaps(beanBackButton)) moveToMainMenu();
+        if (TouchUtil.justPressed)
+        {
+            moveToMainMenu();
+        }
         #end
     }
 
@@ -173,7 +164,6 @@ class BeanTitleState extends MusicBeatState
     {
         super.beatHit();
 
-        
         if (!isReady) return; 
 
         var currentBeat:Int = 0;

@@ -10,9 +10,12 @@ import funkin.play.PlayStatePlaylist;
 import funkin.util.ReflectUtil;
 import funkin.ui.ScriptedMusicBeatState;
 import funkin.ui.transition.stickers.StickerSubState;
+import funkin.Paths;
 
 class BeanMenuHandler extends Module
 {
+    
+    
     public var currentMenu:String = 'base';
 
     function new() {
@@ -24,6 +27,34 @@ class BeanMenuHandler extends Module
         super.onCreate(event);
         cacheMenuShit();
     }
+
+    
+    
+    public function onStateChangeBegin(event)
+    {
+        super.onStateChangeBegin(event);
+        
+        
+        if (currentMenu == 'monker')
+        {
+            var targetClass = ReflectUtil.getClassNameOf(event.targetState);
+            
+            
+            if (targetClass == 'funkin.ui.freeplay.FreeplayState') 
+            {
+                
+                event.cancel();
+                
+                
+                
+                
+                
+                
+                FlxG.switchState(ScriptedMusicBeatState.init('bean.states.BeanFreeplayState')); 
+            }
+        }
+    }
+    
 
     public function onSubStateOpenEnd(event)
     {
@@ -43,13 +74,11 @@ class BeanMenuHandler extends Module
         {
             FlxTransitionableState.skipNextTransIn = true;
 		    FlxTransitionableState.skipNextTransOut = true;
-
         }
     }
 
     function cacheMenuShit()
     {
         FunkinMemory.permanentCacheSound(Paths.music('monkerMenu/monkerMenu'));
-
     }
 }

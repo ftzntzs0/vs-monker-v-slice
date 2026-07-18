@@ -1,0 +1,401 @@
+package bean.states;
+
+import flixel.FlxG;
+import flixel.text.FlxText;
+import flixel.text.FlxTextBorderStyle;
+import flixel.math.FlxMath;
+import flixel.util.FlxColor;
+import flixel.group.FlxTypedGroup;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import flixel.util.FlxTimer;
+import flixel.addons.display.FlxBackdrop;
+import flixel.addons.transition.FlxTransitionableState;
+import funkin.graphics.FunkinSprite;
+import funkin.ui.MusicBeatState;
+import funkin.ui.ScriptedMusicBeatState;
+import funkin.ui.ScriptedMusicBeatSubState;
+import funkin.audio.FunkinSound;
+import funkin.data.song.SongRegistry;
+import funkin.save.Save;
+import funkin.play.scoring.Scoring;
+import funkin.ui.transition.LoadingState;
+import funkin.Paths;
+import funkin.play.PlayState;
+import funkin.play.PlayStatePlaylist;
+
+class BeanFreeplayState extends MusicBeatState
+{
+    final songList:Array<String> = [
+        "bean-tutorial", "warm-up", "yarisugi", "embrace", 
+        "aggressiv-nyat", "lavender-essence", "scholar", "tater", "nutrient"
+    ];
+
+    
+    
+    var listBaseX:Float = 100;           
+    var listBaseYOffset:Float = -125;   
+    var listSpacingY:Float = 198;       
+    var listSelectedOffsetX:Float = 10; 
+    var listCurveOffsetX:Float = -40;   
+
+    
+    var cursorOffsetX:Float = -68;
+    var cursorOffsetY:Float = -68;
+    
+    var textOffsetX:Float = 120;
+    var textOffsetY:Float = 60;
+    
+    var iconOffsetX:Float = -165; 
+    var iconOffsetY:Float = 30;
+    
+    var numTextOffsetX:Float = 30;
+    var numTextOffsetY:Float = 20;
+    
+
+    var curSelected:Int = 0;
+    var acceptInputs:Bool = false;
+
+    
+    var bgDots:FlxBackdrop;
+    var gradient:FunkinSprite;
+    var scanLines:FunkinSprite;
+    var overlay:FunkinSprite;
+    
+    
+    var windowsGrp:FlxTypedGroup<FunkinSprite>;
+    var windowPaths:Array<String> = ['ui/freeplaymenu/window1', 'ui/freeplaymenu/window2', 'ui/freeplaymenu/window3'];
+    
+    
+    var windowXPositions:Array<Float> = [50, 800, 800]; 
+
+    
+    var highScoreSpr:FunkinSprite;
+    var highScoreCapsule:FunkinSprite;
+    var scoreTxt:FlxText;
+    var percentTxt:FlxText;
+
+    
+    var grpSongs:FlxTypedGroup<FlxTypedGroup>; 
+
+    override function create()
+    {
+        super.create();
+
+        FunkinSound.playMusic('monkerMenu', {
+            overrideExisting: false,
+            restartTrack: false,
+            persist: true
+        });
+
+        bgDots = new FlxBackdrop(Paths.image('ui/titlemenu/dotBG'), 0x11);
+        bgDots.velocity.set(-80, -80);
+        add(bgDots);
+
+        gradient = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/gradient'));
+        gradient.setGraphicSize(FlxG.width, FlxG.height);
+        gradient.updateHitbox();
+        add(gradient);
+
+        scanLines = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/scanLines'));
+        scanLines.setGraphicSize(FlxG.width, FlxG.height);
+        scanLines.updateHitbox();
+        scanLines.alpha = 1.0;
+        add(scanLines);
+
+        windowsGrp = new FlxTypedGroup();
+        add(windowsGrp);
+        spawnInitialWindows();
+
+        overlay = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/overlay'));
+        overlay.y = FlxG.height - overlay.height;
+        add(overlay);
+
+        grpSongs = new FlxTypedGroup();
+        add(grpSongs);
+        buildSongList();
+
+        buildScoreUI();
+
+        changeSelection(0, false);
+
+        var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
+        openSubState(substate);
+        substate.transOut();
+
+        new FlxTimer().start(0.5, _->{ acceptInputs = true; });
+    }
+
+    override function update(elapsed:Float)
+    {
+        super.update(elapsed);
+
+        handleWindowMovement(elapsed);
+        handleAnimations(elapsed); 
+        handleInputs();
+    }
+
+    function buildScoreUI()
+    {
+        highScoreSpr = new FunkinSprite(0, 10);
+        highScoreSpr.frames = Paths.getSparrowAtlas('ui/freeplaymenu/highScore');
+        highScoreSpr.animation.addByPrefix('idle', 'idle', 24, true);
+        highScoreSpr.animation.play('idle');
+        highScoreSpr.x = FlxG.width - highScoreSpr.width - 0;
+        add(highScoreSpr);
+
+        highScoreCapsule = new FunkinSprite(highScoreSpr.x, highScoreSpr.y + highScoreSpr.height - 0).loadGraphic(Paths.image('ui/freeplaymenu/highScoreCapsule'));
+        highScoreCapsule.x = FlxG.width - highScoreCapsule.width - 40;
+        add(highScoreCapsule);
+
+        scoreTxt = new FlxText(highScoreCapsule.x, highScoreCapsule.y + 20, highScoreCapsule.width, "0");
+        scoreTxt.setFormat(Paths.font('RifficFree-Bold.ttf'), 68, 0xFF702B71, 'center', FlxTextBorderStyle.NONE);
+        add(scoreTxt);
+
+        percentTxt = new FlxText(highScoreCapsule.x, scoreTxt.y + 75, highScoreCapsule.width, "Accuracy: 0.00%");
+        percentTxt.setFormat(Paths.font('RifficFree-Bold.ttf'), 26, 0xFF702B71, 'center', FlxTextBorderStyle.NONE);
+        add(percentTxt);
+    }
+
+    function buildSongList()
+    {
+        for (i in 0...songList.length)
+        {
+            var itemGroup = new FlxTypedGroup();
+            
+            var songId = songList[i];
+            var displayName = songId;
+            var opponentName = "dad"; 
+
+            if (SongRegistry.instance != null) {
+                var record = SongRegistry.instance.fetchEntry(songId);
+                if (record != null) {
+                    if (record.songName != null) {
+                        displayName = record.songName;
+                    }
+                    
+                    try {
+                        var meta = record.getRawMetadata();
+                        if (meta != null && meta.length > 0 && meta[0].playData != null && meta[0].playData.characters != null) {
+                            if (meta[0].playData.characters.opponent != null) {
+                                opponentName = meta[0].playData.characters.opponent;
+                            }
+                        }
+                    } catch(e:Dynamic) {}
+                }
+            }
+
+            if (displayName == songId) {
+                var words = displayName.split('-');
+                for (w in 0...words.length) {
+                    words[w] = words[w].charAt(0).toUpperCase() + words[w].substr(1);
+                }
+                displayName = words.join(' ');
+            }
+
+            var distance = i - curSelected;
+            
+            
+            var startX:Float = listBaseX + (Math.abs(distance) * listCurveOffsetX);
+            if (distance == 0) startX += listSelectedOffsetX; 
+            
+            var startY:Float = (FlxG.height / 2) + listBaseYOffset + (distance * listSpacingY);
+
+            var cursor = new FunkinSprite(startX + cursorOffsetX, startY + cursorOffsetY).loadGraphic(Paths.image('ui/freeplaymenu/capsule/cursor'));
+            cursor.visible = false; 
+            itemGroup.add(cursor);
+
+            var capsule = new FunkinSprite(startX, startY);
+            capsule.frames = Paths.getSparrowAtlas('ui/freeplaymenu/capsule/capsule');
+            capsule.animation.addByPrefix('idle', 'idle', 24, true);
+            capsule.animation.play('idle');
+            itemGroup.add(capsule);
+
+            var text = new FlxText(capsule.x + textOffsetX, capsule.y + textOffsetY, capsule.width - textOffsetX - 20, displayName);
+            text.setFormat(Paths.font('RifficFree-Bold.ttf'), 44, 0xFF702B71, 'left', FlxTextBorderStyle.NONE);
+            itemGroup.add(text);
+
+            var icon = new FunkinSprite(capsule.x + capsule.width + iconOffsetX, capsule.y + iconOffsetY);
+            icon.frames = Paths.getSparrowAtlas('ui/freeplaymenu/icons/' + opponentName);
+            icon.animation.addByPrefix('idle', 'idle', 24, true);
+            icon.animation.addByPrefix('selected', 'selected', 24, true);
+            icon.animation.play('idle');
+            icon.scale.set(1.0, 1.0);
+            icon.updateHitbox();
+            itemGroup.add(icon);
+
+            var numText = new FlxText(capsule.x + numTextOffsetX, capsule.y + numTextOffsetY, 50, Std.string(i + 1));
+            numText.setFormat(Paths.font('RifficFree-Bold.ttf'), 60, 0xFF702B71, 'center', FlxTextBorderStyle.NONE);
+            numText.angle = 15; 
+            itemGroup.add(numText);
+
+            grpSongs.add(itemGroup);
+        }
+    }
+
+    function spawnInitialWindows()
+    {
+        for (i in 0...3) {
+            var winPath = windowPaths[i]; 
+            
+            var win = new FunkinSprite(windowXPositions[i], FlxG.random.float(0, FlxG.height)).loadGraphic(Paths.image(winPath));
+            
+            win.ID = i; 
+            win.velocity.y = FlxG.random.float(-150, -150);
+            win.alpha = 1.0;
+            windowsGrp.add(win);
+        }
+    }
+
+    function handleWindowMovement(elapsed:Float)
+    {
+        windowsGrp.forEachAlive(function(win:FunkinSprite) {
+            if (win.y + win.height < 0) {
+                win.y = FlxG.height + FlxG.random.float(10, 100);
+                win.x = windowXPositions[win.ID];
+                win.velocity.y = FlxG.random.float(-150, -150);
+            }
+        });
+    }
+
+    function handleAnimations(elapsed:Float)
+    {
+        var i:Int = 0;
+        grpSongs.forEachAlive(function(itemGroup:FlxTypedGroup) {
+            var cursor:FunkinSprite = itemGroup.members[0];
+            var capsule:FunkinSprite = itemGroup.members[1];
+            var text:FlxText = itemGroup.members[2];
+            var icon:FunkinSprite = itemGroup.members[3]; 
+            var numText:FlxText = itemGroup.members[4];
+
+            var distance = i - curSelected;
+            
+            
+            var targetX:Float = listBaseX + (Math.abs(distance) * listCurveOffsetX); 
+            if (distance == 0) targetX += listSelectedOffsetX; 
+            
+            var targetY:Float = (FlxG.height / 2) + listBaseYOffset + (distance * listSpacingY);
+
+            
+            capsule.x = FlxMath.lerp(capsule.x, targetX, 10 * elapsed);
+            capsule.y = FlxMath.lerp(capsule.y, targetY, 10 * elapsed);
+
+            
+            cursor.x = capsule.x + cursorOffsetX;
+            cursor.y = capsule.y + cursorOffsetY;
+            
+            text.x = capsule.x + textOffsetX;
+            text.y = capsule.y + textOffsetY;
+
+            icon.x = capsule.x + capsule.width + iconOffsetX;
+            icon.y = capsule.y + iconOffsetY;
+
+            numText.x = capsule.x + numTextOffsetX;
+            numText.y = capsule.y + numTextOffsetY;
+
+            i++;
+        });
+    }
+
+    function handleInputs()
+    {
+        if (!acceptInputs) return;
+
+        if (controls.UI_UP_P) changeSelection(-1);
+        if (controls.UI_DOWN_P) changeSelection(1);
+        
+        if (controls.ACCEPT_P) {
+            acceptInputs = false;
+            FunkinSound.playOnce(Paths.sound('confirmMenu-bean'));
+            
+            var j:Int = 0;
+            grpSongs.forEachAlive(function(itemGroup:FlxTypedGroup) {
+                if (j == curSelected) {
+                    var icon:FunkinSprite = itemGroup.members[3];
+                    icon.animation.play('selected');
+                }
+                j++;
+            });
+
+            var songId = songList[curSelected];
+            var targetSong = SongRegistry.instance.fetchEntry(songId);
+            
+            if (targetSong != null) {
+                PlayStatePlaylist.playlist = [songId];
+                PlayStatePlaylist.isStoryMode = false;
+
+                new FlxTimer().start(1.0, function(tmr:FlxTimer) {
+                    FlxG.camera.fade(0xFF000000, 0.2, false, function() {
+                        LoadingState.loadPlayState({
+                            targetSong: targetSong,
+                            targetDifficulty: "hard", 
+                            targetVariation: "default",
+                            targetInstrumental: "",
+                            practiceMode: false,
+                            minimalMode: false
+                        }, true);
+                    });
+                });
+            }
+        }
+
+        if (controls.BACK_P || FlxG.keys.justPressed.ESCAPE) {
+            acceptInputs = false;
+            FunkinSound.playOnce(Paths.sound('cancelMenu-bean'));
+
+            var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
+            openSubState(substate);
+            substate.transIn(ScriptedMusicBeatState.init('bean.states.BeanMainMenuState'));
+        }
+    }
+
+    function changeSelection(change:Int = 0, playSound:Bool = true)
+    {
+        if (playSound) FunkinSound.playOnce(Paths.sound('scrollMenu-bean'));
+
+        curSelected += change;
+        if (curSelected < 0) curSelected = songList.length - 1;
+        if (curSelected >= songList.length) curSelected = 0;
+
+        var i:Int = 0;
+        grpSongs.forEach(function(itemGroup:FlxTypedGroup) {
+            var cursor:FunkinSprite = itemGroup.members[0];
+            var capsule:FunkinSprite = itemGroup.members[1];
+            var text:FlxText = itemGroup.members[2];
+            var icon:FunkinSprite = itemGroup.members[3]; 
+            var numText:FlxText = itemGroup.members[4];
+
+            if (i == curSelected) {
+                cursor.visible = true;
+                icon.animation.play('idle');
+                text.color = 0xFFB56DA0; 
+                numText.color = 0xFFB56DA0;
+                text.alpha = 1;
+                numText.alpha = 1;
+            } else {
+                cursor.visible = false;
+                capsule.animation.play('idle');
+                icon.animation.play('idle'); 
+                text.color = 0xFF702B71; 
+                numText.color = 0xFF702B71;
+                text.alpha = 1;
+                numText.alpha = 1;
+            }
+            i++;
+        });
+
+        updateDisplayedScore();
+    }
+
+    function updateDisplayedScore()
+    {
+        var songName = songList[curSelected];
+        var songScore = Save.instance.getSongScore(songName, "hard", "default");
+        
+        var curScore = songScore != null ? songScore.score : 0;
+        var accuracy = songScore != null ? Scoring.tallyCompletion(songScore.tallies) * 100 : 0.00;
+
+        scoreTxt.text = Std.string(curScore);
+        percentTxt.text = "Accuracy: " + FlxMath.roundDecimal(accuracy, 2) + "%";
+    }
+}

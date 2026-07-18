@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="atlas.png">
+	<!-- Created with Adobe Animate version 24.0.3.19 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="atlas0000" x="17" y="17" width="21" height="48" frameX="-168" frameY="0" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0001" x="17" y="17" width="21" height="48" frameX="-168" frameY="0" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0002" x="47" y="17" width="93" height="114" frameX="-170" frameY="-87" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0003" x="47" y="17" width="93" height="114" frameX="-170" frameY="-87" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0004" x="149" y="17" width="186" height="161" frameX="-194" frameY="-186" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0005" x="149" y="17" width="186" height="161" frameX="-194" frameY="-186" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0006" x="344" y="17" width="277" height="177" frameX="-228" frameY="-309" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0007" x="344" y="17" width="277" height="177" frameX="-228" frameY="-309" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0008" x="630" y="17" width="371" height="210" frameX="-132" frameY="-471" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0009" x="630" y="17" width="371" height="210" frameX="-132" frameY="-471" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0010" x="1010" y="17" width="390" height="407" frameX="-69" frameY="-443" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0011" x="1010" y="17" width="390" height="407" frameX="-69" frameY="-443" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0012" x="1409" y="17" width="370" height="499" frameX="-28" frameY="-255" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0013" x="1409" y="17" width="370" height="499" frameX="-28" frameY="-255" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0014" x="1788" y="17" width="233" height="533" frameX="0" frameY="-175" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0015" x="1788" y="17" width="233" height="533" frameX="0" frameY="-175" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0016" x="1788" y="17" width="233" height="533" frameX="0" frameY="-175" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0017" x="1788" y="17" width="233" height="533" frameX="0" frameY="-175" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0018" x="1788" y="17" width="233" height="533" frameX="0" frameY="-175" frameWidth="505" frameHeight="850"/>
+	<SubTexture name="atlas0019" x="1788" y="17" width="233" height="533" frameX="0" frameY="-175" frameWidth="505" frameHeight="850"/>
+</TextureAtlas>
