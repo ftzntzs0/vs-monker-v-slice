@@ -11,18 +11,29 @@ import funkin.util.ReflectUtil;
 import funkin.ui.ScriptedMusicBeatState;
 import funkin.ui.transition.stickers.StickerSubState;
 import funkin.Paths;
+import flixel.util.FlxSave;
 
 class BeanMenuHandler extends Module
 {
     public var currentMenu:String = 'base';
     
-    
-    
     public var returnedFromSong:Bool = false;
     public var scoreBeforePlay:Int = -1;
+    public var returnedFromCredits:Bool = false;
+    
+    
+    public var lastPlayedSong:String = ""; 
+    
+    var save:FlxSave;
 
     function new() {
         super('BeanMenuHandler');
+        
+        save = new FlxSave();
+        save.bind("BeanPreferences", "FunkinCrew");
+        
+        if (save.data.gameBeaten == null) save.data.gameBeaten = false;
+        save.flush();
     }
 
     public function onCreate(event)
@@ -48,13 +59,25 @@ class BeanMenuHandler extends Module
     {
         if (currentMenu == 'monker')
         {
-            
             returnedFromSong = true;
 
             FlxTransitionableState.skipNextTransIn = true;
 		    FlxTransitionableState.skipNextTransOut = true;
             
-            FlxG.switchState(ScriptedMusicBeatState.init('bean.states.BeanFreeplayState'));
+            
+            if (lastPlayedSong == "nutrient" && save.data.gameBeaten == false)
+            {
+                save.data.gameBeaten = true;
+                save.flush();
+                
+                lastPlayedSong = ""; 
+                FlxG.switchState(ScriptedMusicBeatState.init('bean.states.BeanEndMenuState'));
+            }
+            else
+            {
+                lastPlayedSong = ""; 
+                FlxG.switchState(ScriptedMusicBeatState.init('bean.states.BeanFreeplayState'));
+            }
         }
     }
 

@@ -148,6 +148,9 @@ class BeanTitleState extends MusicBeatState
         }
 
         super.update(elapsed);
+        
+        
+        if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.NINE) goToCredits();
 
         if (FlxG.keys.justPressed.ENTER && !FlxG.keys.justPressed.ESCAPE) moveToMainMenu();
         if (FlxG.keys.justPressed.ESCAPE) returnToBaseGame();
@@ -224,5 +227,18 @@ class BeanTitleState extends MusicBeatState
         var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
         openSubState(substate);
         substate.transIn(new MainMenuState());
+    }
+
+    
+    function goToCredits()
+    {
+        if (!acceptInputs) return;
+        acceptInputs = false;
+        
+        FunkinSound.playOnce(Paths.sound('confirmMenu-bean'));
+        
+        var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
+        openSubState(substate);
+        substate.transIn(ScriptedMusicBeatState.init('bean.states.BeanEndMenuState'));
     }
 }

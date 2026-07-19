@@ -1,0 +1,193 @@
+package bean.states;
+
+import flixel.FlxG;
+import flixel.math.FlxMath;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import flixel.util.FlxTimer;
+import funkin.graphics.FunkinSprite;
+import funkin.ui.MusicBeatState;
+import funkin.ui.ScriptedMusicBeatState;
+import funkin.ui.ScriptedMusicBeatSubState;
+import funkin.audio.FunkinSound;
+import funkin.Paths;
+import funkin.modding.module.ModuleHandler;
+
+class BeanEndMenuState extends MusicBeatState
+{
+    
+    
+    
+    
+    
+    var bgOffsetX:Float = 0;
+    var bgOffsetY:Float = 0;
+    var bgScale:Float = 1.0; 
+
+    var logoOffsetX:Float = 50;
+    var logoOffsetY:Float = -330; 
+    var logoScale:Float = 0.5;
+
+    var leaveOffsetX:Float = 0;   
+    var leaveOffsetY:Float = 30;  
+    var leaveScale:Float = 0.7;
+
+    #if mobile
+    var backBtnScale:Float = 0.75; 
+    #end
+
+    var noteOffsetX:Float = 55;
+    var noteOffsetY:Float = -30; 
+    var noteScale:Float = 0.7;
+
+    var monkerOffsetX:Float = -55; 
+    var monkerOffsetY:Float = 10; 
+    var monkerScale:Float = 0.6;
+
+    var thanksOffsetX:Float = -80; 
+    var thanksOffsetY:Float = 95;  
+    var thanksScale:Float = 0.6;
+    
+    
+
+    var bg:FunkinSprite;
+    var staticLogo:FunkinSprite;
+    var note:FunkinSprite;
+    var monker:FunkinSprite;
+    var thanks:FunkinSprite;
+    
+    var isExiting:Bool = false;
+
+    #if !mobile
+    var leave:FunkinSprite;
+    #else
+    var beanBackButton:FunkinSprite;
+    #end
+
+    override function create()
+    {
+        super.create();
+        
+        
+        bg = new FunkinSprite(bgOffsetX, bgOffsetY).loadGraphic(Paths.image('ui/endmenu/bg'));
+        bg.setGraphicSize(FlxG.width, FlxG.height);
+        bg.updateHitbox();
+        bg.scale.set(bg.scale.x * bgScale, bg.scale.y * bgScale);
+        add(bg);
+
+        
+        staticLogo = new FunkinSprite(logoOffsetX, (FlxG.height / 2) + logoOffsetY).loadGraphic(Paths.image('ui/endmenu/staticlogo'));
+        staticLogo.scale.set(logoScale, logoScale);
+        staticLogo.updateHitbox();
+        add(staticLogo);
+
+        
+        #if !mobile
+        leave = new FunkinSprite(staticLogo.x + leaveOffsetX, staticLogo.y + staticLogo.height + leaveOffsetY).loadGraphic(Paths.image('ui/endmenu/leave'));
+        leave.scale.set(leaveScale, leaveScale);
+        leave.updateHitbox();
+        add(leave);
+        
+        
+        blinkLeave(true);
+        #else
+        beanBackButton = new FunkinSprite(0, 0);
+        beanBackButton.frames = Paths.getSparrowAtlas('backButton');
+        beanBackButton.animation.addByPrefix('back', 'back', 24, false);
+        beanBackButton.scale.set(backBtnScale, backBtnScale);
+        beanBackButton.updateHitbox();
+        beanBackButton.x = staticLogo.x + leaveOffsetX;
+        beanBackButton.y = staticLogo.y + staticLogo.height + leaveOffsetY;
+        beanBackButton.alpha = 0.5;
+        beanBackButton.antialiasing = true;
+        add(beanBackButton);
+        #end
+
+        
+        note = new FunkinSprite(noteOffsetX, 0).loadGraphic(Paths.image('ui/endmenu/note'));
+        note.scale.set(noteScale, noteScale);
+        note.updateHitbox();
+        note.y = FlxG.height - note.height + noteOffsetY;
+        add(note);
+
+        
+        monker = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/endmenu/monker'));
+        monker.scale.set(monkerScale, monkerScale);
+        monker.updateHitbox();
+        monker.x = FlxG.width - monker.width + monkerOffsetX;
+        monker.y = FlxG.height - monker.height + monkerOffsetY;
+        add(monker);
+
+        
+        thanks = new FunkinSprite(0, thanksOffsetY).loadGraphic(Paths.image('ui/endmenu/thanks4playing'));
+        thanks.scale.set(thanksScale, thanksScale);
+        thanks.updateHitbox();
+        thanks.x = FlxG.width - thanks.width + thanksOffsetX;
+        add(thanks);
+
+        
+        var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
+        openSubState(substate);
+        substate.transOut();
+    }
+
+    override function update(elapsed:Float)
+    {
+        super.update(elapsed);
+
+        if (isExiting) return;
+
+        
+        if (FlxG.keys.justPressed.ESCAPE) {
+            goBack();
+        }
+
+        
+        #if mobile
+        var touch = FlxG.touches.getFirst();
+        if (touch != null && touch.justPressed) {
+            if (beanBackButton.overlapsPoint(touch.getWorldPosition())) {
+                beanBackButton.alpha = 1.0;
+                beanBackButton.animation.play('back', true);
+                goBack();
+            }
+        }
+        #end
+    }
+
+    #if !mobile
+    function blinkLeave(fadeOut:Bool)
+    {
+        if (isExiting) return;
+
+        FlxTween.tween(leave, {alpha: fadeOut ? 0.2 : 1.0}, 1.2, {
+            ease: FlxEase.sineInOut,
+            onComplete: function(twn:FlxTween) {
+                blinkLeave(!fadeOut);
+            }
+        });
+    }
+    #end
+
+    function goBack()
+    {
+        isExiting = true;
+        
+        FunkinSound.playOnce(Paths.sound('cancelMenu-bean'));
+
+        
+        var menuHandler:Dynamic = ModuleHandler.getModule('BeanMenuHandler');
+        if (menuHandler != null) {
+            try {
+                menuHandler.returnedFromCredits = true;
+            } catch (e:Dynamic) {
+                
+            }
+        }
+
+        
+        var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
+        openSubState(substate);
+        substate.transIn(ScriptedMusicBeatState.init('bean.states.BeanFreeplayState'));
+    }
+}

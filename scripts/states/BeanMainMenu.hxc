@@ -18,9 +18,9 @@ import funkin.ui.MusicBeatState;
 import funkin.ui.ScriptedMusicBeatState;
 import funkin.ui.ScriptedMusicBeatSubState;
 import funkin.ui.mainmenu.MainMenuState;
-import funkin.save.Save;
 import funkin.Paths;
 import funkin.Conductor;
+import flixel.util.FlxSave;
 #if mobile
 import funkin.mobile.ui.FunkinButton;
 import funkin.util.TouchUtil;
@@ -46,6 +46,7 @@ class BeanMainMenuState extends MusicBeatState
     var panel:FunkinSprite;
     var logo:FunkinSprite;
     var portrait:FunkinSprite;
+    var trophy:FunkinSprite;
     
     var particleGroup:FlxGroup;
     var textGroup = []; 
@@ -60,12 +61,28 @@ class BeanMainMenuState extends MusicBeatState
     var logoTargetX:Float = 82;
     var logoStartY:Float = -50;
 
+    
+    var trophyScale:Float = 0.5;
+    
+    
+    var trophyOffsetX:Float = -15;
+    var trophyOffsetY:Float = -5;
+
+    
+    var trophyMobileOffsetX:Float = -15;
+    var trophyMobileOffsetY:Float = -5;
+    
+
+    var save:FlxSave;
+
     override function create()
     {
         super.create();
         
         persistentUpdate = persistentDraw = true;
 
+        save = new FlxSave();
+        save.bind("BeanPreferences", "FunkinCrew");
 
         FunkinSound.playMusic('monkerMenu',
         {
@@ -220,8 +237,29 @@ class BeanMainMenuState extends MusicBeatState
             add(text);
         }
 
+        if (save.data.gameBeaten == true)
+        {
+            trophy = new FunkinSprite(0, 0);
+            trophy.frames = Paths.getSparrowAtlas('ui/mainmenu/trophy');
+            trophy.animation.addByPrefix('idle', 'idle', 24, true);
+            trophy.animation.play('idle');
+            
+            
+            trophy.scale.set(trophyScale, trophyScale);
+            trophy.updateHitbox();
+            
+            trophy.antialiasing = true;
+
+            #if mobile
+            trophy.setPosition(FlxG.width - trophy.width + trophyMobileOffsetX, trophyMobileOffsetY);
+            #else
+            trophy.setPosition(FlxG.width - trophy.width + trophyOffsetX, FlxG.height - trophy.height + trophyOffsetY);
+            #end
+
+            add(trophy);
+        }
+
         #if mobile
-        
         beanBackButton = new FunkinSprite(0, 0);
         beanBackButton.frames = Paths.getSparrowAtlas('backButton');
         beanBackButton.animation.addByPrefix('back', 'back', 24, false);
@@ -279,7 +317,6 @@ class BeanMainMenuState extends MusicBeatState
         #if mobile
         if (TouchUtil.justPressed)
         {
-            
             if (TouchUtil.overlaps(beanBackButton)) {
                 beanBackButton.alpha = 1.0;
                 beanBackButton.animation.play('back', true);
