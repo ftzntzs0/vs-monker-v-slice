@@ -9,9 +9,6 @@ import bean.substates.MonkerTransitionSubState;
 
 class BeanCreditsState extends MusicBeatState {
     
-    
-    
-    
     var windowOffsetX:Float = 0;   
     var windowOffsetY:Float = 0;   
 
@@ -35,9 +32,6 @@ class BeanCreditsState extends MusicBeatState {
     var hoverOffsetX:Float = -40; 
     var hoverOffsetY:Float = -5; 
 
-    
-    
-    
     var profileWindowOffsetX:Float = 0; 
     var profileWindowOffsetY:Float = 5;
 
@@ -56,13 +50,10 @@ class BeanCreditsState extends MusicBeatState {
     var roleOffsetX:Float = 0;
     var roleOffsetY:Float = -95; 
 
-    
     var socialsTextOffsetY:Float = -10;   
     var socialNameOffsetY:Float = 25;    
     var socialsIconOffsetY:Float = 95;   
     var socialsArrowSpacing:Float = 45;   
-    
-
     
     var bg:FlxSprite;
     var creditsWindow:FlxSprite;
@@ -77,7 +68,6 @@ class BeanCreditsState extends MusicBeatState {
     var textGroup:Array<FlxText> = [];
     var hitboxes:Array<FlxSprite> = []; 
 
-    
     var inProfile:Bool = false; 
     var profileWindow:FlxSprite;
     var backHoverSquare:FlxSprite;
@@ -86,17 +76,14 @@ class BeanCreditsState extends MusicBeatState {
     var profileNameText:FlxText;
     var profileRoleText:FlxText;
 
-    
     var socialsText:FlxText;
     var socialNameText:FlxText; 
     var socialLeftArrow:FlxSprite;
     var socialRightArrow:FlxSprite;
     var socialIcon:FlxSprite;
 
-    
     var isExiting:Bool = false;
 
-    
     var categories:Array<Dynamic> = [
         { name: "Directors", people: [{name: "Noobz", role: "Director"}, {name: "Helpame", role: "Director"}] },
         { name: "Artists", people: [{name: "Noobz", role: "Artist"}, {name: "Shouko-kun", role: "Artist"}, {name: "Monika_Fan", role: "Artist"}, {name: "Maplequan", role: "Artist"}, {name: "YaBoiJak_", role: "Artist"}, {name: "SogeyBread", role: "Artist"}, {name: "Netro_Grand", role: "Artist"}, {name: "Inkujira11", role: "Artist"}, {name: "Leanster", role: "Artist"}, {name: "Nacki", role: "Artist"}, {name: "Bida", role: "Artist"}, {name: "CloudyKev", role: "Artist"}] },
@@ -118,7 +105,6 @@ class BeanCreditsState extends MusicBeatState {
         FlxG.mouse.visible = true;
         #end
 
-        
         bg = new FlxSprite(0, 0).loadGraphic(Paths.image('creditsmenu/bg'));
         bg.setGraphicSize(Std.int(FlxG.width), Std.int(FlxG.height));
         bg.updateHitbox();
@@ -140,13 +126,11 @@ class BeanCreditsState extends MusicBeatState {
 
         xHoverSquare.x = xButton.x + (xButton.width / 2) - (xHoverSquare.width / 2) + xHoverOffsetX;
         xHoverSquare.y = xButton.y + (xButton.height / 2) - (xHoverSquare.height / 2) + xHoverOffsetY;
-
+        
+        xHoverSquare.alpha = 0; 
         #if mobile
-        xHoverSquare.alpha = 1; 
         xHoverSquare.scale.set(xHoverMobileScale, xHoverMobileScale);
         xHoverSquare.updateHitbox();
-        #else
-        xHoverSquare.alpha = 0; 
         #end
 
         leftArrow = new FlxSprite(creditsWindow.x + leftArrowOffsetX, creditsWindow.y + leftArrowOffsetY);
@@ -174,7 +158,6 @@ class BeanCreditsState extends MusicBeatState {
 
         updateCategory();
 
-        
         profileWindow = new FlxSprite(0, 0).loadGraphic(Paths.image('creditsmenu/creditsWindow2'));
         profileWindow.screenCenter();
         profileWindow.x += profileWindowOffsetX;
@@ -182,6 +165,7 @@ class BeanCreditsState extends MusicBeatState {
         add(profileWindow);
 
         backHoverSquare = new FlxSprite(0, 0).loadGraphic(Paths.image('creditsmenu/selectSquare2'));
+        backHoverSquare.alpha = 0;
         add(backHoverSquare);
 
         backArrow = new FlxSprite(profileWindow.x + backBtnOffsetX, profileWindow.y + backBtnOffsetY);
@@ -216,7 +200,6 @@ class BeanCreditsState extends MusicBeatState {
         profileRoleText.y += roleOffsetY;
         add(profileRoleText);
 
-        
         socialsText = new FlxText(0, 0, profileWindow.width, "Socials:", 28);
         socialsText.setFormat(Paths.font("HKGrotesk-Black.otf"), 30, 0xFF8E3499, "center");
         socialsText.screenCenter();
@@ -257,10 +240,8 @@ class BeanCreditsState extends MusicBeatState {
         socialRightArrow.y = socialNameText.y + (socialNameText.height / 2) - (socialRightArrow.height / 2);
         add(socialRightArrow);
 
-        
         toggleProfileVisibility(false);
 
-        
         var entryTransition = new MonkerTransitionSubState();
         openSubState(entryTransition);
         entryTransition.transOut(); 
@@ -324,12 +305,13 @@ class BeanCreditsState extends MusicBeatState {
     override function update(elapsed:Float) {
         super.update(elapsed);
 
-        
         if (isExiting) return; 
 
         var pointerX:Float = FlxG.mouse.x;
         var pointerY:Float = FlxG.mouse.y;
         var justPressed:Bool = FlxG.mouse.justPressed;
+        
+        var isTouchingOnMobile:Bool = false;
 
         #if mobile
         if (FlxG.touches.list.length > 0) {
@@ -337,20 +319,22 @@ class BeanCreditsState extends MusicBeatState {
             pointerX = touch.x;
             pointerY = touch.y;
             justPressed = touch.justPressed;
+            isTouchingOnMobile = true;
         }
         #end
 
-        
-        
-        
         if (inProfile) {
-            #if !mobile
-            if (overlapsPoint(backArrow, pointerX, pointerY)) {
+            
+            var isHoveringBack = overlapsPoint(backArrow, pointerX, pointerY);
+            #if mobile
+            isHoveringBack = isHoveringBack && isTouchingOnMobile;
+            #end
+
+            if (isHoveringBack) {
                 backHoverSquare.alpha = 1;
             } else {
                 backHoverSquare.alpha = 0;
             }
-            #end
 
             if (justPressed && overlapsPoint(socialLeftArrow, pointerX, pointerY)) {
                 socialLeftArrow.animation.play('press', true);
@@ -371,18 +355,17 @@ class BeanCreditsState extends MusicBeatState {
             return; 
         }
 
-        
-        
-        
-        #if !mobile
-        if (overlapsPoint(xButton, pointerX, pointerY)) {
+        var isHoveringX = overlapsPoint(xButton, pointerX, pointerY);
+        #if mobile
+        isHoveringX = isHoveringX && isTouchingOnMobile;
+        #end
+
+        if (isHoveringX) {
             xHoverSquare.alpha = 1;
         } else {
             xHoverSquare.alpha = 0;
         }
-        #end
 
-        
         if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE || (justPressed && overlapsPoint(xButton, pointerX, pointerY))) {
             isExiting = true;
             FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -421,6 +404,11 @@ class BeanCreditsState extends MusicBeatState {
             var txt = textGroup[i];
 
             if (overlapsPoint(hb, pointerX, pointerY)) {
+                
+                #if mobile
+                if (!isTouchingOnMobile) continue; 
+                #end
+
                 isHoveringAny = true;
                 selectBar.alpha = 1;
                 
@@ -480,17 +468,13 @@ class BeanCreditsState extends MusicBeatState {
             txt.visible = !visible;
         }
 
-        if (visible) {
-            selectBar.alpha = 0;
-        }
-
-        #if mobile
-        backHoverSquare.visible = visible;
-        #else
         if (!visible) backHoverSquare.alpha = 0;
         backHoverSquare.visible = visible;
         
         if (visible) xHoverSquare.alpha = 0;
-        #end
+        
+        if (visible) {
+            selectBar.alpha = 0;
+        }
     }
 }

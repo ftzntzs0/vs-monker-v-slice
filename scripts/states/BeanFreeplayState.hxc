@@ -26,13 +26,10 @@ import funkin.play.PlayState;
 import funkin.play.PlayStatePlaylist;
 import funkin.modding.module.ModuleHandler;
 
+import funkin.util.HapticUtil;
 import funkin.util.TouchUtil;
 import funkin.util.SwipeUtil;
 import funkin.mobile.input.ControlsHandler;
-#if mobile
-import funkin.mobile.util.HapticUtil;
-import funkin.mobile.util.Constants;
-#end
 
 class BeanFreeplayState extends MusicBeatState
 {
@@ -936,7 +933,7 @@ class BeanFreeplayState extends MusicBeatState
 
         
         #if mobile
-        HapticUtil.increasingVibrate(Constants.MIN_VIBRATION_AMPLITUDE, Constants.MAX_VIBRATION_AMPLITUDE, 0.6);
+        HapticUtil.vibrate(0.1, 0.5, 0.5);
         #end
 
         FlxTween.num(1.0, animMaxZoomScale, animZoomInTime, {
@@ -965,7 +962,7 @@ class BeanFreeplayState extends MusicBeatState
                                 
                                 
                                 #if mobile
-                                HapticUtil.vibrate(Constants.DEFAULT_VIBRATION_PERIOD, Constants.DEFAULT_VIBRATION_DURATION, Constants.MAX_VIBRATION_AMPLITUDE);
+                                HapticUtil.vibrate(0.1, 0.5, 0.5);
                                 #end
 
                                 capsuleShakeIntensity = animShakeForce; 
@@ -1009,7 +1006,7 @@ class BeanFreeplayState extends MusicBeatState
         
         #if mobile
         new FlxTimer().start(0.5, function(tmr:FlxTimer) {
-            HapticUtil.vibrate(Constants.DEFAULT_VIBRATION_PERIOD, Constants.DEFAULT_VIBRATION_DURATION * 5, (Constants.MAX_VIBRATION_AMPLITUDE / 3) * 2.5);
+            HapticUtil.vibrate(0.1, 0.5, 0.5);
         });
         #end
         
