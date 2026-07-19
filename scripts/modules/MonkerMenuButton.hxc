@@ -20,19 +20,23 @@ class MonkerMenuButton extends Module
     var beanButton:FunkinSprite;
     var beanHitbox:FunkinSprite;
     
-    
     var beanLerpSize:Float = 1.0;
     var selected:Bool = false;
 
     function new()
     {
-        
         super('MonkerMenuButton', 1000, {state: MainMenuState});
     }
     
     public function onStateChangeEnd(event)
     {
         super.onStateChangeEnd(event);
+        
+        
+        
+        
+        var currentState = ReflectUtil.getClassNameOf(FlxG.state);
+        if (currentState != 'funkin.ui.mainmenu.MainMenuState') return;
         
         
         var menuHandler = ModuleHandler.getModule('BeanMenuHandler');
@@ -47,24 +51,22 @@ class MonkerMenuButton extends Module
                     persist: true
                 });
             }
+            
             menuHandler.currentMenu = 'base';
         }
 
 		WindowUtil.setWindowTitle("Friday Night Funkin'");
         selected = false;
 
-        
         beanButton = FunkinSprite.create(0, 0, 'UI/go');
         beanButton.scale.set(0.1, 0.1); 
         beanButton.updateHitbox();
-        
         
         var margin:Float = 20; 
         beanButton.setPosition(margin, FlxG.height - beanButton.height - margin);
         beanButton.scrollFactor.set();
         FlxG.state.add(beanButton);
 
-        
         beanHitbox = new FunkinSprite(beanButton.x, beanButton.y).makeSolidColor(beanButton.width, beanButton.height, 0xFF000000);
         beanHitbox.alpha = 0;
         beanHitbox.scrollFactor.set();
@@ -80,7 +82,6 @@ class MonkerMenuButton extends Module
         super.onUpdate(event);
         if (beanButton == null || beanHitbox == null) return;
 
-        
         beanButton.scale.x = FlxMath.lerp(beanButton.scale.x, beanLerpSize, event.elapsed * 12);
         beanButton.scale.y = FlxMath.lerp(beanButton.scale.y, beanLerpSize, event.elapsed * 12);
 
@@ -117,7 +118,6 @@ class MonkerMenuButton extends Module
         
         var menuHandler = ModuleHandler.getModule('BeanMenuHandler');
         if (menuHandler != null) {
-            
             menuHandler.currentMenu = 'monker';
         }
         

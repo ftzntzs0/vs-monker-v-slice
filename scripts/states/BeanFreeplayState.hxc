@@ -23,15 +23,22 @@ import funkin.ui.transition.LoadingState;
 import funkin.Paths;
 import funkin.play.PlayState;
 import funkin.play.PlayStatePlaylist;
+import funkin.modding.module.ModuleHandler;
+
+
+import funkin.util.TouchUtil;
+import funkin.util.SwipeUtil;
+import funkin.mobile.input.ControlsHandler;
 
 class BeanFreeplayState extends MusicBeatState
 {
+    var willAnimateStar:Bool = false;
+
     final songList:Array<String> = [
         "bean-tutorial", "warm-up", "yarisugi", "embrace", 
         "aggressiv-nyat", "lavender-essence", "scholar", "tater", "nutrient"
     ];
 
-    
     
     var listBaseX:Float = 100;           
     var listBaseYOffset:Float = -125;   
@@ -39,48 +46,106 @@ class BeanFreeplayState extends MusicBeatState
     var listSelectedOffsetX:Float = 10; 
     var listCurveOffsetX:Float = -40;   
 
-    
     var cursorOffsetX:Float = -68;
     var cursorOffsetY:Float = -68;
     
     var textOffsetX:Float = 120;
     var textOffsetY:Float = 60;
     
-    var iconOffsetX:Float = -165; 
-    var iconOffsetY:Float = 30;
-    
     var numTextOffsetX:Float = 30;
     var numTextOffsetY:Float = 20;
-    
 
+    var starOffsetX:Float =  60; 
+    var starOffsetY:Float = -10;
+
+    var opponentNames:Array<String> = [];
+
+    
+    var animZoomShiftX:Float = 400.0; 
+    var animZoomShiftY:Float = 290.0;
+
+    var starAnimOffsetX:Float = -40.0; 
+    var starAnimOffsetY:Float = -115.0; 
+
+    
+    var animMaxZoomScale:Float = 1.3;    
+    var animZoomInTime:Float = 0.5;      
+    var animWaitBeforeStarTime:Float = 0.3;
+    var animStarWaitTime:Float = 0.8;    
+    var animZoomOutTime:Float = 0.5;    
+    var animShakeForce:Float = 15.0;     
+
+    
     var curSelected:Int = 0;
     var acceptInputs:Bool = false;
+    var songConfirmed:Bool = false; 
 
-    
+    var isAnimatingStar:Bool = false;
+    var selectedCapsuleScale:Float = 1.0; 
+    var capsuleShakeIntensity:Float = 0;
+
+    var listaCapsulas:Array<FlxTypedGroup> = [];
+
+    #if mobile
+    var touchStartY:Float = 0;
+    var isValidClick:Bool = false;
+    #end
+
+    var intendedScore:Int = 0;      
+    var displayScore:Float = 0;     
+    var scoreTween:FlxTween;
+
     var bgDots:FlxBackdrop;
     var gradient:FunkinSprite;
     var scanLines:FunkinSprite;
     var overlay:FunkinSprite;
     
-    
     var windowsGrp:FlxTypedGroup<FunkinSprite>;
     var windowPaths:Array<String> = ['ui/freeplaymenu/window1', 'ui/freeplaymenu/window2', 'ui/freeplaymenu/window3'];
-    
-    
     var windowXPositions:Array<Float> = [50, 800, 800]; 
 
-    
     var highScoreSpr:FunkinSprite;
     var highScoreCapsule:FunkinSprite;
     var scoreTxt:FlxText;
     var percentTxt:FlxText;
 
-    
     var grpSongs:FlxTypedGroup<FlxTypedGroup>; 
 
+
+    var codesBtn:FunkinSprite;
+    var isCodesOpen:Bool = false;
+    var codesGroup:FlxTypedGroup<Dynamic>;
+    var codesWindow:FunkinSprite;
+    var codesXBtn:FunkinSprite;
+    
+    var codeInput:FlxText; 
+    var typedCode:String = ""; 
+
+    var darkOverlay:FunkinSprite; 
+    var enterBtnTxt:FlxText;      
+    var resetBtnTxt:FlxText;      
     override function create()
     {
         super.create();
+
+        var savedSel = PlayStatePlaylist.campaignId;
+        if (savedSel != null && savedSel != "") {
+            var parsed = Std.parseInt(savedSel);
+            if (parsed != null) curSelected = parsed;
+            else curSelected = 0;
+        } else {
+            curSelected = 0;
+        }
+
+        willAnimateStar = false;
+        var menuHandler = ModuleHandler.getModule('BeanMenuHandler');
+        if (menuHandler != null && menuHandler.returnedFromSong) {
+            var currentSongScore = Save.instance.getSongScore(songList[curSelected], "hard", "default");
+            var newScore = currentSongScore != null ? currentSongScore.score : 0;
+            if (menuHandler.scoreBeforePlay == 0 && newScore > 0) {
+                willAnimateStar = true;
+            }
+        }
 
         FunkinSound.playMusic('monkerMenu', {
             overrideExisting: false,
@@ -105,9 +170,19 @@ class BeanFreeplayState extends MusicBeatState
 
         windowsGrp = new FlxTypedGroup();
         add(windowsGrp);
+        
+        #if mobile
+        windowXPositions[1] += 100; 
+        windowXPositions[2] += 100;
+        #end
+        
         spawnInitialWindows();
 
         overlay = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/overlay'));
+        #if mobile
+        overlay.scale.x = 1.3; 
+        overlay.updateHitbox(); 
+        #end
         overlay.y = FlxG.height - overlay.height;
         add(overlay);
 
@@ -116,6 +191,14 @@ class BeanFreeplayState extends MusicBeatState
         buildSongList();
 
         buildScoreUI();
+        buildCodesUI(); 
+
+        #if !mobile
+        FlxG.mouse.visible = true;
+        FlxG.mouse.load(Paths.image('cursor')); 
+        #else
+        FlxG.mouse.visible = false;
+        #end
 
         changeSelection(0, false);
 
@@ -123,16 +206,261 @@ class BeanFreeplayState extends MusicBeatState
         openSubState(substate);
         substate.transOut();
 
-        new FlxTimer().start(0.5, _->{ acceptInputs = true; });
+        new FlxTimer().start(0.4, _->{ 
+            if (willAnimateStar) triggerStarAnimation();
+            else acceptInputs = true; 
+            
+            var handlerReset = ModuleHandler.getModule('BeanMenuHandler');
+            if (handlerReset != null) {
+                handlerReset.returnedFromSong = false;
+                handlerReset.scoreBeforePlay = -1;
+            }
+        });
     }
 
     override function update(elapsed:Float)
     {
         super.update(elapsed);
 
+        if (capsuleShakeIntensity > 0) {
+            capsuleShakeIntensity -= elapsed * 60;
+            if (capsuleShakeIntensity < 0) capsuleShakeIntensity = 0;
+        }
+
         handleWindowMovement(elapsed);
         handleAnimations(elapsed); 
-        handleInputs();
+        
+        
+        if (isCodesOpen) {
+            handleCodesWindow();
+        } else {
+            handleInputs();
+            handleCodesButton();
+        }
+    }
+
+    function buildCodesUI()
+    {
+        codesBtn = new FunkinSprite(0, 0);
+        codesBtn.frames = Paths.getSparrowAtlas('ui/freeplaymenu/codes');
+        codesBtn.animation.addByPrefix('idle', 'idle', 24, true);
+        codesBtn.animation.addByPrefix('hover', 'hover', 24, true);
+        codesBtn.animation.play('idle');
+        codesBtn.x = FlxG.width - codesBtn.width - 20;
+        codesBtn.y = FlxG.height - codesBtn.height - 20;
+        #if mobile
+        codesBtn.y += 10;
+        #end
+        add(codesBtn);
+
+        codesGroup = new FlxTypedGroup();
+        
+        
+        darkOverlay = new FunkinSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
+        darkOverlay.alpha = 0.6; 
+        codesGroup.add(darkOverlay);
+
+        codesWindow = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/codes/window'));
+        codesWindow.screenCenter();
+        codesGroup.add(codesWindow);
+
+        
+        var inputWidth = 600;
+        codeInput = new FlxText(
+            codesWindow.x + (codesWindow.width / 2) - (inputWidth / 2),
+            codesWindow.y + 203, 
+            inputWidth, "Code", 40
+        );
+        
+        codeInput.setFormat(Paths.font('HKGrotesk-SemiBold.otf'), 44, 0xFF8E3499, 'center', FlxTextBorderStyle.NONE);
+        codesGroup.add(codeInput);
+
+        
+        enterBtnTxt = new FlxText(codesWindow.x + 310, codeInput.y + 122, 150, "Enter");
+        enterBtnTxt.setFormat(Paths.font('HKGrotesk-Medium.otf'), 20, 0xFF8E3499, 'center', FlxTextBorderStyle.NONE);
+        codesGroup.add(enterBtnTxt);
+
+        
+        resetBtnTxt = new FlxText(codesWindow.x + 500, codeInput.y + 122, 200, "Reset Code");
+        resetBtnTxt.setFormat(Paths.font('HKGrotesk-Medium.otf'), 20, 0xFF8E3499, 'center', FlxTextBorderStyle.NONE);
+        codesGroup.add(resetBtnTxt);
+
+        
+        codesXBtn = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/codes/x'));
+        codesXBtn.x = codesWindow.x + codesWindow.width - codesXBtn.width - 20; 
+        codesXBtn.y = codesWindow.y + 20;
+        codesGroup.add(codesXBtn);
+
+        codesGroup.visible = false;
+        add(codesGroup);
+    }
+
+    function handleCodesButton()
+    {
+        if (!acceptInputs || songConfirmed) return;
+
+        var isHovering = false;
+
+        #if !mobile
+        if (FlxG.mouse.overlaps(codesBtn)) {
+            isHovering = true;
+            if (FlxG.mouse.justPressed) {
+                openCodesWindow();
+            }
+        }
+        #else
+        var touch = FlxG.touches.getFirst();
+        if (touch != null && codesBtn.overlapsPoint(touch.getWorldPosition())) {
+            isHovering = true;
+            if (touch.justPressed) {
+                openCodesWindow();
+            }
+        }
+        #end
+
+        codesBtn.animation.play(isHovering ? 'hover' : 'idle');
+    }
+
+   function openCodesWindow()
+    {
+        FunkinSound.playOnce(Paths.sound('windowOpen'));
+        isCodesOpen = true;
+        acceptInputs = false;
+        codesGroup.visible = true;
+        codesBtn.animation.play('idle');
+        
+        #if !mobile
+        FlxG.mouse.visible = true;
+        #else
+        
+        FlxG.stage.window.textInputEnabled = true;
+        #end
+    }
+
+    function closeCodesWindow()
+    {
+        FunkinSound.playOnce(Paths.sound('windowClose'));
+        isCodesOpen = false;
+        acceptInputs = true;
+        codesGroup.visible = false;
+
+        #if mobile
+        FlxG.mouse.visible = false; 
+        
+        FlxG.stage.window.textInputEnabled = false;
+        #end
+    }
+
+    function handleCodesWindow()
+    {
+        
+        var hoverX:Bool = false;
+        var hoverEnter:Bool = false;
+        var hoverReset:Bool = false;
+        var justClicked:Bool = false;
+
+        #if !mobile
+        hoverX = FlxG.mouse.overlaps(codesXBtn);
+        hoverEnter = FlxG.mouse.overlaps(enterBtnTxt);
+        hoverReset = FlxG.mouse.overlaps(resetBtnTxt);
+        justClicked = FlxG.mouse.justPressed;
+        #else
+        var touch = FlxG.touches.getFirst();
+        if (touch != null) {
+            var touchPos = touch.getWorldPosition();
+            hoverX = codesXBtn.overlapsPoint(touchPos);
+            hoverEnter = enterBtnTxt.overlapsPoint(touchPos);
+            hoverReset = resetBtnTxt.overlapsPoint(touchPos);
+            justClicked = touch.justPressed;
+        }
+        #end
+
+        
+        codesXBtn.color = hoverX ? 0xFF888888 : 0xFFFFFFFF;
+        enterBtnTxt.color = hoverEnter ? 0xFFFF0C88 : 0xFF8E3499;
+        resetBtnTxt.color = hoverReset ? 0xFFFF0C88 : 0xFF8E3499;
+
+        
+        if (justClicked) {
+            if (hoverX) closeCodesWindow();
+            
+            if (hoverReset) {
+                typedCode = "";
+                codeInput.text = "Code";
+            }
+            
+            if (hoverEnter && typedCode.length > 0) {
+                trace("O código digitado (pelo botao) foi: " + typedCode);
+                
+                typedCode = "";
+                codeInput.text = "Code";
+            }
+        }
+
+        
+        if (FlxG.keys.justPressed.ESCAPE) {
+            closeCodesWindow();
+        }
+
+        
+        var oldLength = typedCode.length;
+        var maxChars = 15;
+
+        if (typedCode.length < maxChars) {
+            if (FlxG.keys.justPressed.A) typedCode += "a";
+            if (FlxG.keys.justPressed.B) typedCode += "b";
+            if (FlxG.keys.justPressed.C) typedCode += "c";
+            if (FlxG.keys.justPressed.D) typedCode += "d";
+            if (FlxG.keys.justPressed.E) typedCode += "e";
+            if (FlxG.keys.justPressed.F) typedCode += "f";
+            if (FlxG.keys.justPressed.G) typedCode += "g";
+            if (FlxG.keys.justPressed.H) typedCode += "h";
+            if (FlxG.keys.justPressed.I) typedCode += "i";
+            if (FlxG.keys.justPressed.J) typedCode += "j";
+            if (FlxG.keys.justPressed.K) typedCode += "k";
+            if (FlxG.keys.justPressed.L) typedCode += "l";
+            if (FlxG.keys.justPressed.M) typedCode += "m";
+            if (FlxG.keys.justPressed.N) typedCode += "n";
+            if (FlxG.keys.justPressed.O) typedCode += "o";
+            if (FlxG.keys.justPressed.P) typedCode += "p";
+            if (FlxG.keys.justPressed.Q) typedCode += "q";
+            if (FlxG.keys.justPressed.R) typedCode += "r";
+            if (FlxG.keys.justPressed.S) typedCode += "s";
+            if (FlxG.keys.justPressed.T) typedCode += "t";
+            if (FlxG.keys.justPressed.U) typedCode += "u";
+            if (FlxG.keys.justPressed.V) typedCode += "v";
+            if (FlxG.keys.justPressed.W) typedCode += "w";
+            if (FlxG.keys.justPressed.X) typedCode += "x";
+            if (FlxG.keys.justPressed.Y) typedCode += "y";
+            if (FlxG.keys.justPressed.Z) typedCode += "z";
+            if (FlxG.keys.justPressed.ZERO || FlxG.keys.justPressed.NUMPADZERO) typedCode += "0";
+            if (FlxG.keys.justPressed.ONE || FlxG.keys.justPressed.NUMPADONE) typedCode += "1";
+            if (FlxG.keys.justPressed.TWO || FlxG.keys.justPressed.NUMPADTWO) typedCode += "2";
+            if (FlxG.keys.justPressed.THREE || FlxG.keys.justPressed.NUMPADTHREE) typedCode += "3";
+            if (FlxG.keys.justPressed.FOUR || FlxG.keys.justPressed.NUMPADFOUR) typedCode += "4";
+            if (FlxG.keys.justPressed.FIVE || FlxG.keys.justPressed.NUMPADFIVE) typedCode += "5";
+            if (FlxG.keys.justPressed.SIX || FlxG.keys.justPressed.NUMPADSIX) typedCode += "6";
+            if (FlxG.keys.justPressed.SEVEN || FlxG.keys.justPressed.NUMPADSEVEN) typedCode += "7";
+            if (FlxG.keys.justPressed.EIGHT || FlxG.keys.justPressed.NUMPADEIGHT) typedCode += "8";
+            if (FlxG.keys.justPressed.NINE || FlxG.keys.justPressed.NUMPADNINE) typedCode += "9";
+            if (FlxG.keys.justPressed.SPACE) typedCode += " ";
+        }
+
+        if (FlxG.keys.justPressed.BACKSPACE && typedCode.length > 0) {
+            typedCode = typedCode.substring(0, typedCode.length - 1);
+        }
+
+        if (oldLength != typedCode.length) {
+            if (typedCode.length == 0) codeInput.text = "Code";
+            else codeInput.text = typedCode;
+        }
+        
+        if (FlxG.keys.justPressed.ENTER && typedCode.length > 0) {
+            trace("O codigo digitado (pelo teclado) foi: " + typedCode);
+            
+            typedCode = "";
+            codeInput.text = "Code";
+        }
     }
 
     function buildScoreUI()
@@ -159,6 +487,9 @@ class BeanFreeplayState extends MusicBeatState
 
     function buildSongList()
     {
+        listaCapsulas = []; 
+        opponentNames = [];
+
         for (i in 0...songList.length)
         {
             var itemGroup = new FlxTypedGroup();
@@ -170,9 +501,7 @@ class BeanFreeplayState extends MusicBeatState
             if (SongRegistry.instance != null) {
                 var record = SongRegistry.instance.fetchEntry(songId);
                 if (record != null) {
-                    if (record.songName != null) {
-                        displayName = record.songName;
-                    }
+                    if (record.songName != null) displayName = record.songName;
                     
                     try {
                         var meta = record.getRawMetadata();
@@ -193,43 +522,60 @@ class BeanFreeplayState extends MusicBeatState
                 displayName = words.join(' ');
             }
 
+            opponentNames.push(opponentName);
+
             var distance = i - curSelected;
-            
-            
             var startX:Float = listBaseX + (Math.abs(distance) * listCurveOffsetX);
             if (distance == 0) startX += listSelectedOffsetX; 
-            
             var startY:Float = (FlxG.height / 2) + listBaseYOffset + (distance * listSpacingY);
 
             var cursor = new FunkinSprite(startX + cursorOffsetX, startY + cursorOffsetY).loadGraphic(Paths.image('ui/freeplaymenu/capsule/cursor'));
             cursor.visible = false; 
-            itemGroup.add(cursor);
+            itemGroup.add(cursor); 
 
             var capsule = new FunkinSprite(startX, startY);
             capsule.frames = Paths.getSparrowAtlas('ui/freeplaymenu/capsule/capsule');
             capsule.animation.addByPrefix('idle', 'idle', 24, true);
             capsule.animation.play('idle');
-            itemGroup.add(capsule);
+            itemGroup.add(capsule); 
 
             var text = new FlxText(capsule.x + textOffsetX, capsule.y + textOffsetY, capsule.width - textOffsetX - 20, displayName);
             text.setFormat(Paths.font('RifficFree-Bold.ttf'), 44, 0xFF702B71, 'left', FlxTextBorderStyle.NONE);
-            itemGroup.add(text);
+            itemGroup.add(text); 
 
-            var icon = new FunkinSprite(capsule.x + capsule.width + iconOffsetX, capsule.y + iconOffsetY);
+            var icon = new FunkinSprite(capsule.x + capsule.width, capsule.y);
             icon.frames = Paths.getSparrowAtlas('ui/freeplaymenu/icons/' + opponentName);
             icon.animation.addByPrefix('idle', 'idle', 24, true);
             icon.animation.addByPrefix('selected', 'selected', 24, true);
             icon.animation.play('idle');
             icon.scale.set(1.0, 1.0);
             icon.updateHitbox();
-            itemGroup.add(icon);
+            itemGroup.add(icon); 
 
             var numText = new FlxText(capsule.x + numTextOffsetX, capsule.y + numTextOffsetY, 50, Std.string(i + 1));
             numText.setFormat(Paths.font('RifficFree-Bold.ttf'), 60, 0xFF702B71, 'center', FlxTextBorderStyle.NONE);
             numText.angle = 15; 
-            itemGroup.add(numText);
+            itemGroup.add(numText); 
+
+            var star = new FunkinSprite(capsule.x + starOffsetX, capsule.y + starOffsetY);
+            star.frames = Paths.getSparrowAtlas('ui/freeplaymenu/star_completed');
+            star.animation.addByPrefix('star idle', 'star idle', 24, true);
+            star.animation.addByPrefix('star transition', 'star transition', 24, false);
+            star.animation.play('star idle');
+            
+            var songScore = Save.instance.getSongScore(songId, "hard", "default");
+            var hasScore = (songScore != null && songScore.score > 0);
+            
+            if (hasScore) {
+                if (willAnimateStar && i == curSelected) star.visible = false; 
+                else star.visible = true; 
+            } else {
+                star.visible = false; 
+            }
+            itemGroup.add(star); 
 
             grpSongs.add(itemGroup);
+            listaCapsulas.push(itemGroup);
         }
     }
 
@@ -237,9 +583,7 @@ class BeanFreeplayState extends MusicBeatState
     {
         for (i in 0...3) {
             var winPath = windowPaths[i]; 
-            
             var win = new FunkinSprite(windowXPositions[i], FlxG.random.float(0, FlxG.height)).loadGraphic(Paths.image(winPath));
-            
             win.ID = i; 
             win.velocity.y = FlxG.random.float(-150, -150);
             win.alpha = 1.0;
@@ -260,92 +604,324 @@ class BeanFreeplayState extends MusicBeatState
 
     function handleAnimations(elapsed:Float)
     {
-        var i:Int = 0;
-        grpSongs.forEachAlive(function(itemGroup:FlxTypedGroup) {
+        for (i in 0...listaCapsulas.length) {
+            
+            var itemGroup = listaCapsulas[i];
+
             var cursor:FunkinSprite = itemGroup.members[0];
             var capsule:FunkinSprite = itemGroup.members[1];
             var text:FlxText = itemGroup.members[2];
             var icon:FunkinSprite = itemGroup.members[3]; 
             var numText:FlxText = itemGroup.members[4];
+            var star:FunkinSprite = itemGroup.members[5];
 
             var distance = i - curSelected;
-            
-            
             var targetX:Float = listBaseX + (Math.abs(distance) * listCurveOffsetX); 
             if (distance == 0) targetX += listSelectedOffsetX; 
-            
             var targetY:Float = (FlxG.height / 2) + listBaseYOffset + (distance * listSpacingY);
 
-            
             capsule.x = FlxMath.lerp(capsule.x, targetX, 10 * elapsed);
             capsule.y = FlxMath.lerp(capsule.y, targetY, 10 * elapsed);
 
+            var scaleFactor:Float = (i == curSelected) ? selectedCapsuleScale : 1.0;
             
-            cursor.x = capsule.x + cursorOffsetX;
-            cursor.y = capsule.y + cursorOffsetY;
+            capsule.scale.set(scaleFactor, scaleFactor);
+            cursor.scale.set(scaleFactor, scaleFactor);
+            text.scale.set(scaleFactor, scaleFactor);
+            icon.scale.set(scaleFactor, scaleFactor);
+            numText.scale.set(scaleFactor, scaleFactor);
+            star.scale.set(scaleFactor, scaleFactor);
+
+            var xShift = (scaleFactor - 1.0) * animZoomShiftX;
+            var yShift = (scaleFactor - 1.0) * animZoomShiftY; 
+
+            var sX:Float = 0;
+            var sY:Float = 0;
             
-            text.x = capsule.x + textOffsetX;
-            text.y = capsule.y + textOffsetY;
+            if (capsuleShakeIntensity > 0) {
+                sX = FlxG.random.float(-capsuleShakeIntensity, capsuleShakeIntensity);
+                sY = FlxG.random.float(-capsuleShakeIntensity, capsuleShakeIntensity);
+            }
 
-            icon.x = capsule.x + capsule.width + iconOffsetX;
-            icon.y = capsule.y + iconOffsetY;
+            if (i == curSelected) capsule.offset.set(-xShift + sX, -yShift + sY);
+            else capsule.offset.set(sX, sY);
 
-            numText.x = capsule.x + numTextOffsetX;
-            numText.y = capsule.y + numTextOffsetY;
+            cursor.offset.set(sX, sY);
+            text.offset.set(sX, sY);
+            icon.offset.set(sX, sY);
+            numText.offset.set(sX, sY);
+            star.offset.set(sX, sY);
 
-            i++;
-        });
+            var capCenterX = capsule.x + capsule.width / 2;
+            var capCenterY = capsule.y + capsule.height / 2;
+
+            var calcX = function(itemW:Float, offX:Float) {
+                var itemOrigCenterX = capsule.x + offX + itemW / 2;
+                return capCenterX + ((itemOrigCenterX - capCenterX) * scaleFactor) - itemW / 2;
+            };
+            var calcY = function(itemH:Float, offY:Float) {
+                var itemOrigCenterY = capsule.y + offY + itemH / 2;
+                return capCenterY + ((itemOrigCenterY - capCenterY) * scaleFactor) - itemH / 2;
+            };
+
+            cursor.x = calcX(cursor.width, cursorOffsetX) + xShift;
+            cursor.y = calcY(cursor.height, cursorOffsetY) + yShift;
+            
+            text.x = calcX(text.width, textOffsetX) + xShift;
+            text.y = calcY(text.height, textOffsetY) + yShift;
+
+            var oppName = opponentNames[i];
+            var isSel = (i == curSelected && songConfirmed); 
+            var currentOffset = getIconOffset(oppName, isSel);
+
+            icon.x = calcX(icon.width, capsule.width + currentOffset[0]) + xShift;
+            icon.y = calcY(icon.height, currentOffset[1]) + yShift;
+
+            numText.x = calcX(numText.width, numTextOffsetX) + xShift;
+            numText.y = calcY(numText.height, numTextOffsetY) + yShift;
+
+            var sOffsetX = starOffsetX;
+            var sOffsetY = starOffsetY;
+            
+            if (star.animation.curAnim != null && star.animation.curAnim.name == 'star transition') {
+                sOffsetX += starAnimOffsetX;
+                sOffsetY += starAnimOffsetY;
+            }
+
+            star.x = calcX(star.width, sOffsetX) + xShift;
+            star.y = calcY(star.height, sOffsetY) + yShift;
+        }
+
+        if (listaCapsulas.length > 0 && curSelected >= 0 && curSelected < listaCapsulas.length) {
+            var selectedGroup = listaCapsulas[curSelected];
+            if (selectedGroup != null) {
+                grpSongs.remove(selectedGroup, true);
+                grpSongs.add(selectedGroup);
+            }
+        }
     }
 
     function handleInputs()
     {
-        if (!acceptInputs) return;
+        if (!acceptInputs || isAnimatingStar) return;
+
+        if (FlxG.keys.justPressed.R) {
+            triggerStarAnimation();
+        }
 
         if (controls.UI_UP_P) changeSelection(-1);
         if (controls.UI_DOWN_P) changeSelection(1);
         
-        if (controls.ACCEPT_P) {
-            acceptInputs = false;
-            FunkinSound.playOnce(Paths.sound('confirmMenu-bean'));
-            
-            var j:Int = 0;
-            grpSongs.forEachAlive(function(itemGroup:FlxTypedGroup) {
-                if (j == curSelected) {
-                    var icon:FunkinSprite = itemGroup.members[3];
-                    icon.animation.play('selected');
+        if (controls.ACCEPT_P) selectCurrentSong();
+
+        if (FlxG.mouse.wheel != 0) {
+            var change = FlxG.mouse.wheel > 0 ? -1 : 1;
+            changeSelection(change);
+        }
+
+        #if !mobile
+        if (FlxG.mouse.justPressed) {
+            var clickedIndex = -1;
+            for (j in 0...listaCapsulas.length) {
+                var itemGroup = listaCapsulas[j];
+                var capsule:FunkinSprite = itemGroup.members[1]; 
+                if (FlxG.mouse.overlaps(capsule)) clickedIndex = j;
+            }
+
+            if (clickedIndex != -1) {
+                if (clickedIndex == curSelected) selectCurrentSong();
+                else {
+                    curSelected = clickedIndex;
+                    changeSelection(0);
                 }
-                j++;
-            });
-
-            var songId = songList[curSelected];
-            var targetSong = SongRegistry.instance.fetchEntry(songId);
-            
-            if (targetSong != null) {
-                PlayStatePlaylist.playlist = [songId];
-                PlayStatePlaylist.isStoryMode = false;
-
-                new FlxTimer().start(1.0, function(tmr:FlxTimer) {
-                    FlxG.camera.fade(0xFF000000, 0.2, false, function() {
-                        LoadingState.loadPlayState({
-                            targetSong: targetSong,
-                            targetDifficulty: "hard", 
-                            targetVariation: "default",
-                            targetInstrumental: "",
-                            practiceMode: false,
-                            minimalMode: false
-                        }, true);
-                    });
-                });
             }
         }
+        #end
+
+        #if mobile
+        var swipeFired:Bool = false;
+        
+        if (SwipeUtil.swipeUp) {
+            swipeFired = true; 
+            if (curSelected > 0) changeSelection(-1);
+        } 
+        else if (SwipeUtil.swipeDown) {
+            swipeFired = true;
+            if (curSelected < songList.length - 1) changeSelection(1);
+        }
+        else if (SwipeUtil.swipeLeft || SwipeUtil.swipeRight) {
+            swipeFired = true;
+        }
+
+        var touch = FlxG.touches.getFirst();
+        if (touch != null) {
+            
+            if (touch.justPressed) {
+                touchStartY = touch.screenY;
+                isValidClick = true; 
+            }
+            
+            if (Math.abs(touch.screenY - touchStartY) > 15) isValidClick = false;
+            if (swipeFired) isValidClick = false;
+            
+            if (touch.justReleased && isValidClick) {
+                
+                var touchedIndex = -1;
+                var touchPos = touch.getWorldPosition();
+                
+                for (j in 0...listaCapsulas.length) {
+                    var itemGroup = listaCapsulas[j];
+                    var capsule:FunkinSprite = itemGroup.members[1];
+                    if (capsule.overlapsPoint(touchPos)) touchedIndex = j;
+                }
+                
+                touchPos.put(); 
+
+                if (touchedIndex != -1) {
+                    if (touchedIndex == curSelected) selectCurrentSong();
+                    else {
+                        var difference = touchedIndex - curSelected;
+                        changeSelection(difference);
+                    }
+                }
+            }
+        }
+        #end
 
         if (controls.BACK_P || FlxG.keys.justPressed.ESCAPE) {
             acceptInputs = false;
+            FlxG.mouse.visible = false; 
             FunkinSound.playOnce(Paths.sound('cancelMenu-bean'));
+
+            PlayStatePlaylist.campaignId = ""; 
+            var handlerReset = ModuleHandler.getModule('BeanMenuHandler');
+            if (handlerReset != null) {
+                handlerReset.returnedFromSong = false;
+                handlerReset.scoreBeforePlay = -1;
+            }
 
             var substate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
             openSubState(substate);
             substate.transIn(ScriptedMusicBeatState.init('bean.states.BeanMainMenuState'));
+        }
+    }
+
+    function triggerStarAnimation()
+    {
+        isAnimatingStar = true;
+        acceptInputs = false;
+
+        FlxTween.num(1.0, animMaxZoomScale, animZoomInTime, {
+            ease: FlxEase.cubeOut,
+            onComplete: function(twn:FlxTween) {
+                
+                new FlxTimer().start(animWaitBeforeStarTime, function(tmrWait:FlxTimer) {
+                    
+                    for (j in 0...listaCapsulas.length) {
+                        if (j == curSelected) {
+                            var star:FunkinSprite = listaCapsulas[j].members[5];
+                            star.visible = true;
+                            star.animation.play('star transition');
+                        }
+                    }
+
+                    FunkinSound.playOnce(Paths.sound('freeplayStarPlace'));
+
+                    new FlxTimer().start(animStarWaitTime, function(tmr:FlxTimer) {
+                        
+                        FlxTween.num(animMaxZoomScale, 1.0, animZoomOutTime, {
+                            ease: FlxEase.cubeIn,
+                            onComplete: function(twn2:FlxTween) {
+                                
+                                FunkinSound.playOnce(Paths.sound('freeplayCapsulePlace'));
+                                
+                                capsuleShakeIntensity = animShakeForce; 
+                                
+                                for (k in 0...listaCapsulas.length) {
+                                    if (k == curSelected) {
+                                        var star:FunkinSprite = listaCapsulas[k].members[5];
+                                        star.animation.play('star idle');
+                                    }
+                                }
+
+                                new FlxTimer().start(0.2, function(tmr2:FlxTimer) {
+                                    acceptInputs = true;
+                                    isAnimatingStar = false;
+                                });
+                            }
+                        }, function(valSlam:Float) {
+                            selectedCapsuleScale = valSlam;
+                        });
+
+                    });
+                });
+            }
+        }, function(valZoom:Float) {
+            selectedCapsuleScale = valZoom;
+        });
+    }
+
+    function selectCurrentSong()
+    {
+        if (!acceptInputs) return;
+        acceptInputs = false;
+        songConfirmed = true; 
+        
+        #if !mobile
+        FlxG.mouse.visible = false;
+        #end
+        
+        FunkinSound.playOnce(Paths.sound('confirmMenu-bean'));
+        
+        for (j in 0...listaCapsulas.length) {
+            var itemGroup = listaCapsulas[j];
+
+            if (j == curSelected) {
+                var icon:FunkinSprite = itemGroup.members[3];
+                icon.animation.play('selected'); 
+            } else {
+                var capsule:FunkinSprite = itemGroup.members[1];
+                var text:FlxText = itemGroup.members[2];
+                var icon:FunkinSprite = itemGroup.members[3]; 
+                var numText:FlxText = itemGroup.members[4];
+                var star:FunkinSprite = itemGroup.members[5];
+
+                FlxTween.tween(capsule, {alpha: 0}, 0.5, {ease: FlxEase.cubeOut});
+                FlxTween.tween(text, {alpha: 0}, 0.5, {ease: FlxEase.cubeOut});
+                FlxTween.tween(icon, {alpha: 0}, 0.5, {ease: FlxEase.cubeOut});
+                FlxTween.tween(numText, {alpha: 0}, 0.5, {ease: FlxEase.cubeOut});
+                FlxTween.tween(star, {alpha: 0}, 0.5, {ease: FlxEase.cubeOut});
+            }
+        }
+
+        
+        FlxTween.tween(codesBtn, {alpha: 0}, 0.5, {ease: FlxEase.cubeOut});
+
+        var songId = songList[curSelected];
+        var targetSong = SongRegistry.instance.fetchEntry(songId);
+
+        var songScore = Save.instance.getSongScore(songId, "hard", "default");
+        var menuSave = ModuleHandler.getModule('BeanMenuHandler');
+        if (menuSave != null) {
+            menuSave.scoreBeforePlay = songScore != null ? songScore.score : 0;
+        }
+        
+        if (targetSong != null) {
+            PlayStatePlaylist.playlist = [songId];
+            PlayStatePlaylist.isStoryMode = false;
+
+            new FlxTimer().start(1.0, function(tmr:FlxTimer) {
+                FlxG.camera.fade(0xFF000000, 0.2, false, function() {
+                    LoadingState.loadPlayState({
+                        targetSong: targetSong,
+                        targetDifficulty: "hard", 
+                        targetVariation: "default",
+                        targetInstrumental: "",
+                        practiceMode: false,
+                        minimalMode: false
+                    }, true);
+                });
+            });
         }
     }
 
@@ -354,11 +930,15 @@ class BeanFreeplayState extends MusicBeatState
         if (playSound) FunkinSound.playOnce(Paths.sound('scrollMenu-bean'));
 
         curSelected += change;
-        if (curSelected < 0) curSelected = songList.length - 1;
-        if (curSelected >= songList.length) curSelected = 0;
+        
+        while (curSelected < 0) curSelected += songList.length;
+        while (curSelected >= songList.length) curSelected -= songList.length;
 
-        var i:Int = 0;
-        grpSongs.forEach(function(itemGroup:FlxTypedGroup) {
+        PlayStatePlaylist.campaignId = Std.string(curSelected);
+
+        for (i in 0...listaCapsulas.length) {
+            var itemGroup = listaCapsulas[i];
+            
             var cursor:FunkinSprite = itemGroup.members[0];
             var capsule:FunkinSprite = itemGroup.members[1];
             var text:FlxText = itemGroup.members[2];
@@ -367,7 +947,7 @@ class BeanFreeplayState extends MusicBeatState
 
             if (i == curSelected) {
                 cursor.visible = true;
-                icon.animation.play('idle');
+                icon.animation.play('idle'); 
                 text.color = 0xFFB56DA0; 
                 numText.color = 0xFFB56DA0;
                 text.alpha = 1;
@@ -381,8 +961,7 @@ class BeanFreeplayState extends MusicBeatState
                 text.alpha = 1;
                 numText.alpha = 1;
             }
-            i++;
-        });
+        }
 
         updateDisplayedScore();
     }
@@ -392,10 +971,49 @@ class BeanFreeplayState extends MusicBeatState
         var songName = songList[curSelected];
         var songScore = Save.instance.getSongScore(songName, "hard", "default");
         
-        var curScore = songScore != null ? songScore.score : 0;
+        intendedScore = songScore != null ? songScore.score : 0;
         var accuracy = songScore != null ? Scoring.tallyCompletion(songScore.tallies) * 100 : 0.00;
-
-        scoreTxt.text = Std.string(curScore);
         percentTxt.text = "Accuracy: " + FlxMath.roundDecimal(accuracy, 2) + "%";
+
+        if (scoreTween != null) scoreTween.cancel();
+
+        scoreTween = FlxTween.num(displayScore, intendedScore, 0.4, {ease: FlxEase.cubeOut}, function(val:Float) {
+            displayScore = val; 
+            scoreTxt.text = Std.string(Math.round(val)); 
+        });
+    }
+
+    function getIconOffset(oppName:String, isSelected:Bool):Array<Float>
+    {
+        switch(oppName) 
+        {
+            case 'monker':
+                if (isSelected) return [-190.0, 5.0]; 
+                return [-155.0, 30.0];                 
+                
+            case 'syor':
+                if (isSelected) return [-175.0, 15.0]; 
+                return [-165.0, 30.0]; 
+
+            case 'natki':
+                if (isSelected) return [-195.0, -5.0]; 
+                return [-170.0, 20.0]; 
+            
+            case 'yur':
+                if (isSelected) return [-170.0, 15.0]; 
+                return [-155.0, 15.0]; 
+            
+            case 'emcee':
+                if (isSelected) return [-155.0, 15.0]; 
+                return [-155.0, 15.0];  
+
+            case 'tato':
+                if (isSelected) return [-150.0, -10.0]; 
+                return [-135.0, 30.0];  
+
+            default: 
+                if (isSelected) return [-190.0, -20.0];
+                return [-165.0, 30.0];
+        }
     }
 }
