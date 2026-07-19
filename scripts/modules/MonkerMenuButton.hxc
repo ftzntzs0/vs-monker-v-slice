@@ -9,6 +9,7 @@ import funkin.ui.ScriptedMusicBeatSubState;
 import funkin.ui.mainmenu.MainMenuState;
 import funkin.audio.FunkinSound;
 import funkin.util.ReflectUtil;
+import funkin.Paths;
 #if mobile
 import funkin.util.TouchUtil;
 #end
@@ -17,11 +18,30 @@ import funkin.modding.module.ModuleHandler;
 
 class MonkerMenuButton extends Module
 {
+    
+    
+    
+    
+    
+    var geefPosX:Float = 20.0;
+    var geefPosY:Float = 5.0;
+    var geefBaseScale:Float = 0.6; 
+
+    
+    var platePosX:Float = 170.0;
+    var platePosY:Float = 200.0;
+    var plateScale:Float = 0.6; 
+
+    
+
     var beanButton:FunkinSprite;
     var beanHitbox:FunkinSprite;
+    var beanPlate:FunkinSprite;
     
-    var beanLerpSize:Float = 1.0;
+    var beanLerpSize:Float; 
+    var plateLerpSize:Float; 
     var selected:Bool = false;
+    var danceDir:Bool = false; 
 
     function new()
     {
@@ -32,12 +52,8 @@ class MonkerMenuButton extends Module
     {
         super.onStateChangeEnd(event);
         
-        
-        
-        
         var currentState = ReflectUtil.getClassNameOf(FlxG.state);
         if (currentState != 'funkin.ui.mainmenu.MainMenuState') return;
-        
         
         var menuHandler = ModuleHandler.getModule('BeanMenuHandler');
         if (menuHandler != null)
@@ -57,17 +73,33 @@ class MonkerMenuButton extends Module
 
 		WindowUtil.setWindowTitle("Friday Night Funkin'");
         selected = false;
-
-        beanButton = FunkinSprite.create(0, 0, 'UI/go');
-        beanButton.scale.set(0.1, 0.1); 
-        beanButton.updateHitbox();
         
-        var margin:Float = 20; 
-        beanButton.setPosition(margin, FlxG.height - beanButton.height - margin);
+        beanLerpSize = geefBaseScale; 
+        plateLerpSize = plateScale;   
+
+        
+        beanButton = new FunkinSprite(geefPosX, geefPosY);
+        beanButton.frames = Paths.getSparrowAtlas('geef-buttom'); 
+        
+        beanButton.animation.addByIndices('danceRight', 'Geef Dancing Beat', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+        beanButton.animation.addByIndices('danceLeft', 'Geef Dancing Beat', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
+        beanButton.animation.addByPrefix('cheer', 'Geef Cheer', 24, false);
+        
+        beanButton.animation.play('danceRight'); 
+        beanButton.scale.set(geefBaseScale, geefBaseScale);
         beanButton.scrollFactor.set();
+        beanButton.updateHitbox();
         FlxG.state.add(beanButton);
 
-        beanHitbox = new FunkinSprite(beanButton.x, beanButton.y).makeSolidColor(beanButton.width, beanButton.height, 0xFF000000);
+        
+        beanPlate = FunkinSprite.create(platePosX, platePosY, 'plate');
+        beanPlate.scale.set(plateScale, plateScale);
+        beanPlate.scrollFactor.set();
+        beanPlate.updateHitbox();
+        FlxG.state.add(beanPlate);
+
+        
+        beanHitbox = new FunkinSprite(beanButton.x, beanButton.y).makeSolidColor(Std.int(beanButton.width), Std.int(beanButton.height), 0xFF000000);
         beanHitbox.alpha = 0;
         beanHitbox.scrollFactor.set();
         FlxG.state.add(beanHitbox);
@@ -82,8 +114,15 @@ class MonkerMenuButton extends Module
         super.onUpdate(event);
         if (beanButton == null || beanHitbox == null) return;
 
+        
         beanButton.scale.x = FlxMath.lerp(beanButton.scale.x, beanLerpSize, event.elapsed * 12);
         beanButton.scale.y = FlxMath.lerp(beanButton.scale.y, beanLerpSize, event.elapsed * 12);
+
+        
+        if (beanPlate != null) {
+            beanPlate.scale.x = FlxMath.lerp(beanPlate.scale.x, plateLerpSize, event.elapsed * 12);
+            beanPlate.scale.y = FlxMath.lerp(beanPlate.scale.y, plateLerpSize, event.elapsed * 12);
+        }
 
         var subState = FlxG.state.subState;
 		if (subState != null && ReflectUtil.getClassNameOf(subState) == "funkin.ui.freeplay.FreeplayState")
@@ -94,27 +133,50 @@ class MonkerMenuButton extends Module
         {
             if (TouchUtil.overlaps(beanHitbox))
             {
-                beanLerpSize = 1.1; 
+                beanLerpSize = geefBaseScale * 1.1; 
+                plateLerpSize = plateScale * 1.1;   
                 if (TouchUtil.justPressed) onButtonPress();
             }
             else
-                beanLerpSize = 1.0;
+            {
+                beanLerpSize = geefBaseScale;
+                plateLerpSize = plateScale;
+            }
         }
         #else
         if (FlxG.mouse.overlaps(beanHitbox))
         {
-            beanLerpSize = 1.1; 
+            beanLerpSize = geefBaseScale * 1.1; 
+            plateLerpSize = plateScale * 1.1;   
             if (FlxG.mouse.justPressed) onButtonPress();
         }
         else
-            beanLerpSize = 1.0; 
+        {
+            beanLerpSize = geefBaseScale; 
+            plateLerpSize = plateScale;
+        }
         #end
+    }
+
+    public function onBeatHit(event)
+    {
+        super.onBeatHit(event);
+
+        if (beanButton == null || selected) return;
+
+        danceDir = !danceDir;
+        if (danceDir)
+            beanButton.animation.play('danceRight', true);
+        else
+            beanButton.animation.play('danceLeft', true);
     }
 
    function onButtonPress()
     {
         if (selected) return;
         selected = true;
+        
+        beanButton.animation.play('cheer', true);
         
         var menuHandler = ModuleHandler.getModule('BeanMenuHandler');
         if (menuHandler != null) {

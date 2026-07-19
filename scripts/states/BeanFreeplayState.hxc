@@ -29,6 +29,10 @@ import funkin.modding.module.ModuleHandler;
 import funkin.util.TouchUtil;
 import funkin.util.SwipeUtil;
 import funkin.mobile.input.ControlsHandler;
+#if mobile
+import funkin.mobile.util.HapticUtil;
+import funkin.mobile.util.Constants;
+#end
 
 class BeanFreeplayState extends MusicBeatState
 {
@@ -184,8 +188,8 @@ class BeanFreeplayState extends MusicBeatState
         add(windowsGrp);
         
         #if mobile
-        windowXPositions[1] += 100; 
-        windowXPositions[2] += 100;
+        windowXPositions[1] += 150; 
+        windowXPositions[2] += 150;
         #end
         
         spawnInitialWindows();
@@ -930,6 +934,11 @@ class BeanFreeplayState extends MusicBeatState
         isAnimatingStar = true;
         acceptInputs = false;
 
+        
+        #if mobile
+        HapticUtil.increasingVibrate(Constants.MIN_VIBRATION_AMPLITUDE, Constants.MAX_VIBRATION_AMPLITUDE, 0.6);
+        #end
+
         FlxTween.num(1.0, animMaxZoomScale, animZoomInTime, {
             ease: FlxEase.cubeOut,
             onComplete: function(twn:FlxTween) {
@@ -954,6 +963,11 @@ class BeanFreeplayState extends MusicBeatState
                                 
                                 FunkinSound.playOnce(Paths.sound('freeplayCapsulePlace'));
                                 
+                                
+                                #if mobile
+                                HapticUtil.vibrate(Constants.DEFAULT_VIBRATION_PERIOD, Constants.DEFAULT_VIBRATION_DURATION, Constants.MAX_VIBRATION_AMPLITUDE);
+                                #end
+
                                 capsuleShakeIntensity = animShakeForce; 
                                 
                                 for (k in 0...listaCapsulas.length) {
@@ -980,7 +994,7 @@ class BeanFreeplayState extends MusicBeatState
         });
     }
 
-    function selectCurrentSong()
+   function selectCurrentSong()
     {
         if (!acceptInputs) return;
         acceptInputs = false;
@@ -991,6 +1005,13 @@ class BeanFreeplayState extends MusicBeatState
         #end
         
         FunkinSound.playOnce(Paths.sound('confirmMenu-bean'));
+
+        
+        #if mobile
+        new FlxTimer().start(0.5, function(tmr:FlxTimer) {
+            HapticUtil.vibrate(Constants.DEFAULT_VIBRATION_PERIOD, Constants.DEFAULT_VIBRATION_DURATION * 5, (Constants.MAX_VIBRATION_AMPLITUDE / 3) * 2.5);
+        });
+        #end
         
         for (j in 0...listaCapsulas.length) {
             var itemGroup = listaCapsulas[j];
@@ -1026,7 +1047,6 @@ class BeanFreeplayState extends MusicBeatState
         var menuSave = ModuleHandler.getModule('BeanMenuHandler');
         if (menuSave != null) {
             menuSave.scoreBeforePlay = songScore != null ? songScore.score : 0;
-            
             
             menuSave.lastPlayedSong = songId;
         }

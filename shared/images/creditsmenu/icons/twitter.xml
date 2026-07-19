@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="twitter.png">
+	<!-- Created with Adobe Animate version 24.0.3.19 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="twitter0000" x="17" y="17" width="91" height="77"/>
+	<SubTexture name="twitterSelected0000" x="117" y="17" width="91" height="77"/>
+</TextureAtlas>

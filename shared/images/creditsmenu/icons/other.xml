@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="other.png">
+	<!-- Created with Adobe Animate version 24.0.3.19 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="pen0000" x="17" y="17" width="140" height="52"/>
+	<SubTexture name="penSelected0000" x="17" y="78" width="140" height="52"/>
+</TextureAtlas>

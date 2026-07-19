@@ -2,6 +2,8 @@ import funkin.play.PlayState;
 import funkin.play.stage.Stage;
 import flixel.FlxG;
 import flixel.FlxObject;
+import flixel.FlxSprite; 
+import funkin.Paths;     
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxTimer;
@@ -20,6 +22,83 @@ class Beanpark extends Stage
         super.onCreate(event);
         finishedZoom = false;
         dummyCam = null;
+
+        #if mobile
+        var game = PlayState.instance;
+
+        
+        var injectInCorrectGroup = function(target:FlxSprite, spriteToAdd:FlxSprite, offset:Int) {
+            if (game == null || target == null || spriteToAdd == null) return false;
+            
+            
+            try {
+                var stageGroup:Dynamic = this;
+                if (stageGroup.members != null) {
+                    var sIdx = stageGroup.members.indexOf(target);
+                    if (sIdx != -1) {
+                        stageGroup.insert(sIdx + offset, spriteToAdd);
+                        return true;
+                    }
+                }
+            } catch(e:Dynamic) {}
+
+            
+            var idx = game.members.indexOf(target);
+            if (idx != -1) {
+                game.insert(idx + offset, spriteToAdd);
+                return true;
+            }
+            
+            
+            for (member in game.members) {
+                if (member != null && Std.isOfType(member, flixel.group.FlxGroup.FlxTypedGroup)) {
+                    var group:Dynamic = member;
+                    if (group.members != null) {
+                        var gIdx = group.members.indexOf(target);
+                        if (gIdx != -1) {
+                            group.insert(gIdx + offset, spriteToAdd);
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        };
+
+        
+        var sky:FlxSprite = this.getNamedProp('sky');
+        if (sky != null) {
+            
+            var solidBg = new FlxSprite(0, 0).makeGraphic(32, 32, 0xFF95D0ED);
+            solidBg.scrollFactor.set(sky.scrollFactor.x, sky.scrollFactor.y);
+            
+            
+            solidBg.scale.set(3500, 3500); 
+            solidBg.updateHitbox();
+            solidBg.screenCenter(); 
+            
+            
+            injectInCorrectGroup(sky, solidBg, 0);
+        }
+
+        
+        var backhills:FlxSprite = this.getNamedProp('backhills');
+        if (backhills != null) {
+            var extraHills = new FlxSprite(backhills.x + backhills.width - 2, backhills.y);
+            extraHills.loadGraphic(Paths.image('stages/park/backhills'));
+            
+            extraHills.scrollFactor.set(backhills.scrollFactor.x, backhills.scrollFactor.y);
+            extraHills.scale.set(backhills.scale.x, backhills.scale.y);
+            extraHills.updateHitbox();
+            
+            
+            injectInCorrectGroup(backhills, extraHills, 1);
+        }
+
+        if (game != null) {
+            try { game.refresh(); } catch(e:Dynamic) {}
+        }
+        #end
     }
 
     override function onSongRetry(event:ScriptEvent) {

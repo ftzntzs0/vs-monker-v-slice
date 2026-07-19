@@ -32,7 +32,7 @@ class BeanMainMenuState extends MusicBeatState
     var acceptInputs:Bool = true;
     var curSelected:Int = 0;
     
-    var optionList = ['Songs', 'Credits', 'Back to Main Menu'];
+    var optionList = ['Songs', 'Credits', 'Exit'];
     
     var characterList = [
         "monker_writing", 
@@ -206,7 +206,7 @@ class BeanMainMenuState extends MusicBeatState
         });
 
         var textSize:Int = 28;
-        var textX:Float = 45;
+        var textX:Float = 105;
         var textSpacing:Float = 50;
         var textStartY:Float = 420;
 
@@ -271,9 +271,12 @@ class BeanMainMenuState extends MusicBeatState
         add(beanBackButton);
         #end
 
+       #if !mobile
         FlxG.mouse.visible = true;
         FlxG.mouse.load(Paths.image('cursor')); 
-
+        #else
+        FlxG.mouse.visible = false;
+        #end
         changeSelection(0);
 
         var startTransition = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
@@ -380,9 +383,9 @@ class BeanMainMenuState extends MusicBeatState
                     substate.transIn(ScriptedMusicBeatState.init('bean.states.BeanFreeplayState'));
                     
                 case 'Credits':
-                    substate.transIn(ScriptedMusicBeatState.init('bean.states.beanCreditsState'));
+                    substate.transIn(ScriptedMusicBeatState.init('bean.states.BeanCreditsState'));
                     
-                case 'Back to Main Menu':
+                case 'Exit':
                     substate.transIn(new MainMenuState());
             }
         });

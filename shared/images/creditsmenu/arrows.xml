@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="arrows.png">
+	<!-- Created with Adobe Animate version 24.0.3.19 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="left0000" x="17" y="17" width="13" height="16"/>
+	<SubTexture name="leftConfirm0000" x="39" y="17" width="13" height="16"/>
+	<SubTexture name="right0000" x="61" y="17" width="13" height="16"/>
+	<SubTexture name="rightConfirm0000" x="83" y="17" width="13" height="16"/>
+</TextureAtlas>

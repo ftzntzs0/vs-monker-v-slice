@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="atlas_icon.png">
+	<!-- Created with Adobe Animate version 22.0.6.202 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="atlas0000" x="20" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0001" x="20" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0002" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0003" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0004" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0005" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0006" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0007" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0008" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0009" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0010" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0011" x="154" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0012" x="154" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0013" x="154" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0014" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0015" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0016" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0017" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0018" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0019" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0020" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0021" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0022" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0023" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0024" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0025" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0026" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0027" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0028" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0029" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0030" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0031" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0032" x="154" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0033" x="154" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0034" x="154" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0035" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0036" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0037" x="20" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0038" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0039" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0040" x="288" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0041" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0042" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0043" x="154" y="20" width="124" height="106"/>
+	<SubTexture name="atlas0044" x="288" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0045" x="288" y="136" width="124" height="106"/>
+	<SubTexture name="atlas0046" x="288" y="136" width="124" height="106"/>
+</TextureAtlas>

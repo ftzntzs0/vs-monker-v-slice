@@ -67,6 +67,12 @@ class BeanEndMenuState extends MusicBeatState
     override function create()
     {
         super.create();
+         FunkinSound.playMusic('monkerMenu',
+        {
+            overrideExisting: true,
+            restartTrack: false,
+            persist: true
+        });
         
         
         bg = new FunkinSprite(bgOffsetX, bgOffsetY).loadGraphic(Paths.image('ui/endmenu/bg'));

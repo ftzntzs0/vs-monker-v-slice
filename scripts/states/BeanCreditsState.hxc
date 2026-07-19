@@ -1,0 +1,496 @@
+package bean.states;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.text.FlxText;
+import flixel.util.FlxColor;
+import funkin.ui.MusicBeatState;
+import funkin.Paths;
+import bean.substates.MonkerTransitionSubState;
+
+class BeanCreditsState extends MusicBeatState {
+    
+    
+    
+    
+    var windowOffsetX:Float = 0;   
+    var windowOffsetY:Float = 0;   
+
+    var xButtonOffsetX:Float = -25; 
+    var xButtonOffsetY:Float = 17;  
+    var xHoverOffsetX:Float = 0;    
+    var xHoverOffsetY:Float = 0;    
+    var xHoverMobileScale:Float = 1.3; 
+
+    var leftArrowOffsetX:Float = 80; 
+    var leftArrowOffsetY:Float = 125;  
+    var rightArrowOffsetX:Float = 300; 
+
+    var categoryTextOffsetY:Float = -5; 
+
+    var listStartX:Float = 50;  
+    var listStartY:Float = 175; 
+    var listSpacingY:Float = 53; 
+    var customColOffset:Float = 0; 
+
+    var hoverOffsetX:Float = -40; 
+    var hoverOffsetY:Float = -5; 
+
+    
+    
+    
+    var profileWindowOffsetX:Float = 0; 
+    var profileWindowOffsetY:Float = 5;
+
+    var backBtnOffsetX:Float = 840; 
+    var backBtnOffsetY:Float = -25; 
+    var backHoverOffsetX:Float = 0; 
+    var backHoverOffsetY:Float = 0; 
+    var backHoverMobileScale:Float = 1.3;
+
+    var iconOffsetX:Float = 0;   
+    var iconOffsetY:Float = -220; 
+
+    var nameOffsetX:Float = 0;
+    var nameOffsetY:Float = -135;  
+
+    var roleOffsetX:Float = 0;
+    var roleOffsetY:Float = -95; 
+
+    
+    var socialsTextOffsetY:Float = -10;   
+    var socialNameOffsetY:Float = 25;    
+    var socialsIconOffsetY:Float = 95;   
+    var socialsArrowSpacing:Float = 45;   
+    
+
+    
+    var bg:FlxSprite;
+    var creditsWindow:FlxSprite;
+    var xHoverSquare:FlxSprite; 
+    var xButton:FlxSprite;
+    var leftArrow:FlxSprite;
+    var rightArrow:FlxSprite;
+    var selectBar:FlxSprite;
+    var categoryText:FlxText;
+    
+    var curCategory:Int = 0;
+    var textGroup:Array<FlxText> = [];
+    var hitboxes:Array<FlxSprite> = []; 
+
+    
+    var inProfile:Bool = false; 
+    var profileWindow:FlxSprite;
+    var backHoverSquare:FlxSprite;
+    var backArrow:FlxSprite;
+    var personIcon:FlxSprite;
+    var profileNameText:FlxText;
+    var profileRoleText:FlxText;
+
+    
+    var socialsText:FlxText;
+    var socialNameText:FlxText; 
+    var socialLeftArrow:FlxSprite;
+    var socialRightArrow:FlxSprite;
+    var socialIcon:FlxSprite;
+
+    
+    var isExiting:Bool = false;
+
+    
+    var categories:Array<Dynamic> = [
+        { name: "Directors", people: [{name: "Noobz", role: "Director"}, {name: "Helpame", role: "Director"}] },
+        { name: "Artists", people: [{name: "Noobz", role: "Artist"}, {name: "Shouko-kun", role: "Artist"}, {name: "Monika_Fan", role: "Artist"}, {name: "Maplequan", role: "Artist"}, {name: "YaBoiJak_", role: "Artist"}, {name: "SogeyBread", role: "Artist"}, {name: "Netro_Grand", role: "Artist"}, {name: "Inkujira11", role: "Artist"}, {name: "Leanster", role: "Artist"}, {name: "Nacki", role: "Artist"}, {name: "Bida", role: "Artist"}, {name: "CloudyKev", role: "Artist"}] },
+        { name: "Coders", people: [{name: "AtlasGamer27", role: "Coder"}, {name: "AssaultEK", role: "Coder"}] },
+        { name: "Musicians", people: [{name: "Agami", role: "Musician"}, {name: "Swe", role: "Musician"}, {name: "CryonicSage", role: "Musician"}, {name: "Geniy186", role: "Musician"}, {name: "Just Yuri", role: "Musician"}, {name: "Rarusel", role: "Musician"}, {name: "Sourcandee", role: "Musician"}, {name: "VamCatJay", role: "Musician"}, {name: "SuperStamps", role: "Musician"}] },
+        { name: "Charters", people: [{name: "DancinCricket_", role: "Charter"}, {name: "ElSebas", role: "Charter"}, {name: "ERRon", role: "Charter"}, {name: "ABoredBanana", role: "Charter"}, {name: "Tech0", role: "Charter"}, {name: "Teocynozi", role: "Charter"}, {name: "Timson05", role: "Charter"}, {name: "Tygo_068", role: "Charter"}, {name: "Yutamon", role: "Charter"}] },
+        { name: "Voice Actors", people: [{name: "Mamon", role: "Voice Actor"}, {name: "Gloopyperson", role: "Voice Actor"}, {name: "KawariVA", role: "Voice Actor"}, {name: "Lapucelle500", role: "Voice Actor"}, {name: "CybbieVA", role: "Voice Actor"}, {name: "Eerie Cicada", role: "Voice Actor"}, {name: "GrayVA", role: "Voice Actor"}, {name: "TaroVA", role: "Voice Actor"}, {name: "Lmao4DC", role: "Voice Actor"}, {name: "LadyRashtaVA", role: "Voice Actor"}] },
+        { name: "Special Thanks", people: [{name: "Team Salvato", role: "Special Thanks"}, {name: "Carof", role: "Special Thanks"}, {name: "Alex", role: "Special Thanks"}, {name: "Razc2L", role: "Special Thanks"}, {name: "Ori", role: "Special Thanks"}, {name: "Moni Pillow", role: "Special Thanks"}, {name: "DJ-3XIT", role: "Special Thanks"}, {name: "Mr_Hatemyself", role: "Special Thanks"}, {name: "Shiro_Burro", role: "Special Thanks"}, {name: "Psych Engine Team", role: "Engine"}] }
+    ];
+
+    public function new() {
+        super();
+    }
+
+    override function create() {
+        super.create();
+
+        #if !mobile
+        FlxG.mouse.visible = true;
+        #end
+
+        
+        bg = new FlxSprite(0, 0).loadGraphic(Paths.image('creditsmenu/bg'));
+        bg.setGraphicSize(Std.int(FlxG.width), Std.int(FlxG.height));
+        bg.updateHitbox();
+        bg.screenCenter();
+        add(bg);
+
+        creditsWindow = new FlxSprite(0, 0).loadGraphic(Paths.image('creditsmenu/creditsWindow'));
+        creditsWindow.screenCenter();
+        creditsWindow.x += windowOffsetX;
+        creditsWindow.y += windowOffsetY;
+        add(creditsWindow);
+
+        xHoverSquare = new FlxSprite(0, 0).loadGraphic(Paths.image('creditsmenu/selectSquare'));
+        add(xHoverSquare);
+
+        xButton = new FlxSprite(creditsWindow.x + creditsWindow.width + xButtonOffsetX, creditsWindow.y + xButtonOffsetY);
+        xButton.loadGraphic(Paths.image('creditsmenu/x_button'));
+        add(xButton);
+
+        xHoverSquare.x = xButton.x + (xButton.width / 2) - (xHoverSquare.width / 2) + xHoverOffsetX;
+        xHoverSquare.y = xButton.y + (xButton.height / 2) - (xHoverSquare.height / 2) + xHoverOffsetY;
+
+        #if mobile
+        xHoverSquare.alpha = 1; 
+        xHoverSquare.scale.set(xHoverMobileScale, xHoverMobileScale);
+        xHoverSquare.updateHitbox();
+        #else
+        xHoverSquare.alpha = 0; 
+        #end
+
+        leftArrow = new FlxSprite(creditsWindow.x + leftArrowOffsetX, creditsWindow.y + leftArrowOffsetY);
+        leftArrow.frames = Paths.getSparrowAtlas('creditsmenu/arrows');
+        leftArrow.animation.addByPrefix('idle', 'left0', 24, true); 
+        leftArrow.animation.addByPrefix('press', 'leftConfirm', 24, false);
+        leftArrow.animation.play('idle');
+        add(leftArrow);
+
+        rightArrow = new FlxSprite(creditsWindow.x + rightArrowOffsetX, creditsWindow.y + leftArrowOffsetY); 
+        rightArrow.frames = Paths.getSparrowAtlas('creditsmenu/arrows');
+        rightArrow.animation.addByPrefix('idle', 'right0', 24, true);
+        rightArrow.animation.addByPrefix('press', 'rightConfirm', 24, false);
+        rightArrow.animation.play('idle');
+        add(rightArrow);
+
+        selectBar = new FlxSprite(0, 0).loadGraphic(Paths.image('creditsmenu/select_bar'));
+        selectBar.alpha = 0; 
+        add(selectBar);
+
+        var distBetweenArrows = (rightArrow.x - (leftArrow.x + leftArrow.width));
+        categoryText = new FlxText(leftArrow.x + leftArrow.width, leftArrow.y + categoryTextOffsetY, distBetweenArrows, "", 32);
+        categoryText.setFormat(Paths.font("HKGrotesk-Medium.otf"), 20, 0xFF8E3499, "center");
+        add(categoryText);
+
+        updateCategory();
+
+        
+        profileWindow = new FlxSprite(0, 0).loadGraphic(Paths.image('creditsmenu/creditsWindow2'));
+        profileWindow.screenCenter();
+        profileWindow.x += profileWindowOffsetX;
+        profileWindow.y += profileWindowOffsetY;
+        add(profileWindow);
+
+        backHoverSquare = new FlxSprite(0, 0).loadGraphic(Paths.image('creditsmenu/selectSquare2'));
+        add(backHoverSquare);
+
+        backArrow = new FlxSprite(profileWindow.x + backBtnOffsetX, profileWindow.y + backBtnOffsetY);
+        backArrow.loadGraphic(Paths.image('creditsmenu/left_arrow'));
+        add(backArrow);
+
+        backHoverSquare.x = backArrow.x + (backArrow.width / 2) - (backHoverSquare.width / 2) + backHoverOffsetX;
+        backHoverSquare.y = backArrow.y + (backArrow.height / 2) - (backHoverSquare.height / 2) + backHoverOffsetY;
+
+        #if mobile
+        backHoverSquare.scale.set(backHoverMobileScale, backHoverMobileScale);
+        backHoverSquare.updateHitbox();
+        #end
+
+        personIcon = new FlxSprite(0, 0).loadGraphic(Paths.image('creditsmenu/person_icon'));
+        personIcon.screenCenter();
+        personIcon.x += iconOffsetX;
+        personIcon.y += iconOffsetY;
+        add(personIcon);
+
+        profileNameText = new FlxText(0, 0, profileWindow.width, "", 36);
+        profileNameText.setFormat(Paths.font("RifficFree-Bold.ttf"), 36, 0xFF8E3499, "center");
+        profileNameText.screenCenter();
+        profileNameText.x += nameOffsetX;
+        profileNameText.y += nameOffsetY;
+        add(profileNameText);
+
+        profileRoleText = new FlxText(0, 0, profileWindow.width, "", 24);
+        profileRoleText.setFormat(Paths.font("HKGrotesk-Black.otf"), 18, 0xFF8E3499, "center");
+        profileRoleText.screenCenter();
+        profileRoleText.x += roleOffsetX;
+        profileRoleText.y += roleOffsetY;
+        add(profileRoleText);
+
+        
+        socialsText = new FlxText(0, 0, profileWindow.width, "Socials:", 28);
+        socialsText.setFormat(Paths.font("HKGrotesk-Black.otf"), 30, 0xFF8E3499, "center");
+        socialsText.screenCenter();
+        socialsText.y += socialsTextOffsetY;
+        add(socialsText);
+
+        socialNameText = new FlxText(0, 0, 0, "Twitter", 24);
+        socialNameText.setFormat(Paths.font("HKGrotesk-SemiBold.otf"), 26, 0xFF8E3499, "center");
+        socialNameText.screenCenter();
+        socialNameText.y += socialNameOffsetY;
+        add(socialNameText);
+
+        socialIcon = new FlxSprite(0, 0);
+        socialIcon.frames = Paths.getSparrowAtlas('creditsmenu/icons/twitter');
+        socialIcon.animation.addByPrefix('twitter', 'twitter0', 24, false);
+        socialIcon.animation.play('twitter');
+        socialIcon.screenCenter();
+        socialIcon.y += socialsIconOffsetY;
+        add(socialIcon);
+
+        socialLeftArrow = new FlxSprite(0, 0);
+        socialLeftArrow.frames = Paths.getSparrowAtlas('creditsmenu/arrows');
+        socialLeftArrow.animation.addByPrefix('idle', 'left0', 24, true);
+        socialLeftArrow.animation.addByPrefix('press', 'leftConfirm', 24, false);
+        socialLeftArrow.animation.play('idle');
+        socialLeftArrow.screenCenter();
+        socialLeftArrow.x = socialNameText.x - socialLeftArrow.width - socialsArrowSpacing;
+        socialLeftArrow.y = socialNameText.y + (socialNameText.height / 2) - (socialLeftArrow.height / 2);
+        add(socialLeftArrow);
+
+        socialRightArrow = new FlxSprite(0, 0);
+        socialRightArrow.frames = Paths.getSparrowAtlas('creditsmenu/arrows');
+        socialRightArrow.animation.addByPrefix('idle', 'right0', 24, true);
+        socialRightArrow.animation.addByPrefix('press', 'rightConfirm', 24, false);
+        socialRightArrow.animation.play('idle');
+        socialRightArrow.screenCenter();
+        socialRightArrow.x = socialNameText.x + socialNameText.width + socialsArrowSpacing;
+        socialRightArrow.y = socialNameText.y + (socialNameText.height / 2) - (socialRightArrow.height / 2);
+        add(socialRightArrow);
+
+        
+        toggleProfileVisibility(false);
+
+        
+        var entryTransition = new MonkerTransitionSubState();
+        openSubState(entryTransition);
+        entryTransition.transOut(); 
+    }
+
+    function updateCategory() {
+        var cat = categories[curCategory];
+        categoryText.text = cat.name;
+
+        for (txt in textGroup) {
+            remove(txt);
+            txt.destroy();
+        }
+        textGroup = [];
+
+        for (hb in hitboxes) {
+            remove(hb);
+            hb.destroy();
+        }
+        hitboxes = [];
+
+        var startX:Float = creditsWindow.x + listStartX;
+        var startY:Float = creditsWindow.y + listStartY;
+        var colOffset:Float = customColOffset != 0 ? customColOffset : creditsWindow.width / 2; 
+
+        var maxItemsPerCol:Int = 9;
+
+        for (i in 0...cat.people.length) {
+            var person = cat.people[i];
+            var isRightCol:Bool = i >= maxItemsPerCol;
+            var row:Int = isRightCol ? (i - maxItemsPerCol) : i;
+
+            var finalX = startX + (isRightCol ? colOffset : 0);
+            var finalY = startY + (row * listSpacingY);
+
+            var nameText = new FlxText(finalX, finalY, 0, person.name, 24);
+            nameText.setFormat(Paths.font("HKGrotesk-Medium.otf"), 18, 0xFF000000, "left"); 
+            add(nameText);
+            textGroup.push(nameText);
+
+            var hitbox = new FlxSprite(finalX - 10, finalY - 10).makeGraphic(Std.int(colOffset - 20), Std.int(listSpacingY), 0x00000000);
+            
+            insert(members.indexOf(nameText), hitbox);
+            hitboxes.push(hitbox);
+        }
+        
+        remove(profileWindow); add(profileWindow);
+        remove(backHoverSquare); add(backHoverSquare);
+        remove(backArrow); add(backArrow);
+        remove(personIcon); add(personIcon);
+        remove(profileNameText); add(profileNameText);
+        remove(profileRoleText); add(profileRoleText);
+        
+        remove(socialsText); add(socialsText);
+        remove(socialNameText); add(socialNameText); 
+        remove(socialLeftArrow); add(socialLeftArrow);
+        remove(socialIcon); add(socialIcon);
+        remove(socialRightArrow); add(socialRightArrow);
+    }
+
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+
+        
+        if (isExiting) return; 
+
+        var pointerX:Float = FlxG.mouse.x;
+        var pointerY:Float = FlxG.mouse.y;
+        var justPressed:Bool = FlxG.mouse.justPressed;
+
+        #if mobile
+        if (FlxG.touches.list.length > 0) {
+            var touch = FlxG.touches.list[0];
+            pointerX = touch.x;
+            pointerY = touch.y;
+            justPressed = touch.justPressed;
+        }
+        #end
+
+        
+        
+        
+        if (inProfile) {
+            #if !mobile
+            if (overlapsPoint(backArrow, pointerX, pointerY)) {
+                backHoverSquare.alpha = 1;
+            } else {
+                backHoverSquare.alpha = 0;
+            }
+            #end
+
+            if (justPressed && overlapsPoint(socialLeftArrow, pointerX, pointerY)) {
+                socialLeftArrow.animation.play('press', true);
+            } else if (socialLeftArrow.animation.curAnim != null && socialLeftArrow.animation.curAnim.name == 'press' && socialLeftArrow.animation.curAnim.finished) {
+                socialLeftArrow.animation.play('idle');
+            }
+
+            if (justPressed && overlapsPoint(socialRightArrow, pointerX, pointerY)) {
+                socialRightArrow.animation.play('press', true);
+            } else if (socialRightArrow.animation.curAnim != null && socialRightArrow.animation.curAnim.name == 'press' && socialRightArrow.animation.curAnim.finished) {
+                socialRightArrow.animation.play('idle');
+            }
+
+            if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE || (justPressed && overlapsPoint(backArrow, pointerX, pointerY))) {
+                FlxG.sound.play(Paths.sound('windowClose')); 
+                toggleProfileVisibility(false);
+            }
+            return; 
+        }
+
+        
+        
+        
+        #if !mobile
+        if (overlapsPoint(xButton, pointerX, pointerY)) {
+            xHoverSquare.alpha = 1;
+        } else {
+            xHoverSquare.alpha = 0;
+        }
+        #end
+
+        
+        if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE || (justPressed && overlapsPoint(xButton, pointerX, pointerY))) {
+            isExiting = true;
+            FlxG.sound.play(Paths.sound('cancelMenu'));
+            
+            var exitTransition = new MonkerTransitionSubState();
+            openSubState(exitTransition);
+            exitTransition.transIn(new bean.states.BeanMainMenuState()); 
+            
+            return;
+        }
+
+        if (justPressed && overlapsPoint(leftArrow, pointerX, pointerY)) {
+            leftArrow.animation.play('press', true); 
+            curCategory--;
+            if (curCategory < 0) curCategory = categories.length - 1;
+            updateCategory();
+        } 
+        else if (leftArrow.animation.curAnim != null && leftArrow.animation.curAnim.name == 'press' && leftArrow.animation.curAnim.finished) {
+            leftArrow.animation.play('idle');
+        }
+
+        if (justPressed && overlapsPoint(rightArrow, pointerX, pointerY)) {
+            rightArrow.animation.play('press', true);
+            curCategory++;
+            if (curCategory >= categories.length) curCategory = 0;
+            updateCategory();
+        } 
+        else if (rightArrow.animation.curAnim != null && rightArrow.animation.curAnim.name == 'press' && rightArrow.animation.curAnim.finished) {
+            rightArrow.animation.play('idle');
+        }
+
+        var isHoveringAny = false;
+
+        for (i in 0...hitboxes.length) {
+            var hb = hitboxes[i];
+            var txt = textGroup[i];
+
+            if (overlapsPoint(hb, pointerX, pointerY)) {
+                isHoveringAny = true;
+                selectBar.alpha = 1;
+                
+                selectBar.x = hb.x + hoverOffsetX;
+                selectBar.y = hb.y + (hb.height / 2) - (selectBar.height / 2) + hoverOffsetY;
+                
+                txt.color = 0xFFFFFFFF; 
+
+                if (justPressed) {
+                    var personData = categories[curCategory].people[i];
+                    openProfile(personData.name, categories[curCategory].name);
+                }
+            } else {
+                txt.color = 0xFF000000; 
+            }
+        }
+
+        if (!isHoveringAny) {
+            selectBar.alpha = 0;
+        }
+    }
+
+    function overlapsPoint(sprite:FlxSprite, px:Float, py:Float):Bool {
+        return (px >= sprite.x && px <= sprite.x + sprite.width && py >= sprite.y && py <= sprite.y + sprite.height);
+    }
+
+    function openProfile(personName:String, catName:String) {
+        FlxG.sound.play(Paths.sound('windowOpen')); 
+        socialIcon.animation.play('twitter', true); 
+        
+        profileNameText.text = personName;
+        profileRoleText.text = catName;
+        toggleProfileVisibility(true);
+    }
+
+    function toggleProfileVisibility(visible:Bool) {
+        inProfile = visible;
+        
+        profileWindow.visible = visible;
+        backArrow.visible = visible;
+        personIcon.visible = visible;
+        profileNameText.visible = visible;
+        profileRoleText.visible = visible;
+        
+        socialsText.visible = visible;
+        socialNameText.visible = visible; 
+        socialLeftArrow.visible = visible;
+        socialIcon.visible = visible;
+        socialRightArrow.visible = visible;
+
+        xButton.visible = !visible;
+        leftArrow.visible = !visible;
+        rightArrow.visible = !visible;
+        categoryText.visible = !visible;
+
+        for (txt in textGroup) {
+            txt.visible = !visible;
+        }
+
+        if (visible) {
+            selectBar.alpha = 0;
+        }
+
+        #if mobile
+        backHoverSquare.visible = visible;
+        #else
+        if (!visible) backHoverSquare.alpha = 0;
+        backHoverSquare.visible = visible;
+        
+        if (visible) xHoverSquare.alpha = 0;
+        #end
+    }
+}

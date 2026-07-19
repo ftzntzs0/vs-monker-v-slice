@@ -1,15 +1,15 @@
 {
-    "title": "VS Coco",
-    "description": "A Port of Vs Coco into V-Slice",
+    "title": "VS Monker 1.5",
+    "description": "A Port of Vs Monker into V-Slice",
     "contributors": [
     {
       "name": "Shoyo!",
       "role": "the whole port"
     },
     {
-      "name": "Vs Coco DEVs",
+      "name": "Vs Monker DEVs",
       "role": "Made the original mod",
-      "url": "https://gamebanana.com/mods/328557"
+      "url": "https://gamebanana.com/mods/449549"
     }
     ],
     "api_version": "0.8.4",

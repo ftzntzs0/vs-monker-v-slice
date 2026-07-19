@@ -1,5 +1,6 @@
 import funkin.play.PlayState;
 import funkin.modding.module.Module;
+import funkin.modding.module.ModuleHandler;
 import flixel.FlxSprite;
 import funkin.play.PauseSubState;
 import flixel.tweens.FlxTween;
@@ -18,6 +19,9 @@ import openfl.filters.ShaderFilter;
 import funkin.graphics.shaders.AdjustColorShader;
 
 import funkin.ui.freeplay.FreeplayState;
+import funkin.ui.ScriptedMusicBeatState;
+import funkin.ui.ScriptedMusicBeatSubState;
+import flixel.addons.transition.FlxTransitionableState;
 
 class CustomPauseMenu extends Module {
     var portrait:FlxSprite;
@@ -164,23 +168,38 @@ class CustomPauseMenu extends Module {
 
             try {
                 if (FlxG.onMobile) {
-                    panelFiller = new FlxSprite(-2025, -200);
+                    var fillerStartX:Float = -2025;
+                    var fillerTargetX:Float = -1350;
+                    var fillerStartY:Float = -200;
                     
-                    
-                    
+                    panelFiller = new FlxSprite(0, 0);
                     
                     if (isTato) {
+                        panelFiller.loadGraphic(Paths.image('UI/pausemenu/panelfiller-tato'));
+                        fillerStartX = -800; 
+                        fillerTargetX = -50;
                         
-                        panelFiller.loadGraphic(Paths.image('UI/panelfiller-tato'));
+                        
+                        
+                        fillerStartY = 0; 
+                        
+                        panelFiller.scale.set(1.1, 1.1);
+                        panelFiller.updateHitbox();
                     } else {
-                        
                         panelFiller.makeGraphic(1500, 2000, 0xFFFFE6F4);
+                        fillerStartX = -2025;
+                        fillerTargetX = -1350;
+                        fillerStartY = -200;
                     }
                     
+                    panelFiller.x = fillerStartX;
+                    panelFiller.y = fillerStartY;
                     panelFiller.scrollFactor.set(0, 0);
+                    
+                    
                     state.add(panelFiller);
 
-                    FlxTween.tween(panelFiller, {x: -1350}, 1.0, {
+                    FlxTween.tween(panelFiller, {x: fillerTargetX}, 1.0, {
                         ease: FlxEase.quartInOut
                     });
                 }
@@ -190,6 +209,8 @@ class CustomPauseMenu extends Module {
                     panel.scale.set(panelScaleX, panelScaleY);
                     panel.updateHitbox();
                     panel.scrollFactor.set(0, 0);
+                    
+                    
                     state.add(panel);
 
                     FlxTween.tween(panel, {x: panelTargetX}, 1.0, {
@@ -329,7 +350,20 @@ class CustomPauseMenu extends Module {
                         FlxG.resetState();
                     } else if (txt.indexOf('exit') != -1) {
                         try { if (FlxG.sound.music != null) FlxG.sound.music.stop(); } catch(err:Dynamic) {}
-                        FlxG.switchState(new FreeplayState());
+                        
+                        var menuHandler:Dynamic = ModuleHandler.getModule("BeanMenuHandler");
+                        if (menuHandler != null && menuHandler.currentMenu == 'monker') {
+                            
+                            FlxTransitionableState.skipNextTransIn = true;
+                            FlxTransitionableState.skipNextTransOut = true;
+                            
+                            var transSubstate = ScriptedMusicBeatSubState.init('bean.substates.MonkerTransitionSubState');
+                            FlxG.state.openSubState(transSubstate);
+                            transSubstate.transIn(ScriptedMusicBeatState.init('bean.states.BeanFreeplayState'));
+                            
+                        } else {
+                            FlxG.switchState(new FreeplayState());
+                        }
                     } else {
                         state.close();
                     }
@@ -398,7 +432,8 @@ class CustomPauseMenu extends Module {
         
         if (panelFiller != null) {
             FlxTween.cancelTweensOf(panelFiller);
-            FlxTween.tween(panelFiller, {x: -2025}, 0.7, {ease: FlxEase.quartInOut});
+            var fillerExitX:Float = isTato ? -800 : -2025;
+            FlxTween.tween(panelFiller, {x: fillerExitX}, 0.7, {ease: FlxEase.quartInOut});
         }
 
         if (panel != null) {

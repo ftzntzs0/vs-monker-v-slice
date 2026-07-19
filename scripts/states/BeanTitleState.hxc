@@ -17,6 +17,7 @@ import funkin.ui.mainmenu.MainMenuState;
 import funkin.save.Save;
 import funkin.Paths;
 import funkin.Conductor;
+import funkin.util.HapticUtil;
 #if mobile
 import funkin.util.TouchUtil;
 #end
@@ -139,6 +140,7 @@ class BeanTitleState extends MusicBeatState
         startTransition.transOut(); 
 
         isReady = true; 
+
     }
 
     override function update(elapsed:Float)
@@ -161,6 +163,7 @@ class BeanTitleState extends MusicBeatState
             moveToMainMenu();
         }
         #end
+
     }
 
     override function beatHit()
@@ -201,6 +204,7 @@ class BeanTitleState extends MusicBeatState
         acceptInputs = false;
 
         FlxG.camera.flash(0xFFFFFFFF, 1);
+        HapticUtil.vibrate(0.1, 0.5, 0.5);
         FlxTween.tween(logo, {y: -1000}, 0.8, {ease: FlxEase.backIn});
 
         FlxFlicker.flicker(enterText, 1, 0.06, true, false); 
