@@ -45,7 +45,7 @@
     "noteSplash": {
       "assetPath": "shared:Notes/tato/NOTE_splashes_TATO",
       "alpha": 0.8,
-      "offsets": [50, 25],
+      "offsets": [50, -10],
       "data": {
         "enabled": true,
         "leftSplashes": [
