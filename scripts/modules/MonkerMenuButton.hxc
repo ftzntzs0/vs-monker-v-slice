@@ -92,7 +92,7 @@ class MonkerMenuButton extends Module
         FlxG.state.add(beanButton);
 
         
-        beanPlate = FunkinSprite.create(platePosX, platePosY, 'plate');
+        beanPlate = FunkinSprite.create(platePosX, platePosY, 'beanPlate');
         beanPlate.scale.set(plateScale, plateScale);
         beanPlate.scrollFactor.set();
         beanPlate.updateHitbox();
