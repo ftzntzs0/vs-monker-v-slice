@@ -99,7 +99,7 @@ class BeanFreeplayState extends MusicBeatState
     var overlay:FunkinSprite;
     
     var windowsGrp:FlxTypedGroup<FunkinSprite>;
-    var windowPaths:Array<String> = ['ui/freeplaymenu/window1', 'ui/freeplaymenu/window2', 'ui/freeplaymenu/window3'];
+    var windowPaths:Array<String> = ['UI/freeplaymenu/window1', 'UI/freeplaymenu/window2', 'UI/freeplaymenu/window3'];
     var windowXPositions:Array<Float> = [50, 800, 800]; 
 
     var highScoreSpr:FunkinSprite;
@@ -166,16 +166,16 @@ class BeanFreeplayState extends MusicBeatState
             persist: true
         });
 
-        bgDots = new FlxBackdrop(Paths.image('ui/titlemenu/dotBG'), 0x11);
+        bgDots = new FlxBackdrop(Paths.image('UI/titlemenu/dotBG'), 0x11);
         bgDots.velocity.set(-80, -80);
         add(bgDots);
 
-        gradient = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/gradient'));
+        gradient = new FunkinSprite(0, 0).loadGraphic(Paths.image('UI/freeplaymenu/gradient'));
         gradient.setGraphicSize(FlxG.width, FlxG.height);
         gradient.updateHitbox();
         add(gradient);
 
-        scanLines = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/scanLines'));
+        scanLines = new FunkinSprite(0, 0).loadGraphic(Paths.image('UI/freeplaymenu/scanLines'));
         scanLines.setGraphicSize(FlxG.width, FlxG.height);
         scanLines.updateHitbox();
         scanLines.alpha = 1.0;
@@ -191,7 +191,7 @@ class BeanFreeplayState extends MusicBeatState
         
         spawnInitialWindows();
 
-        overlay = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/overlay'));
+        overlay = new FunkinSprite(0, 0).loadGraphic(Paths.image('UI/freeplaymenu/overlay'));
         #if mobile
         overlay.scale.x = 1.3; 
         overlay.updateHitbox(); 
@@ -268,7 +268,7 @@ class BeanFreeplayState extends MusicBeatState
     function buildCodesUI()
     {
         codesBtn = new FunkinSprite(0, 0);
-        codesBtn.frames = Paths.getSparrowAtlas('ui/freeplaymenu/codes');
+        codesBtn.frames = Paths.getSparrowAtlas('UI/freeplaymenu/codes');
         codesBtn.animation.addByPrefix('idle', 'idle', 24, true);
         codesBtn.animation.addByPrefix('hover', 'hover', 24, true);
         codesBtn.animation.play('idle');
@@ -285,7 +285,7 @@ class BeanFreeplayState extends MusicBeatState
         darkOverlay.alpha = 0.6; 
         codesGroup.add(darkOverlay);
 
-        codesWindow = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/codes/window'));
+        codesWindow = new FunkinSprite(0, 0).loadGraphic(Paths.image('UI/freeplaymenu/codes/window'));
         codesWindow.screenCenter();
         codesGroup.add(codesWindow);
 
@@ -316,10 +316,10 @@ class BeanFreeplayState extends MusicBeatState
         resetBtnTxt.setFormat(Paths.font('HKGrotesk-Medium.otf'), 20, 0xFF8E3499, 'center', FlxTextBorderStyle.NONE);
         codesGroup.add(resetBtnTxt);
 
-        codesXHover = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/codes/square'));
+        codesXHover = new FunkinSprite(0, 0).loadGraphic(Paths.image('UI/freeplaymenu/codes/square'));
         codesGroup.add(codesXHover); 
 
-        codesXBtn = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/codes/x'));
+        codesXBtn = new FunkinSprite(0, 0).loadGraphic(Paths.image('UI/freeplaymenu/codes/x'));
         
         #if mobile
         codesXBtn.scale.set(1.3, 1.3);
@@ -508,7 +508,7 @@ class BeanFreeplayState extends MusicBeatState
 
     function showCodeImage(imgId:String, isMsSyor:Bool)
     {
-        var popupImage = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/freeplaymenu/codes/images/' + imgId));
+        var popupImage = new FunkinSprite(0, 0).loadGraphic(Paths.image('UI/freeplaymenu/codes/images/' + imgId));
         popupImage.screenCenter();
         popupImage.scale.set(0.01, 0.01); 
         popupImage.antialiasing = true;
@@ -541,13 +541,13 @@ class BeanFreeplayState extends MusicBeatState
     function buildScoreUI()
     {
         highScoreSpr = new FunkinSprite(0, 10);
-        highScoreSpr.frames = Paths.getSparrowAtlas('ui/freeplaymenu/highScore');
+        highScoreSpr.frames = Paths.getSparrowAtlas('UI/freeplaymenu/highScore');
         highScoreSpr.animation.addByPrefix('idle', 'idle', 24, true);
         highScoreSpr.animation.play('idle');
         highScoreSpr.x = FlxG.width - highScoreSpr.width - 0;
         add(highScoreSpr);
 
-        highScoreCapsule = new FunkinSprite(highScoreSpr.x, highScoreSpr.y + highScoreSpr.height - 0).loadGraphic(Paths.image('ui/freeplaymenu/highScoreCapsule'));
+        highScoreCapsule = new FunkinSprite(highScoreSpr.x, highScoreSpr.y + highScoreSpr.height - 0).loadGraphic(Paths.image('UI/freeplaymenu/highScoreCapsule'));
         highScoreCapsule.x = FlxG.width - highScoreCapsule.width - 40;
         add(highScoreCapsule);
 
@@ -604,12 +604,12 @@ class BeanFreeplayState extends MusicBeatState
             if (distance == 0) startX += listSelectedOffsetX; 
             var startY:Float = (FlxG.height / 2) + listBaseYOffset + (distance * listSpacingY);
 
-            var cursor = new FunkinSprite(startX + cursorOffsetX, startY + cursorOffsetY).loadGraphic(Paths.image('ui/freeplaymenu/capsule/cursor'));
+            var cursor = new FunkinSprite(startX + cursorOffsetX, startY + cursorOffsetY).loadGraphic(Paths.image('UI/freeplaymenu/capsule/cursor'));
             cursor.visible = false; 
             itemGroup.add(cursor); 
 
             var capsule = new FunkinSprite(startX, startY);
-            capsule.frames = Paths.getSparrowAtlas('ui/freeplaymenu/capsule/capsule');
+            capsule.frames = Paths.getSparrowAtlas('UI/freeplaymenu/capsule/capsule');
             capsule.animation.addByPrefix('idle', 'idle', 24, true);
             capsule.animation.play('idle');
             itemGroup.add(capsule); 
@@ -619,7 +619,7 @@ class BeanFreeplayState extends MusicBeatState
             itemGroup.add(text); 
 
             var icon = new FunkinSprite(capsule.x + capsule.width, capsule.y);
-            icon.frames = Paths.getSparrowAtlas('ui/freeplaymenu/icons/' + opponentName);
+            icon.frames = Paths.getSparrowAtlas('UI/freeplaymenu/icons/' + opponentName);
             icon.animation.addByPrefix('idle', 'idle', 24, true);
             icon.animation.addByPrefix('selected', 'selected', 24, true);
             icon.animation.play('idle');
@@ -633,7 +633,7 @@ class BeanFreeplayState extends MusicBeatState
             itemGroup.add(numText); 
 
             var star = new FunkinSprite(capsule.x + starOffsetX, capsule.y + starOffsetY);
-            star.frames = Paths.getSparrowAtlas('ui/freeplaymenu/star_completed');
+            star.frames = Paths.getSparrowAtlas('UI/freeplaymenu/star_completed');
             star.animation.addByPrefix('star idle', 'star idle', 24, true);
             star.animation.addByPrefix('star transition', 'star transition', 24, false);
             star.animation.play('star idle');

@@ -67,14 +67,14 @@ class BeanTitleState extends MusicBeatState
 
         isAltMenu = FlxG.random.bool(30);
 
-        bgDots = new FlxBackdrop(Paths.image('ui/titlemenu/dotBG'), 0x11);
+        bgDots = new FlxBackdrop(Paths.image('UI/titlemenu/dotBG'), 0x11);
         bgDots.velocity.set(-80, -80);
         add(bgDots);
 
         if (!isAltMenu) 
         {
             beef = new FunkinSprite(0, 0); 
-            beef.frames = Paths.getSparrowAtlas('ui/titlemenu/beefTitle');
+            beef.frames = Paths.getSparrowAtlas('UI/titlemenu/beefTitle');
             beef.animation.addByPrefix('idle', 'idle', 24, false);
             beef.animation.play('idle');
             beef.x = beefOffsetX;
@@ -83,7 +83,7 @@ class BeanTitleState extends MusicBeatState
             add(beef);
 
             geef = new FunkinSprite(0, 0);
-            geef.frames = Paths.getSparrowAtlas('ui/titlemenu/geefTitle');
+            geef.frames = Paths.getSparrowAtlas('UI/titlemenu/geefTitle');
             geef.animation.addByPrefix('idle', 'idle', 24, false);
             geef.animation.play('idle');
             geef.x = (FlxG.width - geef.width) + geefOffsetX;
@@ -94,7 +94,7 @@ class BeanTitleState extends MusicBeatState
         else 
         {
             monker = new FunkinSprite(0, 0);
-            monker.frames = Paths.getSparrowAtlas('ui/titlemenu/monkerTitle');
+            monker.frames = Paths.getSparrowAtlas('UI/titlemenu/monkerTitle');
             monker.animation.addByPrefix('idle', 'idle', 24, false);
             monker.animation.play('idle');
             monker.x = (FlxG.width - monker.width) + monkerOffsetX;
@@ -104,7 +104,7 @@ class BeanTitleState extends MusicBeatState
         }
 
         logo = new FunkinSprite(0, logoOffsetY); 
-        logo.frames = Paths.getSparrowAtlas('ui/titlemenu/logoBumpin');
+        logo.frames = Paths.getSparrowAtlas('UI/titlemenu/logoBumpin');
         logo.animation.addByPrefix('bump', 'logo bumpin', 24, false); 
         logo.animation.play('bump');
         logo.screenCenter(0x01); 
@@ -122,9 +122,9 @@ class BeanTitleState extends MusicBeatState
         enterText = new FunkinSprite(0, 0);
         
         #if mobile
-        enterText.loadGraphic(Paths.image('ui/titlemenu/pressTAP'));
+        enterText.loadGraphic(Paths.image('UI/titlemenu/pressTAP'));
         #else
-        enterText.loadGraphic(Paths.image('ui/titlemenu/pressEnter'));
+        enterText.loadGraphic(Paths.image('UI/titlemenu/pressEnter'));
         #end
         
         enterText.screenCenter(0x01); 

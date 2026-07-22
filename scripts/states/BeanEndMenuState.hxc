@@ -75,21 +75,21 @@ class BeanEndMenuState extends MusicBeatState
         });
         
         
-        bg = new FunkinSprite(bgOffsetX, bgOffsetY).loadGraphic(Paths.image('ui/endmenu/bg'));
+        bg = new FunkinSprite(bgOffsetX, bgOffsetY).loadGraphic(Paths.image('UI/endmenu/bg'));
         bg.setGraphicSize(FlxG.width, FlxG.height);
         bg.updateHitbox();
         bg.scale.set(bg.scale.x * bgScale, bg.scale.y * bgScale);
         add(bg);
 
         
-        staticLogo = new FunkinSprite(logoOffsetX, (FlxG.height / 2) + logoOffsetY).loadGraphic(Paths.image('ui/endmenu/staticlogo'));
+        staticLogo = new FunkinSprite(logoOffsetX, (FlxG.height / 2) + logoOffsetY).loadGraphic(Paths.image('UI/endmenu/staticlogo'));
         staticLogo.scale.set(logoScale, logoScale);
         staticLogo.updateHitbox();
         add(staticLogo);
 
         
         #if !mobile
-        leave = new FunkinSprite(staticLogo.x + leaveOffsetX, staticLogo.y + staticLogo.height + leaveOffsetY).loadGraphic(Paths.image('ui/endmenu/leave'));
+        leave = new FunkinSprite(staticLogo.x + leaveOffsetX, staticLogo.y + staticLogo.height + leaveOffsetY).loadGraphic(Paths.image('UI/endmenu/leave'));
         leave.scale.set(leaveScale, leaveScale);
         leave.updateHitbox();
         add(leave);
@@ -110,14 +110,14 @@ class BeanEndMenuState extends MusicBeatState
         #end
 
         
-        note = new FunkinSprite(noteOffsetX, 0).loadGraphic(Paths.image('ui/endmenu/note'));
+        note = new FunkinSprite(noteOffsetX, 0).loadGraphic(Paths.image('UI/endmenu/note'));
         note.scale.set(noteScale, noteScale);
         note.updateHitbox();
         note.y = FlxG.height - note.height + noteOffsetY;
         add(note);
 
         
-        monker = new FunkinSprite(0, 0).loadGraphic(Paths.image('ui/endmenu/monker'));
+        monker = new FunkinSprite(0, 0).loadGraphic(Paths.image('UI/endmenu/monker'));
         monker.scale.set(monkerScale, monkerScale);
         monker.updateHitbox();
         monker.x = FlxG.width - monker.width + monkerOffsetX;
@@ -125,7 +125,7 @@ class BeanEndMenuState extends MusicBeatState
         add(monker);
 
         
-        thanks = new FunkinSprite(0, thanksOffsetY).loadGraphic(Paths.image('ui/endmenu/thanks4playing'));
+        thanks = new FunkinSprite(0, thanksOffsetY).loadGraphic(Paths.image('UI/endmenu/thanks4playing'));
         thanks.scale.set(thanksScale, thanksScale);
         thanks.updateHitbox();
         thanks.x = FlxG.width - thanks.width + thanksOffsetX;

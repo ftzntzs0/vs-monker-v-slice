@@ -29,7 +29,7 @@ class MonkerTransitionSubState extends MusicBeatSubState
     function new() {
         super();
 
-        transitionSprite = FunkinSprite.create(0, 0, 'ui/monkerTransition');
+        transitionSprite = FunkinSprite.create(0, 0, 'UI/monkerTransition');
         transitionSprite.scrollFactor.set();
         transitionSprite.origin.set(transitionSprite.frameWidth / 2, transitionSprite.frameHeight / 2);
         transitionSprite.screenCenter();

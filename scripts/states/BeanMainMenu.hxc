@@ -96,7 +96,7 @@ class BeanMainMenuState extends MusicBeatState
         bgWhite.scrollFactor.set(0, 0); 
         add(bgWhite);
 
-        bgDots = new FlxBackdrop(Paths.image('ui/titlemenu/dotBG'), 0x11);
+        bgDots = new FlxBackdrop(Paths.image('UI/titlemenu/dotBG'), 0x11);
         bgDots.velocity.set(-80, -80);
         bgDots.alpha = 0.5; 
         add(bgDots);
@@ -141,7 +141,7 @@ class BeanMainMenuState extends MusicBeatState
         }
         
         portrait = new FunkinSprite(0, charStartY);
-        portrait.frames = Paths.getSparrowAtlas('ui/mainmenu/characters/' + randomChar);
+        portrait.frames = Paths.getSparrowAtlas('UI/mainmenu/characters/' + randomChar);
         
         portrait.animation.addByPrefix('idle', 'idle', 24, true); 
         portrait.animation.play('idle');
@@ -240,7 +240,7 @@ class BeanMainMenuState extends MusicBeatState
         if (save.data.gameBeaten == true)
         {
             trophy = new FunkinSprite(0, 0);
-            trophy.frames = Paths.getSparrowAtlas('ui/mainmenu/trophy');
+            trophy.frames = Paths.getSparrowAtlas('UI/mainmenu/trophy');
             trophy.animation.addByPrefix('idle', 'idle', 24, true);
             trophy.animation.play('idle');
             
